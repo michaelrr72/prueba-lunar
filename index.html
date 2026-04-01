@@ -167,7 +167,7 @@
 
   <div class="warning-box">
     <span style="font-size:20px;flex-shrink:0;margin-top:1px;">⚠</span>
-    <span>Los retos involucran <strong>Leyendas Locales</strong> — los enemigos más brutales del overworld de Teyvat. Muchos tienen ataques de un solo golpe, barras de vida enormes y mecánicas únicas. No es una pelea normal.</span>
+    <span>Los retos involucran <strong>Leyendas Locales</strong> — los enemigos más brutales del mundo abierto de Teyvat. Muchas tienen ataques de un solo golpe, barras de vida enormes y mecánicas únicas. No es una pelea normal.</span>
   </div>
 
   <div id="result-banner" class="result-banner">
@@ -201,6 +201,20 @@
         <option value="nohit">Sin recibir daño</option>
         <option value="restriction">Restricción de equipo</option>
         <option value="speedrun">Contra el tiempo</option>
+      </select>
+    </div>
+    <div class="select-wrap">
+      <select id="difficulty-filter">
+        <option value="all">Todas las dificultades</option>
+        <option value="medio">Solo medio</option>
+        <option value="dificil">Solo difícil</option>
+        <option value="extremo">Solo extremo</option>
+      </select>
+    </div>
+    <div class="select-wrap">
+      <select id="condition-mode">
+        <option value="fixed">Condiciones fijas</option>
+        <option value="random">Condiciones aleatorias</option>
       </select>
     </div>
     <button class="btn btn-gold" onclick="shuffleChallenge()">⟳ Sortear reto</button>
@@ -247,7 +261,7 @@
   </div>
 
   <div class="divider-ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
-  <div class="footer">Genshin Impact Fan Challenge · Prueba Lunar v2.0</div>
+  <div class="footer">Desafío de Fans de Genshin Impact · Prueba Lunar v2.0</div>
 </div>
 
 <div class="modal-overlay" id="modal-overlay">
@@ -277,8 +291,8 @@ const POOL = [
     desc:'Derrota a Vivianne del Lago. Su rayo de agua y sus cañones pueden eliminar personajes de un solo golpe. Tiene una de las barras de vida más grandes entre todas las Leyendas Locales del juego.',
     tip:'Hydro no funciona — es inmune. Dendro o Pyro son las mejores opciones. Un escudo Zhongli es casi obligatorio. Ten curaciones de reserva.',
     conditions:[
-      'Sin usar pociones de daño ni comida de ataque durante el combate',
-      'El combate debe grabarse o documentarse con screenshots del inicio y el fin',
+      'Se permiten hasta 2 consumibles de apoyo durante el combate',
+      'La validación del reto se hace en directo con el árbitro presente',
       'No se permite bajar el nivel de mundo para facilitar la pelea'
     ]
   },
@@ -288,24 +302,24 @@ const POOL = [
     enemy:'Rocky Avildsen', enemyIcon:'🥊', region:'Fontaine · Leyenda Local',
     title:'El Último Round',
     desc:'Derrota a Rocky Avildsen. No tiene elemento, así que no hay debilidad fácil que explotar. En su fase de furia, sus puñetazos pueden eliminar personajes al instante y se vuelve mucho más agresivo.',
-    tip:'Paciencia. Sus ataques telegrafían bien. En fase furiosa, prioriza esquivar sobre atacar. Sin debilidad elemental, el DPS puro es tu única herramienta.',
+    tip:'Paciencia. Sus ataques son claros al anticiparse. En fase furiosa, prioriza esquivar sobre atacar. Sin debilidad elemental, el daño por segundo puro es tu única herramienta.',
     conditions:[
-      'Sin comida durante el combate',
+      'Se permite comida de curación, pero no comida ofensiva',
       'El equipo debe elegirse antes de entrar — sin cambios después',
-      'Si un personaje cae en la fase de furia, el reto se considera fallido'
+      'Si cae más de 1 personaje en la fase de furia, el reto se considera fallido'
     ]
   },
   {
     type:'combat', tag:'Combate', tagClass:'tag-combat',
-    diff:'dificil', diffClass:'diff-dificil', diffLabel:'⚔ DIFÍCIL',
+    diff:'medio', diffClass:'diff-medio', diffLabel:'★ MEDIO',
     enemy:'Liam, el Arcoíris Fugaz', enemyIcon:'🎸', region:'Fontaine · Leyenda Local',
     title:'La Balada del Caos',
-    desc:'Derrota a Liam. Controla el campo de batalla con molotovs y pociones que generan reacciones Overloaded devastadoras en el suelo. Su movilidad lo hace muy difícil de fijar.',
-    tip:'Empapa el suelo con Hydro antes de que lance sus pociones para neutralizar el Overloaded. Si un personaje está infligido con Pyro o Electro, cámbialo inmediatamente.',
+    desc:'Derrota a Liam. Controla el campo de batalla con cócteles molotov y pociones que generan reacciones de Sobrecargado devastadoras en el suelo. Su movilidad lo hace muy difícil de fijar.',
+    tip:'Empapa el suelo con Hydro antes de que lance sus pociones para neutralizar Sobrecargado. Si un personaje queda afectado por Pyro o Electro, cámbialo de inmediato.',
     conditions:[
-      'Sin usar Anemo en sus skills para dispersar sus áreas de daño',
+      'Se recomienda no usar personajes Anemo para dispersar sus áreas de daño',
       'El combate no puede interrumpirse — sin salir del rango de combate',
-      'Máximo 1 personaje caído permitido en todo el intento'
+      'Máximo 2 personajes caídos permitidos en todo el intento'
     ]
   },
   {
@@ -317,8 +331,8 @@ const POOL = [
     tip:'Necesitas al menos 3 elementos para romper los 3 escudos. Un equipo de 4 elementos mixtos es lo ideal. Enfócate en uno a la vez.',
     conditions:[
       'Debes derrotar a los tres en un único intento sin morir',
-      'Sin pociones de daño ni comida ofensiva durante el combate',
-      'Si caen 2 personajes, el reto se da por fallido aunque ganes'
+      'Se permiten pociones y comida ofensiva moderada durante el combate',
+      'Si caen 3 personajes, el reto se da por fallido aunque ganes'
     ]
   },
   {
@@ -327,65 +341,104 @@ const POOL = [
     enemy:'Cocijo', enemyIcon:'⚡', region:'Natlan · Leyenda Local',
     title:'Antes del Sello de Trueno',
     desc:'Derrota a Cocijo antes de que active su escudo Thunderthorn Ward. Solo acepta 34 instancias de daño antes de activarlo — si no lo eliminas rápido, la pelea se vuelve casi imposible.',
-    tip:'Burst de daño en los primeros segundos. Pyro rompe sus escudos rápido. Usa reacciones como Melt o Vaporize. Come y toma pociones ANTES de entrar.',
+    tip:'Daño explosivo en los primeros segundos. Pyro rompe sus escudos rápido. Usa reacciones como Derretido o Vaporizado. Come y toma pociones ANTES de entrar.',
     conditions:[
-      'Debes derrotarlo antes de que active el escudo por primera vez — si lo activa, reto fallido',
+      'Debes derrotarlo antes de que active el escudo por segunda vez — si lo activa dos veces, reto fallido',
       'Sin bajar nivel de mundo',
-      'Screenshot del intento para verificar que el escudo nunca se activó'
+      'La validación del escudo se confirma en directo durante el intento'
+    ]
+  },
+  {
+    type:'combat', tag:'Combate', tagClass:'tag-combat',
+    diff:'medio', diffClass:'diff-medio', diffLabel:'★ MEDIO',
+    enemy:'"He Never Dies"', enemyIcon:'🐾', region:'Natlan · Prueba de la Noche',
+    title:'El Capibara de la Muerte',
+    desc:'Derrota al capibara He Never Dies. Parece inofensivo, pero si lo dejas acumular suficiente energía desata una técnica definitiva devastadora. Es una Leyenda Local de Natlan dentro del modo Prueba de la Noche.',
+    tip:'Los equipos con control de masas (aturdimiento) funcionan bien. Reacciones de Sobrecargado y ataques de caída son efectivos. No lo subestimes.',
+    conditions:[
+      'Si el capibara activa su técnica definitiva dos veces, reto fallido automáticamente',
+      'Las reglas del modo Prueba de la Noche aplican durante el combate',
+      'Se permite 1 personaje caído durante el intento'
     ]
   },
   {
     type:'combat', tag:'Combate', tagClass:'tag-combat',
     diff:'dificil', diffClass:'diff-dificil', diffLabel:'⚔ DIFÍCIL',
-    enemy:'"He Never Dies"', enemyIcon:'🐾', region:'Natlan · Prueba de la Noche',
-    title:'El Capibara de la Muerte',
-    desc:'Derrota al capibara He Never Dies. Parece inofensivo, pero si lo dejas acumular suficiente energía desata una técnica definitiva devastadora. Es una Leyenda Local de Natlan dentro del modo Prueba de la Noche.',
-    tip:'Equipos de crowd control (aturdimiento) funcionan bien. Reacciones Overloaded y ataques de caída son efectivos. No lo subestimes.',
+    enemy:'Sappho Amidst the Waves', enemyIcon:'🌊', region:'Fontaine · Leyenda Local',
+    title:'Marea de Acero',
+    desc:'Derrota a Sappho Amidst the Waves. Sus cadenas de ataques Hydro castigan errores seguidos y exigen buena lectura del ritmo del combate.',
+    tip:'Mantén movilidad constante y prioriza ventanas de daño cortas. Llevar escudo ayuda, pero no reemplaza una buena evasión.',
     conditions:[
-      'Si el capibara activa su técnica definitiva en algún momento, reto fallido automáticamente',
-      'Las reglas del modo Prueba de la Noche aplican durante el combate',
-      'Ningún personaje puede caer durante el intento'
+      'Se permite comida de apoyo, pero no comida ofensiva',
+      'Si caen 2 personajes, el reto se declara fallido',
+      'Validación en directo por el árbitro de sala'
+    ]
+  },
+  {
+    type:'combat', tag:'Combate', tagClass:'tag-combat',
+    diff:'dificil', diffClass:'diff-dificil', diffLabel:'⚔ DIFÍCIL',
+    enemy:'Balachko', enemyIcon:'⚔', region:'Fontaine · Leyenda Local',
+    title:'Duelo Contra Balachko',
+    desc:'Derrota a Balachko, una Leyenda Local de Fontaine con presión constante y castigo alto si te quedas sin estamina.',
+    tip:'Administra la estamina y no sobreextiendas combos. Es mejor daño seguro y constante que arriesgar un intercambio largo.',
+    conditions:[
+      'Se permite 1 caída de personaje en todo el combate',
+      'Sin cambiar de equipo una vez iniciado el intento',
+      'Validación del resultado en directo'
+    ]
+  },
+  {
+    type:'combat', tag:'Combate', tagClass:'tag-combat',
+    diff:'extremo', diffClass:'diff-extremo', diffLabel:'☠ EXTREMO',
+    enemy:'Bronzelock', enemyIcon:'🛡', region:'Fontaine · Leyenda Local',
+    title:'Fortaleza Implacable',
+    desc:'Derrota a Bronzelock. Su resistencia y presión sostenida lo convierten en un duelo largo donde cada error pesa.',
+    tip:'Lleva una rotación estable de daño sostenido. Evita gastar recursos al inicio y acelera solo cuando controles el ritmo.',
+    conditions:[
+      'Máximo 1 personaje caído durante el combate',
+      'Se permiten consumibles de apoyo, no ofensivos',
+      'Validación en directo del combate completo'
     ]
   },
 
   // ── SIN DAÑO ─────────────────────────────────────────────────────────────
   {
     type:'nohit', tag:'Sin daño', tagClass:'tag-nohit',
-    diff:'extremo', diffClass:'diff-extremo', diffLabel:'☠ EXTREMO',
+    diff:'dificil', diffClass:'diff-dificil', diffLabel:'⚔ DIFÍCIL',
     enemy:'Vivianne del Lago', enemyIcon:'💧', region:'Fontaine · Leyenda Local',
     title:'Danza Sobre el Agua',
-    desc:'Derrota a Vivianne del Lago sin que ningún personaje reciba daño directo. Sus cañones hacen tracking activo y su rayo es casi instantáneo — tienes que esquivar todo el tiempo.',
+    desc:'Derrota a Vivianne del Lago sin que ningún personaje reciba daño directo. Sus cañones tienen seguimiento activo y su rayo es casi instantáneo — tienes que esquivar todo el tiempo.',
     tip:'Zhongli escudo + Geo equipo = cristalizar cada golpe sin recibir daño. Sin curación porque si necesitas curar, algo ya salió muy mal.',
     conditions:[
-      'La barra de vida de todos los personajes debe terminar intacta (al 100%)',
-      'Escudos permitidos — curarse NO',
-      'Grabación obligatoria para verificar el resultado'
-    ]
-  },
-  {
-    type:'nohit', tag:'Sin daño', tagClass:'tag-nohit',
-    diff:'extremo', diffClass:'diff-extremo', diffLabel:'☠ EXTREMO',
-    enemy:'Rocky Avildsen', enemyIcon:'🥊', region:'Fontaine · Leyenda Local',
-    title:'Cero Golpes, Cero Excusas',
-    desc:'Derrota a Rocky Avildsen sin recibir ningún golpe — incluyendo toda su fase de furia. Sus puñetazos tienen hitbox grandes y erráticas. Es probablemente el reto de no-hit más difícil del overworld.',
-    tip:'Este reto requiere memorizar sus patrones. Sus ataques tienen wind-up claro. Aprende a leerlos antes de intentarlo en serio.',
-    conditions:[
-      'Ningún golpe directo permitido en ningún momento',
-      'Sin curarse en ningún momento del combate',
-      'Un solo intento válido — si recibes daño, se declara fallido'
+      'La barra de vida de todos los personajes debe terminar por encima de 80%',
+      'Escudos permitidos — se permite una curación de emergencia',
+      'Verificación del resultado en directo durante el combate'
     ]
   },
   {
     type:'nohit', tag:'Sin daño', tagClass:'tag-nohit',
     diff:'dificil', diffClass:'diff-dificil', diffLabel:'⚔ DIFÍCIL',
+    enemy:'Rocky Avildsen', enemyIcon:'🥊', region:'Fontaine · Leyenda Local',
+    title:'Cero Golpes, Cero Excusas',
+    desc:'Derrota a Rocky Avildsen sin recibir ningún golpe — incluyendo toda su fase de furia. Sus puñetazos tienen áreas de impacto grandes y erráticas. Es probablemente el reto de no-hit más difícil del mundo abierto.',
+    tip:'Este reto requiere memorizar sus patrones. Sus ataques tienen una preparación clara. Aprende a leerlos antes de intentarlo en serio.',
+    conditions:[
+      'Máximo 1 golpe directo permitido en todo el combate',
+      'Se permite una curación en todo el combate',
+      'Hasta 2 intentos válidos; si recibes más de 1 golpe, se declara fallido'
+    ]
+  },
+  {
+    type:'nohit', tag:'Sin daño', tagClass:'tag-nohit',
+    diff:'medio', diffClass:'diff-medio', diffLabel:'★ MEDIO',
     enemy:'Rilai', enemyIcon:'🎵', region:'Natlan · Leyenda Local',
     title:'Sin Toque de Fusion Nova',
-    desc:'Derrota a Rilai sin ser golpeado por ninguno de sus ataques Fusion Nova. No puedes usar escudos ni I-frames para absorberlos — si el ataque toca a un personaje de cualquier forma, se cuenta como impacto.',
+    desc:'Derrota a Rilai sin ser golpeado por ninguno de sus ataques Fusion Nova. No puedes usar escudos ni invulnerabilidad temporal para absorberlos — si el ataque toca a un personaje de cualquier forma, se cuenta como impacto.',
     tip:'Esta es exactamente la condición del segundo logro de Rilai en el juego. Estudia el patrón de sus Fusion Novas y aprende cuándo esquivar.',
     conditions:[
-      'Ningún ataque Fusion Nova puede impactar a ningún personaje del equipo',
-      'Escudos e I-frames NO cuentan como evasión — el ataque no debe tocar al personaje',
-      'Grabación para verificar cada ataque esquivado'
+      'Como máximo 1 ataque Fusion Nova puede impactar al equipo',
+      'Escudos e invulnerabilidad temporal se permiten como recurso defensivo',
+      'Validación en directo de los ataques esquivados'
     ]
   },
 
@@ -396,24 +449,24 @@ const POOL = [
     enemy:'Polychrome Tri-Stars', enemyIcon:'🔺', region:'Natlan · Leyenda Local',
     title:'Mono Elemento Contra Tres Escudos',
     desc:'Derrota a los Polychrome Tri-Stars usando solo personajes de un único elemento. Con un solo elemento, tienes que gestionar creativamente cómo romper los tres escudos distintos.',
-    tip:'Pyro es la opción más versátil: rompe Cryo directamente, reacciona con Electro (Overloaded). Geo ignora escudos pero es lento.',
+    tip:'Pyro es la opción más versátil: rompe Cryo directamente y reacciona con Electro (Sobrecargado). Geo ignora escudos, pero es más lento.',
     conditions:[
-      'Anuncia el elemento antes de empezar — sin cambiar',
+      'Anuncia el elemento antes de empezar — se permite 1 ajuste si el intento falla',
       'Los 4 personajes deben ser del mismo elemento',
-      'Ningún personaje puede caer durante el combate'
+      'Se permite 1 personaje caído durante el combate'
     ]
   },
   {
     type:'restriction', tag:'Restricción', tagClass:'tag-restriction',
-    diff:'dificil', diffClass:'diff-dificil', diffLabel:'⚔ DIFÍCIL',
+    diff:'medio', diffClass:'diff-medio', diffLabel:'★ MEDIO',
     enemy:'Liam, el Arcoíris Fugaz', enemyIcon:'🎸', region:'Fontaine · Leyenda Local',
     title:'El Guerrero Solitario',
     desc:'Derrota a Liam con un solo personaje activo durante todo el combate. No puedes cambiar de personaje — el elegido debe terminar solo lo que empieza, frente a uno de los Leyendas más difíciles de Fontaine.',
-    tip:'Noelle (auto-cura en burst, escudo) o Hu Tao (burst damage extremo) son buenas opciones. Planea antes de entrar.',
+    tip:'Noelle (autocuración en definitiva y escudo) o Hu Tao (daño explosivo extremo) son buenas opciones. Planifica antes de entrar.',
     conditions:[
-      'Anuncia el personaje elegido antes de entrar — sin cambios posibles',
+      'Anuncia el personaje elegido antes de entrar — se permite cambiar una vez si reinicias',
       'Si el personaje único cae, reto fallido',
-      'Sin comida ni pociones durante el combate'
+      'Sin comida ofensiva; pociones de apoyo permitidas'
     ]
   },
   {
@@ -422,51 +475,94 @@ const POOL = [
     enemy:'Cocijo', enemyIcon:'⚡', region:'Natlan · Leyenda Local',
     title:'Sin el Favor del Rayo',
     desc:'Derrota a Cocijo sin usar ningún personaje Electro ni Pyro. Esos son los elementos más efectivos contra él — sin ellos, tienes que encontrar otra forma de hacer el daño suficiente antes del escudo.',
-    tip:'Hydro + Cryo para Freeze, o Dendro para Bloom. Geo puro también funciona aunque es más lento. El tiempo es tu enemigo.',
+    tip:'Hydro + Cryo para Congelado, o Dendro para Florecimiento. Geo puro también funciona, aunque es más lento. El tiempo es tu enemigo.',
     conditions:[
       'Cero personajes Electro o Pyro en el equipo',
       'Sin bajar el nivel de mundo',
-      'El escudo no puede activarse — si lo hace, reto fallido'
+      'El escudo puede activarse una vez — si se activa dos veces, reto fallido'
     ]
   },
 
   // ── SPEEDRUN ─────────────────────────────────────────────────────────────
   {
     type:'speedrun', tag:'Speedrun', tagClass:'tag-speedrun',
-    diff:'dificil', diffClass:'diff-dificil', diffLabel:'⚔ DIFÍCIL',
+    diff:'medio', diffClass:'diff-medio', diffLabel:'★ MEDIO',
     enemy:'Ninianne + Vivianne del Lago', enemyIcon:'⏱', region:'Fontaine · Dos Leyendas Locales',
     title:'Las Dos Pesadillas',
-    desc:'Derrota a Ninianne del Lago y luego a Vivianne del Lago en menos de 12 minutos totales, sin cerrar el juego entre las dos peleas. Pelear a dos Leyendas seguidas agota recursos rápido.',
+    desc:'Derrota a Ninianne del Lago y luego a Vivianne del Lago en menos de 16 minutos totales, sin cerrar el juego entre las dos peleas. Pelear a dos Leyendas seguidas agota recursos rápido.',
     tip:'Empieza por Ninianne — es la más fácil de las dos. Conserva curaciones y pociones para Vivianne. Dendro o Pyro para ambas.',
     conditions:[
-      'Tiempo desde el primer ataque a Ninianne hasta la caída de Vivianne: máximo 12 min',
+      'Tiempo desde el primer ataque a Ninianne hasta la caída de Vivianne: máximo 16 min',
       'Sin cerrar el juego ni visitar una Estatua de los Siete entre peleas',
-      'Screenshot del reloj al inicio y al final para validar'
+      'El árbitro valida el tiempo en directo durante toda la ronda'
     ]
   },
   {
     type:'speedrun', tag:'Speedrun', tagClass:'tag-speedrun',
-    diff:'extremo', diffClass:'diff-extremo', diffLabel:'☠ EXTREMO',
+    diff:'dificil', diffClass:'diff-dificil', diffLabel:'⚔ DIFÍCIL',
     enemy:'Rocky Avildsen', enemyIcon:'🥊', region:'Fontaine · Leyenda Local',
-    title:'Nocaut en 3 Minutos',
-    desc:'Derrota a Rocky Avildsen incluyendo su fase de furia en menos de 3 minutos. Su barra de vida es enorme y sin debilidad elemental, esto es un test de DPS puro bajo presión extrema.',
-    tip:'Necesitas el equipo de mayor burst del juego. Melt, Vaporize o Hyperbloom. No hay tiempo para errores ni para curarse.',
+    title:'Nocaut en 4:30',
+    desc:'Derrota a Rocky Avildsen incluyendo su fase de furia en menos de 4 minutos y 30 segundos. Su barra de vida es enorme y, sin debilidad elemental, esto sigue siendo una prueba exigente de daño por segundo.',
+    tip:'Necesitas el equipo con mayor daño explosivo del juego. Derretido, Vaporizado o Hiperflorecimiento. No hay tiempo para errores ni para curarse.',
     conditions:[
       'Temporizador visible durante todo el combate (reloj del sistema o app externa)',
       'Sin pausar el juego durante el intento',
-      'La fase de furia debe activarse Y superarse dentro del tiempo límite'
+      'La fase de furia debe activarse y superarse dentro del tiempo límite'
     ]
   }
 ];
 
 let assigned=[], results=[null,null,null], currentRound=0, gameOver=false;
+const CONDITION_POOL = {
+  combat: {
+    medio: ['Se permite 1 personaje caído', 'Sin comida ofensiva', 'Se permite 1 pausa táctica breve'],
+    dificil: ['Máximo 1 personaje caído', 'Sin cambiar equipo durante el intento', 'Sin teletransportarse durante el reto'],
+    extremo: ['Sin pausas durante el combate', 'Si caen 2 personajes, reto fallido', 'Sin reinicio de combate voluntario']
+  },
+  nohit: {
+    medio: ['Se permite 1 impacto directo', 'Se permite una curación de emergencia', 'Validación en directo por árbitro'],
+    dificil: ['Sin impactos seguidos', 'Máximo 1 curación total', 'Escudos permitidos'],
+    extremo: ['Cero impactos directos', 'Sin curación', 'Sin escudo durante el reto']
+  },
+  restriction: {
+    medio: ['Se permite 1 ajuste de equipo si reinicias', 'Sin bajar nivel de mundo', 'Validación en directo'],
+    dificil: ['Sin cambios de personaje durante combate', 'Sin comida ofensiva', 'Máximo 1 personaje caído'],
+    extremo: ['Un solo intento válido', 'Sin consumibles', 'Ningún personaje puede caer']
+  },
+  speedrun: {
+    medio: ['Temporizador visible en directo', 'Se permite 1 pausa breve', 'Sin cambio de ruta planeada a mitad'],
+    dificil: ['Sin pausar el juego', 'Temporizador continuo visible', 'Sin reintento de jefe ya iniciado'],
+    extremo: ['Sin pausas ni menú prolongado', 'Tiempo límite estricto', 'Intento único']
+  }
+};
+
+function pickRandom(arr, n){
+  const shuffled=[...arr].sort(()=>Math.random()-0.5);
+  return shuffled.slice(0, Math.min(n, shuffled.length));
+}
+
+function getSelectValue(id, fallback){
+  const el=document.getElementById(id);
+  return el ? el.value : fallback;
+}
+
+function withConditionMode(challenge){
+  const mode=getSelectValue('condition-mode','fixed');
+  if(mode==='fixed') return {...challenge};
+  const pool=(CONDITION_POOL[challenge.type]||{})[challenge.diff]||[];
+  const extra=pickRandom(pool, 2);
+  const anchor=challenge.conditions[0]||'Cumplir objetivo principal del reto';
+  return {...challenge, conditions:[anchor, ...extra]};
+}
 
 function init(){
-  const type=document.getElementById('type-filter').value;
-  const pool=type==='all'?POOL:POOL.filter(c=>c.type===type);
-  if(!pool.length){alert('No hay retos de ese tipo. Prueba con "Todos".');return;}
+  const type=getSelectValue('type-filter','all');
+  const difficulty=getSelectValue('difficulty-filter','all');
+  const pool=POOL.filter(c=>(type==='all'||c.type===type)&&(difficulty==='all'||c.diff===difficulty));
+  if(!pool.length){alert('No hay retos para esa combinación de filtros. Prueba con "Todas las dificultades".');return;}
   const s=[...pool].sort(()=>Math.random()-0.5);
-  assigned=pool.length>=3?[s[0],s[1],s[2]]:[s[0],s[1%s.length],s[2%s.length]];
+  const picked=pool.length>=3?[s[0],s[1],s[2]]:[s[0],s[1%s.length],s[2%s.length]];
+  assigned=picked.map(withConditionMode);
   results=[null,null,null]; currentRound=0; gameOver=false;
   document.getElementById('result-banner').className='result-banner';
   document.getElementById('status-label').textContent='En curso...';
@@ -551,12 +647,14 @@ function showDefeat(){
 
 function shuffleChallenge(){
   if(gameOver)return;
-  const type=document.getElementById('type-filter').value;
-  const pool=type==='all'?POOL:POOL.filter(c=>c.type===type);
+  const type=getSelectValue('type-filter','all');
+  const difficulty=getSelectValue('difficulty-filter','all');
+  const pool=POOL.filter(c=>(type==='all'||c.type===type)&&(difficulty==='all'||c.diff===difficulty));
+  if(!pool.length){alert('No hay retos para esa combinación de filtros.');return;}
   const used=assigned.map(c=>c.title);
   const avail=pool.filter(c=>!used.includes(c.title));
   const pick=avail.length>0?avail:pool;
-  assigned[currentRound]=pick[Math.floor(Math.random()*pick.length)];
+  assigned[currentRound]=withConditionMode(pick[Math.floor(Math.random()*pick.length)]);
   renderChallenge();
 }
 
