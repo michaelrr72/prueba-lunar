@@ -211,6 +211,12 @@
         <option value="extremo">Solo extremo</option>
       </select>
     </div>
+    <div class="select-wrap">
+      <select id="condition-mode">
+        <option value="fixed">Condiciones fijas</option>
+        <option value="random">Condiciones aleatorias</option>
+      </select>
+    </div>
     <button class="btn btn-gold" onclick="shuffleChallenge()">⟳ Sortear reto</button>
     <button class="btn btn-ghost" onclick="resetAll()">Reiniciar todo</button>
   </div>
@@ -286,7 +292,7 @@ const POOL = [
     tip:'Hydro no funciona — es inmune. Dendro o Pyro son las mejores opciones. Un escudo Zhongli es casi obligatorio. Ten curaciones de reserva.',
     conditions:[
       'Se permiten hasta 2 consumibles de apoyo durante el combate',
-      'El combate debe grabarse o documentarse con capturas de pantalla del inicio y el final',
+      'La validación del reto se hace en directo con el árbitro presente',
       'No se permite bajar el nivel de mundo para facilitar la pelea'
     ]
   },
@@ -339,7 +345,7 @@ const POOL = [
     conditions:[
       'Debes derrotarlo antes de que active el escudo por segunda vez — si lo activa dos veces, reto fallido',
       'Sin bajar nivel de mundo',
-      'Captura de pantalla del intento para verificar que el escudo nunca se activó'
+      'La validación del escudo se confirma en directo durante el intento'
     ]
   },
   {
@@ -355,6 +361,45 @@ const POOL = [
       'Se permite 1 personaje caído durante el intento'
     ]
   },
+  {
+    type:'combat', tag:'Combate', tagClass:'tag-combat',
+    diff:'dificil', diffClass:'diff-dificil', diffLabel:'⚔ DIFÍCIL',
+    enemy:'Sappho Amidst the Waves', enemyIcon:'🌊', region:'Fontaine · Leyenda Local',
+    title:'Marea de Acero',
+    desc:'Derrota a Sappho Amidst the Waves. Sus cadenas de ataques Hydro castigan errores seguidos y exigen buena lectura del ritmo del combate.',
+    tip:'Mantén movilidad constante y prioriza ventanas de daño cortas. Llevar escudo ayuda, pero no reemplaza una buena evasión.',
+    conditions:[
+      'Se permite comida de apoyo, pero no comida ofensiva',
+      'Si caen 2 personajes, el reto se declara fallido',
+      'Validación en directo por el árbitro de sala'
+    ]
+  },
+  {
+    type:'combat', tag:'Combate', tagClass:'tag-combat',
+    diff:'dificil', diffClass:'diff-dificil', diffLabel:'⚔ DIFÍCIL',
+    enemy:'Balachko', enemyIcon:'⚔', region:'Fontaine · Leyenda Local',
+    title:'Duelo Contra Balachko',
+    desc:'Derrota a Balachko, una Leyenda Local de Fontaine con presión constante y castigo alto si te quedas sin estamina.',
+    tip:'Administra la estamina y no sobreextiendas combos. Es mejor daño seguro y constante que arriesgar un intercambio largo.',
+    conditions:[
+      'Se permite 1 caída de personaje en todo el combate',
+      'Sin cambiar de equipo una vez iniciado el intento',
+      'Validación del resultado en directo'
+    ]
+  },
+  {
+    type:'combat', tag:'Combate', tagClass:'tag-combat',
+    diff:'extremo', diffClass:'diff-extremo', diffLabel:'☠ EXTREMO',
+    enemy:'Bronzelock', enemyIcon:'🛡', region:'Fontaine · Leyenda Local',
+    title:'Fortaleza Implacable',
+    desc:'Derrota a Bronzelock. Su resistencia y presión sostenida lo convierten en un duelo largo donde cada error pesa.',
+    tip:'Lleva una rotación estable de daño sostenido. Evita gastar recursos al inicio y acelera solo cuando controles el ritmo.',
+    conditions:[
+      'Máximo 1 personaje caído durante el combate',
+      'Se permiten consumibles de apoyo, no ofensivos',
+      'Validación en directo del combate completo'
+    ]
+  },
 
   // ── SIN DAÑO ─────────────────────────────────────────────────────────────
   {
@@ -367,7 +412,7 @@ const POOL = [
     conditions:[
       'La barra de vida de todos los personajes debe terminar por encima de 80%',
       'Escudos permitidos — se permite una curación de emergencia',
-      'Grabación obligatoria para verificar el resultado'
+      'Verificación del resultado en directo durante el combate'
     ]
   },
   {
@@ -393,6 +438,7 @@ const POOL = [
     conditions:[
       'Como máximo 1 ataque Fusion Nova puede impactar al equipo',
       'Escudos e invulnerabilidad temporal se permiten como recurso defensivo',
+      'Validación en directo de los ataques esquivados'
       'Grabación para verificar cada ataque esquivado'
     ]
   },
@@ -449,6 +495,7 @@ const POOL = [
     conditions:[
       'Tiempo desde el primer ataque a Ninianne hasta la caída de Vivianne: máximo 16 min',
       'Sin cerrar el juego ni visitar una Estatua de los Siete entre peleas',
+      'El árbitro valida el tiempo en directo durante toda la ronda'
       'Captura de pantalla del reloj al inicio y al final para validar'
     ]
   },
@@ -468,6 +515,42 @@ const POOL = [
 ];
 
 let assigned=[], results=[null,null,null], currentRound=0, gameOver=false;
+const CONDITION_POOL = {
+  combat: {
+    medio: ['Se permite 1 personaje caído', 'Sin comida ofensiva', 'Se permite 1 pausa táctica breve'],
+    dificil: ['Máximo 1 personaje caído', 'Sin cambiar equipo durante el intento', 'Sin teletransportarse durante el reto'],
+    extremo: ['Sin pausas durante el combate', 'Si caen 2 personajes, reto fallido', 'Sin reinicio de combate voluntario']
+  },
+  nohit: {
+    medio: ['Se permite 1 impacto directo', 'Se permite una curación de emergencia', 'Validación en directo por árbitro'],
+    dificil: ['Sin impactos seguidos', 'Máximo 1 curación total', 'Escudos permitidos'],
+    extremo: ['Cero impactos directos', 'Sin curación', 'Sin escudo durante el reto']
+  },
+  restriction: {
+    medio: ['Se permite 1 ajuste de equipo si reinicias', 'Sin bajar nivel de mundo', 'Validación en directo'],
+    dificil: ['Sin cambios de personaje durante combate', 'Sin comida ofensiva', 'Máximo 1 personaje caído'],
+    extremo: ['Un solo intento válido', 'Sin consumibles', 'Ningún personaje puede caer']
+  },
+  speedrun: {
+    medio: ['Temporizador visible en directo', 'Se permite 1 pausa breve', 'Sin cambio de ruta planeada a mitad'],
+    dificil: ['Sin pausar el juego', 'Temporizador continuo visible', 'Sin reintento de jefe ya iniciado'],
+    extremo: ['Sin pausas ni menú prolongado', 'Tiempo límite estricto', 'Intento único']
+  }
+};
+
+function pickRandom(arr, n){
+  const shuffled=[...arr].sort(()=>Math.random()-0.5);
+  return shuffled.slice(0, Math.min(n, shuffled.length));
+}
+
+function withConditionMode(challenge){
+  const mode=document.getElementById('condition-mode').value;
+  if(mode==='fixed') return {...challenge};
+  const pool=(CONDITION_POOL[challenge.type]||{})[challenge.diff]||[];
+  const extra=pickRandom(pool, 2);
+  const anchor=challenge.conditions[0]||'Cumplir objetivo principal del reto';
+  return {...challenge, conditions:[anchor, ...extra]};
+}
 
 function init(){
   const type=document.getElementById('type-filter').value;
@@ -475,7 +558,8 @@ function init(){
   const pool=POOL.filter(c=>(type==='all'||c.type===type)&&(difficulty==='all'||c.diff===difficulty));
   if(!pool.length){alert('No hay retos para esa combinación de filtros. Prueba con "Todas las dificultades".');return;}
   const s=[...pool].sort(()=>Math.random()-0.5);
-  assigned=pool.length>=3?[s[0],s[1],s[2]]:[s[0],s[1%s.length],s[2%s.length]];
+  const picked=pool.length>=3?[s[0],s[1],s[2]]:[s[0],s[1%s.length],s[2%s.length]];
+  assigned=picked.map(withConditionMode);
   results=[null,null,null]; currentRound=0; gameOver=false;
   document.getElementById('result-banner').className='result-banner';
   document.getElementById('status-label').textContent='En curso...';
@@ -567,7 +651,7 @@ function shuffleChallenge(){
   const used=assigned.map(c=>c.title);
   const avail=pool.filter(c=>!used.includes(c.title));
   const pick=avail.length>0?avail:pool;
-  assigned[currentRound]=pick[Math.floor(Math.random()*pick.length)];
+  assigned[currentRound]=withConditionMode(pick[Math.floor(Math.random()*pick.length)]);
   renderChallenge();
 }
 
