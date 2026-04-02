@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prueba Lunar — Genshin Impact</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap"
@@ -25,11 +24,10 @@
     </div>
 
     <div class="warning-box">
-      <span class="warning-icon">⚠</span>
-      <span>
-        Los retos involucran <strong>Leyendas Locales</strong> — los enemigos más brutales del overworld de Teyvat.
-        Muchos tienen ataques de un solo golpe, barras de vida enormes y mecánicas únicas. No es una pelea normal.
-      </span>
+      <span class="warning-symbol">⚠</span>
+      <span>Los retos involucran <strong>Leyendas Locales</strong> — los enemigos más brutales del overworld de Teyvat.
+        Muchos tienen ataques de un solo golpe, barras de vida enormes y mecánicas únicas. No es una pelea
+        normal.</span>
     </div>
 
     <div id="result-banner" class="result-banner" aria-live="polite">
@@ -47,13 +45,11 @@
         <div class="round-orb" id="orb3"><span class="orb-icon" id="orb3-icon">III</span><span
             class="orb-label">RETO</span></div>
       </div>
-
       <div class="score-center">
         <div class="score-nums" id="score-nums">0 · 0</div>
         <div class="score-caption">victorias · derrotas</div>
         <div class="score-needed">necesita 2 victorias</div>
       </div>
-
       <div class="status-box">
         <div class="status-title">ESTADO</div>
         <div id="status-label" class="status-label">En curso...</div>
@@ -82,7 +78,6 @@
           <span class="diff-badge" id="diff-tag">—</span>
           <button class="edit-btn" id="btn-edit">✎ Editar</button>
         </div>
-
         <div class="card-body">
           <div class="enemy-banner">
             <div class="enemy-icon" id="enemy-icon">👁</div>
@@ -91,27 +86,22 @@
               <div class="enemy-region" id="enemy-region">Región · Tipo</div>
             </div>
           </div>
-
           <div class="challenge-name" id="c-name">—</div>
           <div class="challenge-desc" id="c-desc">—</div>
-
           <div class="mechanic-tip" id="c-tip">
-            <span class="tip-icon">💡</span>
+            <span class="tip-symbol">💡</span>
             <span id="c-tip-text"></span>
           </div>
-
           <div class="conditions">
             <div class="conditions-title">Condiciones del Sello</div>
             <ul id="c-conditions"></ul>
           </div>
-
           <div class="result-btns">
             <button class="btn-win" id="btn-win">✓ Reto Superado</button>
             <button class="btn-lose" id="btn-lose">✗ Reto Fallido</button>
           </div>
         </div>
       </div>
-
       <div class="progress-dots">
         <div class="dot" id="dot0"></div>
         <div class="dot" id="dot1"></div>
@@ -126,16 +116,12 @@
   <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="modal">
       <div class="modal-title" id="modal-title">✦ Personalizar Reto</div>
-
       <label class="form-label" for="m-title">Nombre del reto</label>
       <input class="form-input" id="m-title" placeholder="Nombre...">
-
       <label class="form-label" for="m-desc">Descripción</label>
       <textarea class="form-textarea" id="m-desc" rows="2" placeholder="Descripción..."></textarea>
-
       <label class="form-label" for="m-conds">Condiciones (separadas por | )</label>
       <input class="form-input" id="m-conds" placeholder="Cond 1 | Cond 2 | Cond 3">
-
       <div class="modal-actions">
         <button class="btn btn-gold" id="btn-save-modal" style="flex:1">Guardar</button>
         <button class="btn btn-ghost" id="btn-close-modal">Cancelar</button>
