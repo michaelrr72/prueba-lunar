@@ -1,586 +1,150 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prueba Lunar — Genshin Impact</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --gold: #C4A35A; --gold-light: #E2C57D; --gold-glow: rgba(196,163,90,0.15);
-    --bg: #0A0C10; --bg2: #0F1218; --bg3: #141820;
-    --surface: #1A1F2A; --surface2: #202530;
-    --text: #EDE8DC; --text2: #A89F8C; --text3: #6A6258;
-    --win: #4CAF87; --lose: #C0443A;
-    --border: rgba(196,163,90,0.2); --border2: rgba(196,163,90,0.08);
-  }
-  html, body { min-height: 100vh; background: var(--bg); color: var(--text); font-family: 'Crimson Text', Georgia, serif; font-size: 17px; line-height: 1.6; }
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image:
-      radial-gradient(1px 1px at 15% 25%, rgba(255,255,255,0.6) 0%, transparent 100%),
-      radial-gradient(1px 1px at 45% 10%, rgba(255,255,255,0.4) 0%, transparent 100%),
-      radial-gradient(1px 1px at 80% 35%, rgba(255,255,255,0.5) 0%, transparent 100%),
-      radial-gradient(1px 1px at 60% 70%, rgba(255,255,255,0.3) 0%, transparent 100%),
-      radial-gradient(1px 1px at 20% 80%, rgba(255,255,255,0.4) 0%, transparent 100%),
-      radial-gradient(1px 1px at 90% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
-      radial-gradient(2px 2px at 25% 5%,  rgba(196,163,90,0.4) 0%, transparent 100%),
-      radial-gradient(2px 2px at 75% 60%, rgba(196,163,90,0.3) 0%, transparent 100%),
-      radial-gradient(600px 400px at 50% 0%, rgba(196,163,90,0.04) 0%, transparent 70%);
-    pointer-events: none; z-index: 0;
-  }
-  .page-wrap { position: relative; z-index: 1; max-width: 740px; margin: 0 auto; padding: 40px 20px 80px; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prueba Lunar — Genshin Impact</title>
 
-  /* HEADER */
-  .header { text-align: center; margin-bottom: 44px; animation: fadeDown 0.8s ease both; }
-  .moon-sigil { font-size: 52px; line-height: 1; margin-bottom: 16px; filter: drop-shadow(0 0 14px rgba(196,163,90,0.6)); animation: moonFloat 4s ease-in-out infinite; }
-  @keyframes moonFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
-  .header-kana { font-family:'Cinzel',serif; font-size:11px; letter-spacing:6px; color:var(--gold); opacity:.7; margin-bottom:10px; }
-  .header-title { font-family:'Cinzel',serif; font-size:38px; font-weight:900; color:var(--gold); letter-spacing:3px; text-shadow:0 0 30px rgba(196,163,90,0.3); margin-bottom:8px; }
-  .header-subtitle { font-size:15px; color:var(--text2); font-style:italic; margin-bottom:20px; }
-  .prize-pill { display:inline-flex; align-items:center; gap:10px; padding:8px 24px; border:1px solid var(--gold); border-radius:40px; font-family:'Cinzel',serif; font-size:13px; color:var(--gold); background:var(--gold-glow); letter-spacing:1px; }
-
-  /* WARNING */
-  .warning-box { display:flex; align-items:flex-start; gap:12px; padding:14px 18px; border:1px solid rgba(226,75,74,0.3); border-radius:12px; background:rgba(192,68,58,0.06); margin-bottom:28px; font-size:14px; color:var(--text2); animation:fadeUp 0.7s 0.05s ease both; }
-  .warning-box strong { color:#E07070; }
-
-  /* SCOREBOARD */
-  .scoreboard { display:grid; grid-template-columns:1fr auto 1fr; gap:16px; align-items:center; margin-bottom:32px; padding:24px; border:1px solid var(--border); border-radius:16px; background:var(--surface); animation:fadeUp 0.7s 0.1s ease both; }
-  .rounds-row { display:flex; gap:12px; justify-content:center; }
-  .round-orb { width:54px; height:54px; border-radius:50%; border:1.5px solid var(--border); display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:'Cinzel',serif; font-size:11px; color:var(--text3); transition:all 0.4s; background:var(--bg3); }
-  .round-orb.active { border-color:var(--gold); color:var(--gold); box-shadow:0 0 14px rgba(196,163,90,0.2),inset 0 0 10px rgba(196,163,90,0.05); }
-  .round-orb.won  { border-color:var(--win);  background:rgba(76,175,135,0.1); box-shadow:0 0 12px rgba(76,175,135,0.2); }
-  .round-orb.lost { border-color:var(--lose); background:rgba(192,68,58,0.1);  box-shadow:0 0 12px rgba(192,68,58,0.2);  }
-  .orb-icon { font-size:18px; line-height:1; }
-  .orb-label { font-size:9px; letter-spacing:1px; margin-top:2px; }
-  .score-center { text-align:center; }
-  .score-nums { font-family:'Cinzel',serif; font-size:28px; font-weight:700; color:var(--gold); letter-spacing:2px; }
-  .score-caption { font-size:11px; color:var(--text3); letter-spacing:2px; margin-top:2px; }
-  .score-needed { font-size:12px; color:var(--text2); text-align:center; margin-top:6px; font-style:italic; }
-
-  /* CONTROLS */
-  .controls { display:flex; gap:10px; margin-bottom:24px; flex-wrap:wrap; animation:fadeUp 0.7s 0.2s ease both; }
-  .select-wrap { flex:1; min-width:160px; }
-  select { width:100%; padding:10px 14px; background:var(--surface); border:1px solid var(--border); border-radius:10px; color:var(--text2); font-family:'Crimson Text',serif; font-size:15px; cursor:pointer; appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C4A35A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:36px; }
-  select:focus { outline:none; border-color:var(--gold); }
-  .btn { padding:10px 20px; border-radius:10px; font-family:'Cinzel',serif; font-size:12px; font-weight:600; letter-spacing:1px; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
-  .btn-gold { background:var(--gold-glow); border:1px solid var(--gold); color:var(--gold); }
-  .btn-gold:hover { background:rgba(196,163,90,0.22); transform:translateY(-1px); }
-  .btn-ghost { background:var(--surface); border:1px solid var(--border); color:var(--text2); }
-  .btn-ghost:hover { border-color:var(--text3); color:var(--text); }
-
-  /* CHALLENGE CARD */
-  .challenge-wrap { animation:fadeUp 0.7s 0.3s ease both; }
-  .challenge-card { border:1px solid var(--border); border-radius:16px; overflow:hidden; background:var(--surface); transition:box-shadow 0.3s; }
-  .challenge-card:hover { box-shadow:0 0 30px rgba(196,163,90,0.07); }
-  .card-header { display:flex; align-items:center; gap:10px; padding:18px 24px; border-bottom:1px solid var(--border2); background:linear-gradient(135deg,var(--surface2) 0%,var(--surface) 100%); flex-wrap:wrap; }
-  .round-badge { width:36px; height:36px; border-radius:50%; border:1.5px solid var(--gold); display:flex; align-items:center; justify-content:center; font-family:'Cinzel',serif; font-size:14px; font-weight:700; color:var(--gold); flex-shrink:0; }
-  .type-tag { display:inline-flex; align-items:center; padding:4px 12px; border-radius:20px; font-family:'Cinzel',serif; font-size:10px; font-weight:600; letter-spacing:1px; }
-  .tag-combat      { background:rgba(192,68,58,0.12);  color:#E07070;         border:1px solid rgba(192,68,58,0.3);  }
-  .tag-nohit       { background:rgba(56,133,221,0.12); color:#7AAEEE;         border:1px solid rgba(56,133,221,0.3); }
-  .tag-restriction { background:rgba(196,163,90,0.12); color:var(--gold-light);border:1px solid rgba(196,163,90,0.3);}
-  .tag-speedrun    { background:rgba(76,175,135,0.12); color:#72C9A0;         border:1px solid rgba(76,175,135,0.25);}
-  .diff-badge { display:inline-flex; align-items:center; padding:4px 10px; border-radius:20px; font-family:'Cinzel',serif; font-size:10px; font-weight:700; letter-spacing:.5px; }
-  .diff-medio   { background:rgba(196,163,90,0.1);  color:var(--gold);  border:1px solid rgba(196,163,90,0.3); }
-  .diff-dificil { background:rgba(226,75,74,0.12);  color:#E07070;      border:1px solid rgba(226,75,74,0.3);  }
-  .diff-extremo { background:rgba(255,50,50,0.14);  color:#FF7070;      border:1px solid rgba(255,50,50,0.4);  }
-  .edit-btn { margin-left:auto; padding:4px 12px; background:none; border:1px solid var(--border); border-radius:6px; color:var(--text3); font-family:'Crimson Text',serif; font-size:13px; cursor:pointer; transition:all 0.2s; flex-shrink:0; }
-  .edit-btn:hover { color:var(--text2); border-color:var(--text3); }
-
-  .card-body { padding:24px; }
-  .enemy-banner { display:flex; align-items:center; gap:14px; padding:12px 16px; border:1px solid rgba(226,75,74,0.2); border-radius:10px; background:rgba(192,68,58,0.06); margin-bottom:14px; }
-  .enemy-icon { font-size:28px; flex-shrink:0; }
-  .enemy-name { font-family:'Cinzel',serif; font-size:15px; font-weight:700; color:#E07070; line-height:1.2; margin-bottom:2px; }
-  .enemy-region { font-size:12px; color:var(--text3); letter-spacing:1px; }
-  .challenge-name { font-family:'Cinzel',serif; font-size:21px; font-weight:700; color:var(--text); margin-bottom:10px; line-height:1.2; }
-  .challenge-desc { font-size:16px; color:var(--text2); font-style:italic; margin-bottom:16px; line-height:1.7; }
-  .mechanic-tip { display:flex; gap:10px; padding:10px 14px; border-radius:8px; background:rgba(122,174,238,0.06); border:1px solid rgba(122,174,238,0.15); margin-bottom:18px; font-size:13px; color:var(--text2); line-height:1.5; }
-  .conditions { margin-bottom:24px; padding:14px 18px; border-left:2px solid var(--border); background:var(--bg3); border-radius:0 8px 8px 0; }
-  .conditions-title { font-family:'Cinzel',serif; font-size:10px; letter-spacing:2px; color:var(--gold); margin-bottom:8px; }
-  .conditions li { list-style:none; font-size:14px; color:var(--text2); padding:3px 0 3px 18px; position:relative; line-height:1.5; }
-  .conditions li::before { content:'◆'; position:absolute; left:0; font-size:6px; color:var(--gold); top:8px; }
-  .result-btns { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-  .btn-win, .btn-lose { padding:14px; border-radius:12px; font-family:'Cinzel',serif; font-size:13px; font-weight:700; letter-spacing:1px; cursor:pointer; transition:all 0.25s; }
-  .btn-win  { background:rgba(76,175,135,0.08); border:1.5px solid var(--win);  color:var(--win);  }
-  .btn-win:hover  { background:rgba(76,175,135,0.18); transform:translateY(-2px); box-shadow:0 4px 16px rgba(76,175,135,0.15); }
-  .btn-lose { background:rgba(192,68,58,0.08);  border:1.5px solid var(--lose); color:var(--lose); }
-  .btn-lose:hover { background:rgba(192,68,58,0.18);  transform:translateY(-2px); box-shadow:0 4px 16px rgba(192,68,58,0.15); }
-  .btn-win:disabled,.btn-lose:disabled { opacity:.3; pointer-events:none; }
-
-  .progress-dots { display:flex; justify-content:center; gap:10px; margin-top:18px; }
-  .dot { width:8px; height:8px; border-radius:50%; border:1px solid var(--border); background:transparent; transition:all 0.35s; }
-  .dot.active { background:var(--gold); border-color:var(--gold); box-shadow:0 0 6px rgba(196,163,90,0.5); }
-  .dot.won  { background:var(--win);  border-color:var(--win);  }
-  .dot.lost { background:var(--lose); border-color:var(--lose); }
-
-  /* RESULT BANNER */
-  .result-banner { display:none; text-align:center; padding:40px 24px; border-radius:16px; margin-bottom:28px; border:1.5px solid; animation:bannerReveal 0.6s ease; }
-  @keyframes bannerReveal { from{opacity:0;transform:scale(0.96) translateY(8px)} to{opacity:1;transform:scale(1) translateY(0)} }
-  .result-banner.show { display:block; }
-  .result-banner.victory { border-color:var(--gold); background:linear-gradient(135deg,rgba(196,163,90,0.06) 0%,rgba(196,163,90,0.02) 100%); box-shadow:0 0 40px rgba(196,163,90,0.1); }
-  .result-banner.defeat  { border-color:var(--lose);  background:rgba(192,68,58,0.06); }
-  .banner-icon  { font-size:52px; margin-bottom:12px; filter:drop-shadow(0 0 12px rgba(196,163,90,0.5)); }
-  .defeat .banner-icon { filter:none; }
-  .banner-title { font-family:'Cinzel',serif; font-size:24px; font-weight:900; color:var(--gold); margin-bottom:8px; letter-spacing:2px; }
-  .defeat .banner-title { color:var(--lose); }
-  .banner-sub   { font-size:16px; color:var(--text2); font-style:italic; line-height:1.7; max-width:420px; margin:0 auto; }
-
-  /* MODAL */
-  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:100; align-items:center; justify-content:center; backdrop-filter:blur(4px); }
-  .modal-overlay.open { display:flex; }
-  .modal { background:var(--surface); border:1px solid var(--gold); border-radius:16px; padding:28px; width:90%; max-width:480px; animation:bannerReveal 0.3s ease; }
-  .modal-title { font-family:'Cinzel',serif; font-size:16px; color:var(--gold); margin-bottom:18px; letter-spacing:1px; }
-  .form-label { font-family:'Cinzel',serif; font-size:10px; letter-spacing:2px; color:var(--text3); display:block; margin-bottom:5px; margin-top:14px; }
-  .form-input,.form-textarea { width:100%; padding:10px 14px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; color:var(--text); font-family:'Crimson Text',serif; font-size:16px; transition:border-color 0.2s; resize:none; }
-  .form-input::placeholder,.form-textarea::placeholder { color:var(--text3); }
-  .form-input:focus,.form-textarea:focus { outline:none; border-color:var(--gold); }
-  .modal-actions { display:flex; gap:10px; margin-top:20px; }
-
-  @keyframes fadeDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes fadeUp   { from{opacity:0;transform:translateY(16px)}  to{opacity:1;transform:translateY(0)} }
-
-  .divider-ornament { display:flex; align-items:center; gap:16px; margin:32px 0; color:var(--text3); font-size:12px; letter-spacing:2px; }
-  .divider-ornament::before,.divider-ornament::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,transparent,var(--border),transparent); }
-  .footer { text-align:center; margin-top:48px; font-size:12px; color:var(--text3); letter-spacing:2px; font-family:'Cinzel',serif; }
-
-  @media (max-width:500px) {
-    .header-title { font-size:28px; }
-    .scoreboard { grid-template-columns:1fr; gap:12px; }
-    .result-btns { grid-template-columns:1fr; }
-    .controls { flex-direction:column; }
-  }
-</style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
 </head>
+
 <body>
-<div class="page-wrap">
+  <div class="page-wrap">
 
-  <div class="header">
-    <div class="moon-sigil">☾</div>
-    <div class="header-kana">Genshin Impact · Reto Especial</div>
-    <h1 class="header-title">Prueba Lunar</h1>
-    <p class="header-subtitle">Tres sellos. Dos victorias. Una sola recompensa.</p>
-    <div class="prize-pill"><span>☾</span><span>Premio: Bendición Lunar</span></div>
-  </div>
-
-  <div class="warning-box">
-    <span style="font-size:20px;flex-shrink:0;margin-top:1px;">⚠</span>
-    <span>Los retos involucran <strong>Leyendas Locales</strong> — los enemigos más brutales del overworld de Teyvat. Muchos tienen ataques de un solo golpe, barras de vida enormes y mecánicas únicas. No es una pelea normal.</span>
-  </div>
-
-  <div id="result-banner" class="result-banner">
-    <div class="banner-icon" id="banner-icon">☾</div>
-    <div class="banner-title" id="banner-title">¡Bendición Lunar Obtenida!</div>
-    <div class="banner-sub" id="banner-sub">Ha demostrado valentía y habilidad en Teyvat.</div>
-  </div>
-
-  <div class="scoreboard">
-    <div class="rounds-row">
-      <div class="round-orb" id="orb1"><span class="orb-icon" id="orb1-icon">I</span><span class="orb-label">RETO</span></div>
-      <div class="round-orb" id="orb2"><span class="orb-icon" id="orb2-icon">II</span><span class="orb-label">RETO</span></div>
-      <div class="round-orb" id="orb3"><span class="orb-icon" id="orb3-icon">III</span><span class="orb-label">RETO</span></div>
+    <div class="header">
+      <div class="moon-sigil">☾</div>
+      <div class="header-kana">Genshin Impact · Reto Especial</div>
+      <h1 class="header-title">Prueba Lunar</h1>
+      <p class="header-subtitle">Tres sellos. Dos victorias. Una sola recompensa.</p>
+      <div class="prize-pill"><span>☾</span><span>Premio: Bendición Lunar</span></div>
     </div>
-    <div class="score-center">
-      <div class="score-nums" id="score-nums">0 · 0</div>
-      <div class="score-caption">victorias · derrotas</div>
-      <div class="score-needed">necesita 2 victorias</div>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:8px;align-items:center;">
-      <div style="font-size:11px;color:var(--text3);letter-spacing:1px;font-family:'Cinzel',serif;">ESTADO</div>
-      <div id="status-label" style="font-size:15px;color:var(--text2);font-style:italic;">En curso...</div>
-    </div>
-  </div>
 
-  <div class="controls">
-    <div class="select-wrap">
-      <select id="type-filter">
-        <option value="all">Todos los tipos de reto</option>
-        <option value="combat">Derrotar Leyenda Local</option>
-        <option value="nohit">Sin recibir daño</option>
-        <option value="restriction">Restricción de equipo</option>
-        <option value="speedrun">Contra el tiempo</option>
-      </select>
+    <div class="warning-box">
+      <span class="warning-icon">⚠</span>
+      <span>
+        Los retos involucran <strong>Leyendas Locales</strong> — los enemigos más brutales del overworld de Teyvat.
+        Muchos tienen ataques de un solo golpe, barras de vida enormes y mecánicas únicas. No es una pelea normal.
+      </span>
     </div>
-    <button class="btn btn-gold" onclick="shuffleChallenge()">⟳ Sortear reto</button>
-    <button class="btn btn-ghost" onclick="resetAll()">Reiniciar todo</button>
-  </div>
 
-  <div class="challenge-wrap">
-    <div class="challenge-card">
-      <div class="card-header">
-        <div class="round-badge" id="round-badge">1</div>
-        <span class="type-tag" id="type-tag">—</span>
-        <span class="diff-badge" id="diff-tag">—</span>
-        <button class="edit-btn" onclick="openModal()">✎ Editar</button>
+    <div id="result-banner" class="result-banner" aria-live="polite">
+      <div class="banner-icon" id="banner-icon">☾</div>
+      <div class="banner-title" id="banner-title">¡Bendición Lunar Obtenida!</div>
+      <div class="banner-sub" id="banner-sub">Ha demostrado valentía y habilidad en Teyvat.</div>
+    </div>
+
+    <div class="scoreboard">
+      <div class="rounds-row">
+        <div class="round-orb" id="orb1"><span class="orb-icon" id="orb1-icon">I</span><span
+            class="orb-label">RETO</span></div>
+        <div class="round-orb" id="orb2"><span class="orb-icon" id="orb2-icon">II</span><span
+            class="orb-label">RETO</span></div>
+        <div class="round-orb" id="orb3"><span class="orb-icon" id="orb3-icon">III</span><span
+            class="orb-label">RETO</span></div>
       </div>
-      <div class="card-body">
-        <div class="enemy-banner">
-          <div class="enemy-icon" id="enemy-icon">👁</div>
-          <div>
-            <div class="enemy-name" id="enemy-name">Leyenda Local</div>
-            <div class="enemy-region" id="enemy-region">Región · Tipo</div>
+
+      <div class="score-center">
+        <div class="score-nums" id="score-nums">0 · 0</div>
+        <div class="score-caption">victorias · derrotas</div>
+        <div class="score-needed">necesita 2 victorias</div>
+      </div>
+
+      <div class="status-box">
+        <div class="status-title">ESTADO</div>
+        <div id="status-label" class="status-label">En curso...</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="select-wrap">
+        <select id="type-filter">
+          <option value="all">Todos los tipos de reto</option>
+          <option value="combat">Derrotar Leyenda Local</option>
+          <option value="nohit">Sin recibir daño</option>
+          <option value="restriction">Restricción de equipo</option>
+          <option value="speedrun">Contra el tiempo</option>
+        </select>
+      </div>
+      <button class="btn btn-gold" id="btn-shuffle">⟳ Sortear reto</button>
+      <button class="btn btn-ghost" id="btn-reset">Reiniciar todo</button>
+    </div>
+
+    <div class="challenge-wrap">
+      <div class="challenge-card">
+        <div class="card-header">
+          <div class="round-badge" id="round-badge">1</div>
+          <span class="type-tag" id="type-tag">—</span>
+          <span class="diff-badge" id="diff-tag">—</span>
+          <button class="edit-btn" id="btn-edit">✎ Editar</button>
+        </div>
+
+        <div class="card-body">
+          <div class="enemy-banner">
+            <div class="enemy-icon" id="enemy-icon">👁</div>
+            <div>
+              <div class="enemy-name" id="enemy-name">Leyenda Local</div>
+              <div class="enemy-region" id="enemy-region">Región · Tipo</div>
+            </div>
+          </div>
+
+          <div class="challenge-name" id="c-name">—</div>
+          <div class="challenge-desc" id="c-desc">—</div>
+
+          <div class="mechanic-tip" id="c-tip">
+            <span class="tip-icon">💡</span>
+            <span id="c-tip-text"></span>
+          </div>
+
+          <div class="conditions">
+            <div class="conditions-title">Condiciones del Sello</div>
+            <ul id="c-conditions"></ul>
+          </div>
+
+          <div class="result-btns">
+            <button class="btn-win" id="btn-win">✓ Reto Superado</button>
+            <button class="btn-lose" id="btn-lose">✗ Reto Fallido</button>
           </div>
         </div>
-        <div class="challenge-name" id="c-name">—</div>
-        <div class="challenge-desc" id="c-desc">—</div>
-        <div class="mechanic-tip" id="c-tip">
-          <span style="flex-shrink:0;font-size:14px;margin-top:1px;">💡</span>
-          <span id="c-tip-text"></span>
-        </div>
-        <div class="conditions">
-          <div class="conditions-title">Condiciones del Sello</div>
-          <ul id="c-conditions"></ul>
-        </div>
-        <div class="result-btns">
-          <button class="btn-win" id="btn-win" onclick="recordResult('win')">✓ Reto Superado</button>
-          <button class="btn-lose" id="btn-lose" onclick="recordResult('lose')">✗ Reto Fallido</button>
-        </div>
+      </div>
+
+      <div class="progress-dots">
+        <div class="dot" id="dot0"></div>
+        <div class="dot" id="dot1"></div>
+        <div class="dot" id="dot2"></div>
       </div>
     </div>
-    <div class="progress-dots">
-      <div class="dot" id="dot0"></div>
-      <div class="dot" id="dot1"></div>
-      <div class="dot" id="dot2"></div>
+
+    <div class="divider-ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
+    <div class="footer">Genshin Impact Fan Challenge · Prueba Lunar v2.0</div>
+  </div>
+
+  <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+      <div class="modal-title" id="modal-title">✦ Personalizar Reto</div>
+
+      <label class="form-label" for="m-title">Nombre del reto</label>
+      <input class="form-input" id="m-title" placeholder="Nombre...">
+
+      <label class="form-label" for="m-desc">Descripción</label>
+      <textarea class="form-textarea" id="m-desc" rows="2" placeholder="Descripción..."></textarea>
+
+      <label class="form-label" for="m-conds">Condiciones (separadas por | )</label>
+      <input class="form-input" id="m-conds" placeholder="Cond 1 | Cond 2 | Cond 3">
+
+      <div class="modal-actions">
+        <button class="btn btn-gold" id="btn-save-modal" style="flex:1">Guardar</button>
+        <button class="btn btn-ghost" id="btn-close-modal">Cancelar</button>
+      </div>
     </div>
   </div>
 
-  <div class="divider-ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
-  <div class="footer">Genshin Impact Fan Challenge · Prueba Lunar v2.0</div>
-</div>
-
-<div class="modal-overlay" id="modal-overlay">
-  <div class="modal">
-    <div class="modal-title">✦ Personalizar Reto</div>
-    <label class="form-label">Nombre del reto</label>
-    <input class="form-input" id="m-title" placeholder="Nombre...">
-    <label class="form-label">Descripción</label>
-    <textarea class="form-textarea" id="m-desc" rows="2" placeholder="Descripción..."></textarea>
-    <label class="form-label">Condiciones (separadas por | )</label>
-    <input class="form-input" id="m-conds" placeholder="Cond 1 | Cond 2 | Cond 3">
-    <div class="modal-actions">
-      <button class="btn btn-gold" style="flex:1" onclick="saveModal()">Guardar</button>
-      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
-    </div>
-  </div>
-</div>
-
-<script>
-const POOL = [
-  // ── COMBATE ──────────────────────────────────────────────────────────────
-  {
-    type:'combat', tag:'Combate', tagClass:'tag-combat',
-    diff:'extremo', diffClass:'diff-extremo', diffLabel:'☠ EXTREMO',
-    enemy:'Vivianne del Lago', enemyIcon:'💧', region:'Fontaine · Leyenda Local',
-    title:'La Pesadilla del Lago',
-    desc:'Derrota a Vivianne del Lago. Su rayo de agua y sus cañones pueden eliminar personajes de un solo golpe. Tiene una de las barras de vida más grandes entre todas las Leyendas Locales del juego.',
-    tip:'Hydro no funciona — es inmune. Dendro o Pyro son las mejores opciones. Un escudo Zhongli es casi obligatorio. Ten curaciones de reserva.',
-    conditions:[
-      'Sin usar pociones de daño ni comida de ataque durante el combate',
-      'El combate debe grabarse o documentarse con screenshots del inicio y el fin',
-      'No se permite bajar el nivel de mundo para facilitar la pelea'
-    ]
-  },
-  {
-    type:'combat', tag:'Combate', tagClass:'tag-combat',
-    diff:'extremo', diffClass:'diff-extremo', diffLabel:'☠ EXTREMO',
-    enemy:'Rocky Avildsen', enemyIcon:'🥊', region:'Fontaine · Leyenda Local',
-    title:'El Último Round',
-    desc:'Derrota a Rocky Avildsen. No tiene elemento, así que no hay debilidad fácil que explotar. En su fase de furia, sus puñetazos pueden eliminar personajes al instante y se vuelve mucho más agresivo.',
-    tip:'Paciencia. Sus ataques telegrafían bien. En fase furiosa, prioriza esquivar sobre atacar. Sin debilidad elemental, el DPS puro es tu única herramienta.',
-    conditions:[
-      'Sin comida durante el combate',
-      'El equipo debe elegirse antes de entrar — sin cambios después',
-      'Si un personaje cae en la fase de furia, el reto se considera fallido'
-    ]
-  },
-  {
-    type:'combat', tag:'Combate', tagClass:'tag-combat',
-    diff:'dificil', diffClass:'diff-dificil', diffLabel:'⚔ DIFÍCIL',
-    enemy:'Liam, el Arcoíris Fugaz', enemyIcon:'🎸', region:'Fontaine · Leyenda Local',
-    title:'La Balada del Caos',
-    desc:'Derrota a Liam. Controla el campo de batalla con molotovs y pociones que generan reacciones Overloaded devastadoras en el suelo. Su movilidad lo hace muy difícil de fijar.',
-    tip:'Empapa el suelo con Hydro antes de que lance sus pociones para neutralizar el Overloaded. Si un personaje está infligido con Pyro o Electro, cámbialo inmediatamente.',
-    conditions:[
-      'Sin usar Anemo en sus skills para dispersar sus áreas de daño',
-      'El combate no puede interrumpirse — sin salir del rango de combate',
-      'Máximo 1 personaje caído permitido en todo el intento'
-    ]
-  },
-  {
-    type:'combat', tag:'Combate', tagClass:'tag-combat',
-    diff:'extremo', diffClass:'diff-extremo', diffLabel:'☠ EXTREMO',
-    enemy:'Polychrome Tri-Stars', enemyIcon:'🔺', region:'Natlan · Leyenda Local',
-    title:'Los Tres Agentes Fatui',
-    desc:'Derrota a los tres Agentes Fatui simultáneamente. Cada uno tiene un escudo elemental distinto (Sidorenko = Cryo, Vasily = Pyro, Nomokonov = Electro). Sin los elementos correctos, el combate se convierte en algo casi interminable.',
-    tip:'Necesitas al menos 3 elementos para romper los 3 escudos. Un equipo de 4 elementos mixtos es lo ideal. Enfócate en uno a la vez.',
-    conditions:[
-      'Debes derrotar a los tres en un único intento sin morir',
-      'Sin pociones de daño ni comida ofensiva durante el combate',
-      'Si caen 2 personajes, el reto se da por fallido aunque ganes'
-    ]
-  },
-  {
-    type:'combat', tag:'Combate', tagClass:'tag-combat',
-    diff:'extremo', diffClass:'diff-extremo', diffLabel:'☠ EXTREMO',
-    enemy:'Cocijo', enemyIcon:'⚡', region:'Natlan · Leyenda Local',
-    title:'Antes del Sello de Trueno',
-    desc:'Derrota a Cocijo antes de que active su escudo Thunderthorn Ward. Solo acepta 34 instancias de daño antes de activarlo — si no lo eliminas rápido, la pelea se vuelve casi imposible.',
-    tip:'Burst de daño en los primeros segundos. Pyro rompe sus escudos rápido. Usa reacciones como Melt o Vaporize. Come y toma pociones ANTES de entrar.',
-    conditions:[
-      'Debes derrotarlo antes de que active el escudo por primera vez — si lo activa, reto fallido',
-      'Sin bajar nivel de mundo',
-      'Screenshot del intento para verificar que el escudo nunca se activó'
-    ]
-  },
-  {
-    type:'combat', tag:'Combate', tagClass:'tag-combat',
-    diff:'dificil', diffClass:'diff-dificil', diffLabel:'⚔ DIFÍCIL',
-    enemy:'"He Never Dies"', enemyIcon:'🐾', region:'Natlan · Prueba de la Noche',
-    title:'El Capibara de la Muerte',
-    desc:'Derrota al capibara He Never Dies. Parece inofensivo, pero si lo dejas acumular suficiente energía desata una técnica definitiva devastadora. Es una Leyenda Local de Natlan dentro del modo Prueba de la Noche.',
-    tip:'Equipos de crowd control (aturdimiento) funcionan bien. Reacciones Overloaded y ataques de caída son efectivos. No lo subestimes.',
-    conditions:[
-      'Si el capibara activa su técnica definitiva en algún momento, reto fallido automáticamente',
-      'Las reglas del modo Prueba de la Noche aplican durante el combate',
-      'Ningún personaje puede caer durante el intento'
-    ]
-  },
-
-  // ── SIN DAÑO ─────────────────────────────────────────────────────────────
-  {
-    type:'nohit', tag:'Sin daño', tagClass:'tag-nohit',
-    diff:'extremo', diffClass:'diff-extremo', diffLabel:'☠ EXTREMO',
-    enemy:'Vivianne del Lago', enemyIcon:'💧', region:'Fontaine · Leyenda Local',
-    title:'Danza Sobre el Agua',
-    desc:'Derrota a Vivianne del Lago sin que ningún personaje reciba daño directo. Sus cañones hacen tracking activo y su rayo es casi instantáneo — tienes que esquivar todo el tiempo.',
-    tip:'Zhongli escudo + Geo equipo = cristalizar cada golpe sin recibir daño. Sin curación porque si necesitas curar, algo ya salió muy mal.',
-    conditions:[
-      'La barra de vida de todos los personajes debe terminar intacta (al 100%)',
-      'Escudos permitidos — curarse NO',
-      'Grabación obligatoria para verificar el resultado'
-    ]
-  },
-  {
-    type:'nohit', tag:'Sin daño', tagClass:'tag-nohit',
-    diff:'extremo', diffClass:'diff-extremo', diffLabel:'☠ EXTREMO',
-    enemy:'Rocky Avildsen', enemyIcon:'🥊', region:'Fontaine · Leyenda Local',
-    title:'Cero Golpes, Cero Excusas',
-    desc:'Derrota a Rocky Avildsen sin recibir ningún golpe — incluyendo toda su fase de furia. Sus puñetazos tienen hitbox grandes y erráticas. Es probablemente el reto de no-hit más difícil del overworld.',
-    tip:'Este reto requiere memorizar sus patrones. Sus ataques tienen wind-up claro. Aprende a leerlos antes de intentarlo en serio.',
-    conditions:[
-      'Ningún golpe directo permitido en ningún momento',
-      'Sin curarse en ningún momento del combate',
-      'Un solo intento válido — si recibes daño, se declara fallido'
-    ]
-  },
-  {
-    type:'nohit', tag:'Sin daño', tagClass:'tag-nohit',
-    diff:'dificil', diffClass:'diff-dificil', diffLabel:'⚔ DIFÍCIL',
-    enemy:'Rilai', enemyIcon:'🎵', region:'Natlan · Leyenda Local',
-    title:'Sin Toque de Fusion Nova',
-    desc:'Derrota a Rilai sin ser golpeado por ninguno de sus ataques Fusion Nova. No puedes usar escudos ni I-frames para absorberlos — si el ataque toca a un personaje de cualquier forma, se cuenta como impacto.',
-    tip:'Esta es exactamente la condición del segundo logro de Rilai en el juego. Estudia el patrón de sus Fusion Novas y aprende cuándo esquivar.',
-    conditions:[
-      'Ningún ataque Fusion Nova puede impactar a ningún personaje del equipo',
-      'Escudos e I-frames NO cuentan como evasión — el ataque no debe tocar al personaje',
-      'Grabación para verificar cada ataque esquivado'
-    ]
-  },
-
-  // ── RESTRICCIÓN ──────────────────────────────────────────────────────────
-  {
-    type:'restriction', tag:'Restricción', tagClass:'tag-restriction',
-    diff:'dificil', diffClass:'diff-dificil', diffLabel:'⚔ DIFÍCIL',
-    enemy:'Polychrome Tri-Stars', enemyIcon:'🔺', region:'Natlan · Leyenda Local',
-    title:'Mono Elemento Contra Tres Escudos',
-    desc:'Derrota a los Polychrome Tri-Stars usando solo personajes de un único elemento. Con un solo elemento, tienes que gestionar creativamente cómo romper los tres escudos distintos.',
-    tip:'Pyro es la opción más versátil: rompe Cryo directamente, reacciona con Electro (Overloaded). Geo ignora escudos pero es lento.',
-    conditions:[
-      'Anuncia el elemento antes de empezar — sin cambiar',
-      'Los 4 personajes deben ser del mismo elemento',
-      'Ningún personaje puede caer durante el combate'
-    ]
-  },
-  {
-    type:'restriction', tag:'Restricción', tagClass:'tag-restriction',
-    diff:'dificil', diffClass:'diff-dificil', diffLabel:'⚔ DIFÍCIL',
-    enemy:'Liam, el Arcoíris Fugaz', enemyIcon:'🎸', region:'Fontaine · Leyenda Local',
-    title:'El Guerrero Solitario',
-    desc:'Derrota a Liam con un solo personaje activo durante todo el combate. No puedes cambiar de personaje — el elegido debe terminar solo lo que empieza, frente a uno de los Leyendas más difíciles de Fontaine.',
-    tip:'Noelle (auto-cura en burst, escudo) o Hu Tao (burst damage extremo) son buenas opciones. Planea antes de entrar.',
-    conditions:[
-      'Anuncia el personaje elegido antes de entrar — sin cambios posibles',
-      'Si el personaje único cae, reto fallido',
-      'Sin comida ni pociones durante el combate'
-    ]
-  },
-  {
-    type:'restriction', tag:'Restricción', tagClass:'tag-restriction',
-    diff:'medio', diffClass:'diff-medio', diffLabel:'★ MEDIO',
-    enemy:'Cocijo', enemyIcon:'⚡', region:'Natlan · Leyenda Local',
-    title:'Sin el Favor del Rayo',
-    desc:'Derrota a Cocijo sin usar ningún personaje Electro ni Pyro. Esos son los elementos más efectivos contra él — sin ellos, tienes que encontrar otra forma de hacer el daño suficiente antes del escudo.',
-    tip:'Hydro + Cryo para Freeze, o Dendro para Bloom. Geo puro también funciona aunque es más lento. El tiempo es tu enemigo.',
-    conditions:[
-      'Cero personajes Electro o Pyro en el equipo',
-      'Sin bajar el nivel de mundo',
-      'El escudo no puede activarse — si lo hace, reto fallido'
-    ]
-  },
-
-  // ── SPEEDRUN ─────────────────────────────────────────────────────────────
-  {
-    type:'speedrun', tag:'Speedrun', tagClass:'tag-speedrun',
-    diff:'dificil', diffClass:'diff-dificil', diffLabel:'⚔ DIFÍCIL',
-    enemy:'Ninianne + Vivianne del Lago', enemyIcon:'⏱', region:'Fontaine · Dos Leyendas Locales',
-    title:'Las Dos Pesadillas',
-    desc:'Derrota a Ninianne del Lago y luego a Vivianne del Lago en menos de 12 minutos totales, sin cerrar el juego entre las dos peleas. Pelear a dos Leyendas seguidas agota recursos rápido.',
-    tip:'Empieza por Ninianne — es la más fácil de las dos. Conserva curaciones y pociones para Vivianne. Dendro o Pyro para ambas.',
-    conditions:[
-      'Tiempo desde el primer ataque a Ninianne hasta la caída de Vivianne: máximo 12 min',
-      'Sin cerrar el juego ni visitar una Estatua de los Siete entre peleas',
-      'Screenshot del reloj al inicio y al final para validar'
-    ]
-  },
-  {
-    type:'speedrun', tag:'Speedrun', tagClass:'tag-speedrun',
-    diff:'extremo', diffClass:'diff-extremo', diffLabel:'☠ EXTREMO',
-    enemy:'Rocky Avildsen', enemyIcon:'🥊', region:'Fontaine · Leyenda Local',
-    title:'Nocaut en 3 Minutos',
-    desc:'Derrota a Rocky Avildsen incluyendo su fase de furia en menos de 3 minutos. Su barra de vida es enorme y sin debilidad elemental, esto es un test de DPS puro bajo presión extrema.',
-    tip:'Necesitas el equipo de mayor burst del juego. Melt, Vaporize o Hyperbloom. No hay tiempo para errores ni para curarse.',
-    conditions:[
-      'Temporizador visible durante todo el combate (reloj del sistema o app externa)',
-      'Sin pausar el juego durante el intento',
-      'La fase de furia debe activarse Y superarse dentro del tiempo límite'
-    ]
-  }
-];
-
-let assigned=[], results=[null,null,null], currentRound=0, gameOver=false;
-
-function init(){
-  const type=document.getElementById('type-filter').value;
-  const pool=type==='all'?POOL:POOL.filter(c=>c.type===type);
-  if(!pool.length){alert('No hay retos de ese tipo. Prueba con "Todos".');return;}
-  const s=[...pool].sort(()=>Math.random()-0.5);
-  assigned=pool.length>=3?[s[0],s[1],s[2]]:[s[0],s[1%s.length],s[2%s.length]];
-  results=[null,null,null]; currentRound=0; gameOver=false;
-  document.getElementById('result-banner').className='result-banner';
-  document.getElementById('status-label').textContent='En curso...';
-  document.getElementById('status-label').style.color='var(--text2)';
-  renderAll();
-}
-
-function renderAll(){ renderOrbs(); renderChallenge(); renderScore(); renderDots(); }
-
-function renderOrbs(){
-  const labels=['I','II','III'];
-  for(let i=0;i<3;i++){
-    const orb=document.getElementById('orb'+(i+1));
-    const icon=document.getElementById('orb'+(i+1)+'-icon');
-    orb.className='round-orb';
-    if(results[i]==='win'){ orb.classList.add('won'); icon.textContent='✓'; }
-    else if(results[i]==='lose'){ orb.classList.add('lost'); icon.textContent='✗'; }
-    else{ icon.textContent=labels[i]; if(i===currentRound&&!gameOver)orb.classList.add('active'); }
-  }
-}
-
-function renderChallenge(){
-  const c=assigned[currentRound]; if(!c)return;
-  document.getElementById('round-badge').textContent=currentRound+1;
-  const tt=document.getElementById('type-tag'); tt.textContent=c.tag; tt.className='type-tag '+c.tagClass;
-  const dt=document.getElementById('diff-tag'); dt.textContent=c.diffLabel; dt.className='diff-badge '+c.diffClass;
-  document.getElementById('enemy-icon').textContent=c.enemyIcon;
-  document.getElementById('enemy-name').textContent=c.enemy;
-  document.getElementById('enemy-region').textContent=c.region;
-  document.getElementById('c-name').textContent=c.title;
-  document.getElementById('c-desc').textContent=c.desc;
-  document.getElementById('c-tip').style.display=c.tip?'flex':'none';
-  document.getElementById('c-tip-text').textContent=c.tip||'';
-  document.getElementById('c-conditions').innerHTML=c.conditions.map(x=>'<li>'+x+'</li>').join('');
-  document.getElementById('btn-win').disabled=gameOver;
-  document.getElementById('btn-lose').disabled=gameOver;
-}
-
-function renderScore(){
-  const w=results.filter(r=>r==='win').length, l=results.filter(r=>r==='lose').length;
-  document.getElementById('score-nums').textContent=w+' · '+l;
-}
-
-function renderDots(){
-  for(let i=0;i<3;i++){
-    const d=document.getElementById('dot'+i); d.className='dot';
-    if(results[i]==='win')d.classList.add('won');
-    else if(results[i]==='lose')d.classList.add('lost');
-    else if(i===currentRound&&!gameOver)d.classList.add('active');
-  }
-}
-
-function recordResult(r){
-  if(gameOver)return;
-  results[currentRound]=r;
-  const w=results.filter(x=>x==='win').length, l=results.filter(x=>x==='lose').length;
-  if(w>=2){gameOver=true;showVictory();}
-  else if(l>=2){gameOver=true;showDefeat();}
-  else currentRound++;
-  renderAll();
-}
-
-function showVictory(){
-  const b=document.getElementById('result-banner'); b.className='result-banner victory show';
-  document.getElementById('banner-icon').textContent='☾';
-  document.getElementById('banner-title').textContent='¡Bendición Lunar Obtenida!';
-  document.getElementById('banner-sub').textContent='Ha demostrado valentía y habilidad real frente a las Leyendas de Teyvat. La luna sonríe. ¡Entrega la recompensa merecida!';
-  document.getElementById('status-label').textContent='¡Victoria!';
-  document.getElementById('status-label').style.color='var(--win)';
-  b.scrollIntoView({behavior:'smooth',block:'start'});
-}
-
-function showDefeat(){
-  const b=document.getElementById('result-banner'); b.className='result-banner defeat show';
-  document.getElementById('banner-icon').textContent='✗';
-  document.getElementById('banner-title').textContent='Las Leyendas permanecen invictas';
-  document.getElementById('banner-sub').textContent='Los sellos lunares no han sido rotos. Las Leyendas de Teyvat han ganado hoy. La Bendición Lunar aguarda a quien tenga el coraje de intentarlo de nuevo.';
-  document.getElementById('status-label').textContent='Derrota';
-  document.getElementById('status-label').style.color='var(--lose)';
-  b.scrollIntoView({behavior:'smooth',block:'start'});
-}
-
-function shuffleChallenge(){
-  if(gameOver)return;
-  const type=document.getElementById('type-filter').value;
-  const pool=type==='all'?POOL:POOL.filter(c=>c.type===type);
-  const used=assigned.map(c=>c.title);
-  const avail=pool.filter(c=>!used.includes(c.title));
-  const pick=avail.length>0?avail:pool;
-  assigned[currentRound]=pick[Math.floor(Math.random()*pick.length)];
-  renderChallenge();
-}
-
-function resetAll(){init();}
-function openModal(){
-  const c=assigned[currentRound];
-  document.getElementById('m-title').value=c.title;
-  document.getElementById('m-desc').value=c.desc;
-  document.getElementById('m-conds').value=c.conditions.join(' | ');
-  document.getElementById('modal-overlay').classList.add('open');
-}
-function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
-function saveModal(){
-  const title=document.getElementById('m-title').value.trim();
-  const desc=document.getElementById('m-desc').value.trim();
-  const condStr=document.getElementById('m-conds').value.trim();
-  const conditions=condStr?condStr.split('|').map(s=>s.trim()).filter(Boolean):[];
-  if(!title)return;
-  assigned[currentRound]={...assigned[currentRound],title,desc,conditions};
-  closeModal(); renderChallenge();
-}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
-document.getElementById('modal-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('modal-overlay'))closeModal();});
-init();
-</script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
 </body>
+
 </html>
