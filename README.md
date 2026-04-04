@@ -168,7 +168,7 @@ No utiliza frameworks externos para la lógica principal.
 
 ---
 
-## � Instalación y Uso
+## ❓ Instalación y Uso
 
 ### Requisitos previos
 - Un navegador web moderno (Chrome, Firefox, Edge, etc.)
