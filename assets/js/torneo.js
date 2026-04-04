@@ -133,11 +133,7 @@ function updateNextRound(roundIndex) {
         nextRound[i].player1 = match1?.winner || null;
         nextRound[i].player2 = match2?.winner || null;
 
-        if (nextRound[i].player1 && !nextRound[i].player2) {
-            nextRound[i].winner = nextRound[i].player1;
-        } else {
-            nextRound[i].winner = null;
-        }
+        nextRound[i].winner = null;
     }
 
     updateNextRound(roundIndex + 1);
@@ -187,6 +183,10 @@ function renderBracket() {
             const card = document.createElement('div');
             card.className = 'match-card';
 
+            if (match.winner) {
+                card.classList.add('match-complete');
+            }
+
             const player1 = createPlayerRow(match.player1, match.winner === match.player1, roundIndex, matchIndex, 1, !match.player2 && !!match.player1);
             const player2 = createPlayerRow(match.player2, match.winner === match.player2, roundIndex, matchIndex, 2, false);
 
@@ -208,9 +208,10 @@ function renderBracket() {
         const championBox = document.createElement('div');
         championBox.className = 'champion-box';
         championBox.innerHTML = `
-      <div class="champion-title">Campeón del Torneo</div>
-      <div class="champion-name">${champion}</div>
-    `;
+            <div class="champion-crown">♛</div>
+            <div class="champion-title">Campeón del Torneo</div>
+            <div class="champion-name">${champion}</div>
+            `;
         elements.bracketContainer.appendChild(championBox);
     }
 }
@@ -227,6 +228,9 @@ function createPlayerRow(name, isWinner, roundIndex, matchIndex, slot, isBye = f
     span.textContent = name || 'Pendiente';
 
     row.appendChild(span);
+    if (!name) {
+        span.classList.add('pending');
+    }
 
     if (name && !isBye) {
         const btn = document.createElement('button');
@@ -237,7 +241,7 @@ function createPlayerRow(name, isWinner, roundIndex, matchIndex, slot, isBye = f
     } else if (isBye) {
         const byeText = document.createElement('span');
         byeText.className = 'match-name';
-        byeText.textContent = 'BYE';
+        byeText.textContent = 'Pasa libre';
         row.appendChild(byeText);
     }
 

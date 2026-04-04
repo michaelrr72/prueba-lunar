@@ -25,6 +25,10 @@ Además, incluye un **cronómetro integrado**, reglas globales visibles dentro d
 - Personalización manual del reto actual
 - Persistencia local mediante `localStorage`
 - Diseño temático con estética lunar y fondo animado
+- modo torneo con bracket de eliminación directa
+- navegación entre Prueba Lunar y Torneo Lunar
+- bracket visual con avance manual de ganadores
+- definición de un campeón final
 
 ---
 
@@ -112,19 +116,46 @@ Incluye:
 
 ---
 
-## 📂 Estructura del proyecto
+## 🏆 Modo Torneo
+
+Además del modo principal de retos, el proyecto incluye una página alternativa de torneo pensada para dinámicas competitivas entre varios participantes.
+
+Características del modo torneo:
+- registro manual de participantes
+- generación automática de bracket
+- eliminación directa hasta obtener un campeón
+- avance manual de ganadores por ronda
+- soporte visual para enfrentamientos y final
+- persistencia local mediante `localStorage`
+
+---
+
+## 🧱 Estructura ampliada del proyecto
 
 ```
 prueba-lunar/
 ├── index.html
+├── torneo.html
 ├── README.md
 └── assets/
     ├── css/
     │   └── styles.css
     └── js/
         ├── data.js
-        └── app.js
+        ├── app.js
+        └── torneo.js
 ```
+
+---
+
+## 🎮 Modos disponibles
+**Prueba Lunar**
+
+Modo principal de retos individuales contra jefes seleccionados, con condiciones aleatorias, tiempo límite y progreso por rondas.
+
+**Torneo Lunar**
+
+Modo competitivo de eliminación directa, pensado para organizar enfrentamientos entre participantes hasta definir un único campeón.
 
 ---
 
