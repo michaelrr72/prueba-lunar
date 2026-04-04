@@ -30,8 +30,8 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: 'Crimson Text', Georgia, serif;
-  font-size: 18px;
-  line-height: 1.65;
+  font-size: clamp(18px, 1.05vw + 0.55rem, 21px);
+  line-height: 1.7;
 }
 
 body::before {
@@ -55,9 +55,9 @@ body::before {
 .page-wrap {
   position: relative;
   z-index: 1;
-  max-width: 920px;
+  max-width: 1080px;
   margin: 0 auto;
-  padding: 44px 24px 90px;
+  padding: 50px 28px 100px;
 }
 
 /* HEADER */
@@ -98,19 +98,19 @@ body::before {
 
 .header-title {
   font-family: 'Cinzel', serif;
-  font-size: 38px;
+  font-size: clamp(36px, 2vw + 1.5rem, 52px);
   font-weight: 900;
   color: var(--gold);
   letter-spacing: 3px;
   text-shadow: 0 0 30px rgba(196, 163, 90, 0.3);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .header-subtitle {
-  font-size: 15px;
+  font-size: 19px;
   color: var(--text2);
   font-style: italic;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 .prize-pill {
@@ -131,13 +131,13 @@ body::before {
 .warning-box {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  padding: 14px 18px;
+  gap: 14px;
+  padding: 18px 20px;
   border: 1px solid rgba(226, 75, 74, 0.3);
   border-radius: 12px;
   background: rgba(192, 68, 58, 0.06);
-  margin-bottom: 28px;
-  font-size: 14px;
+  margin-bottom: 30px;
+  font-size: 18px;
   color: var(--text2);
   animation: fadeUp 0.7s 0.05s ease both;
 }
@@ -254,13 +254,13 @@ body::before {
 
 select {
   width: 100%;
-  padding: 10px 14px;
+  padding: 14px 16px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 10px;
   color: var(--text2);
   font-family: 'Crimson Text', serif;
-  font-size: 15px;
+  font-size: 18px;
   cursor: pointer;
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C4A35A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
@@ -275,10 +275,10 @@ select:focus {
 }
 
 .btn {
-  padding: 10px 20px;
-  border-radius: 10px;
+  padding: 14px 24px;
+  border-radius: 12px;
   font-family: 'Cinzel', serif;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 1px;
   cursor: pointer;
@@ -470,19 +470,19 @@ select:focus {
 
 .challenge-name {
   font-family: 'Cinzel', serif;
-  font-size: 21px;
+  font-size: 28px;
   font-weight: 700;
   color: var(--text);
-  margin-bottom: 10px;
-  line-height: 1.2;
+  margin-bottom: 12px;
+  line-height: 1.25;
 }
 
 .challenge-desc {
-  font-size: 16px;
+  font-size: 19px;
   color: var(--text2);
   font-style: italic;
-  margin-bottom: 16px;
-  line-height: 1.7;
+  margin-bottom: 18px;
+  line-height: 1.65;
 }
 
 .mechanic-tip {
@@ -516,11 +516,11 @@ select:focus {
 
 .conditions li {
   list-style: none;
-  font-size: 14px;
+  font-size: 17px;
   color: var(--text2);
-  padding: 3px 0 3px 18px;
+  padding: 5px 0 5px 20px;
   position: relative;
-  line-height: 1.5;
+  line-height: 1.65;
 }
 
 .conditions li::before {
@@ -849,7 +849,7 @@ select:focus {
 }
 
 .status-label {
-  font-size: 15px;
+  font-size: 18px;
   color: var(--text2);
   font-style: italic;
 }
@@ -883,7 +883,7 @@ select:focus {
 
 .timer-display {
   font-family: 'Cinzel', serif;
-  font-size: 52px;
+  font-size: clamp(48px, 3vw + 1rem, 68px);
   font-weight: 700;
   color: var(--text);
   letter-spacing: 3px;
@@ -971,7 +971,7 @@ select:focus {
 
 .time-limit-value {
   font-family: 'Cinzel', serif;
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 700;
   color: var(--gold-light);
   letter-spacing: 1px;
@@ -1011,6 +1011,17 @@ select:focus {
   opacity: 0.9;
   animation: timerSpin 8s linear infinite;
   transform-origin: center;
+}
+
+.header-kana,
+.score-caption,
+.conditions-title,
+.timer-label,
+.time-limit-title,
+.global-rules-title {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  letter-spacing: 2px;
 }
 
 body::after {
