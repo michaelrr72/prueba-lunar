@@ -24,6 +24,10 @@
   --border2: rgba(196, 163, 90, 0.08);
 }
 
+small {
+  font-size: 0.7em;
+}
+
 html,
 body {
   min-height: 100vh;
@@ -1100,7 +1104,7 @@ body::after {
 
 .tournament-layout {
   display: grid;
-  grid-template-columns: 340px 1fr;
+  grid-template-columns: 1fr;
   gap: 24px;
   align-items: start;
 }
@@ -1268,18 +1272,27 @@ body::after {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
   border: 1px solid transparent;
   border-radius: 10px;
-  padding: 10px 12px;
+  padding: 10px 16px;
   background: rgba(255, 255, 255, 0.02);
-  min-height: 52px;
+  min-height: 58px;
   position: relative;
   z-index: 1;
+  flex-wrap: wrap;
 }
 
 .match-player+.match-player {
   margin-top: 10px;
+}
+
+.match-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .match-player.winner {
@@ -1291,6 +1304,17 @@ body::after {
 .match-player.bye {
   border-color: rgba(196, 163, 90, 0.28);
   background: rgba(196, 163, 90, 0.08);
+}
+
+.match-player.disqualified {
+  opacity: 0.65;
+}
+
+.match-status {
+  color: var(--lose);
+  font-size: 12px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
 }
 
 .match-name {
@@ -1320,6 +1344,23 @@ body::after {
   border-color: var(--gold);
   color: var(--gold);
   transform: translateY(-1px);
+}
+
+.match-btn-dq {
+  border-color: var(--lose);
+  color: var(--lose);
+}
+
+.match-btn-dq:hover {
+  border-color: #ff6b6b;
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+}
+
+.match-actions-all {
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
 }
 
 .empty-state {
@@ -1400,12 +1441,6 @@ body::after {
 .floating-nav-btn:hover {
   transform: translateY(-2px) scale(1.03);
   background: rgba(196, 163, 90, 0.10);
-}
-
-@media (max-width: 900px) {
-  .tournament-layout {
-    grid-template-columns: 1fr;
-  }
 }
 
 .match-card.match-complete {

@@ -72,7 +72,9 @@ function createMatch(player1, player2 = null) {
     return {
         player1,
         player2,
-        winner: player2 === null ? player1 : null
+        player1Result: null,
+        player2Result: null,
+        completed: false
     };
 }
 
@@ -92,61 +94,75 @@ function generateBracket() {
     }
 
     state.rounds = [firstRound];
-    buildNextRounds();
     saveState();
     renderBracket();
 }
 
-function buildNextRounds() {
-    let currentRoundIndex = 0;
-
-    while (true) {
-        const currentRound = state.rounds[currentRoundIndex];
-        if (!currentRound || currentRound.length <= 1) break;
-
-        const nextRoundSize = Math.ceil(currentRound.length / 2);
-        const nextRound = [];
-
-        for (let i = 0; i < nextRoundSize; i++) {
-            nextRound.push(createMatch(null, null));
-        }
-
-        if (!state.rounds[currentRoundIndex + 1]) {
-            state.rounds.push(nextRound);
-        } else {
-            state.rounds[currentRoundIndex + 1] = nextRound;
-        }
-
-        currentRoundIndex++;
-    }
+function isMatchComplete(match) {
+    if (!match.player1 && !match.player2) return true;
+    if (match.player2 === null) return match.player1Result !== null;
+    return match.player1Result !== null && match.player2Result !== null;
 }
 
-function updateNextRound(roundIndex) {
+function getMatchSurvivors(match) {
+    const survivors = [];
+    if (match.player1 && match.player1Result === 'pass') survivors.push(match.player1);
+    if (match.player2 && match.player2Result === 'pass') survivors.push(match.player2);
+    return survivors;
+}
+
+function buildNextRoundFromRound(roundIndex) {
     const currentRound = state.rounds[roundIndex];
-    const nextRound = state.rounds[roundIndex + 1];
-    if (!nextRound) return;
+    if (!currentRound || !currentRound.every(isMatchComplete)) return;
 
-    for (let i = 0; i < nextRound.length; i++) {
-        const match1 = currentRound[i * 2];
-        const match2 = currentRound[i * 2 + 1];
+    const survivors = currentRound.flatMap(getMatchSurvivors);
+    state.rounds = state.rounds.slice(0, roundIndex + 1);
 
-        nextRound[i].player1 = match1?.winner || null;
-        nextRound[i].player2 = match2?.winner || null;
-
-        nextRound[i].winner = null;
+    if (survivors.length < 2) return;
+    const nextRound = [];
+    for (let i = 0; i < survivors.length; i += 2) {
+        nextRound.push(createMatch(survivors[i], survivors[i + 1] || null));
     }
 
-    updateNextRound(roundIndex + 1);
+    state.rounds.push(nextRound);
 }
 
-function setWinner(roundIndex, matchIndex, playerSlot) {
+function getChampion() {
+    const finalRound = state.rounds[state.rounds.length - 1];
+    if (!finalRound || !finalRound.every(isMatchComplete)) return null;
+
+    const survivors = finalRound.flatMap(getMatchSurvivors);
+    return survivors.length === 1 ? survivors[0] : null;
+}
+
+function recordResult(roundIndex, matchIndex, slot, passed) {
     const match = state.rounds[roundIndex][matchIndex];
-    const winner = playerSlot === 1 ? match.player1 : match.player2;
+    if (match.completed) return;
 
-    if (!winner) return;
+    if (slot === 1) {
+        match.player1Result = passed ? 'pass' : 'fail';
+    } else {
+        match.player2Result = passed ? 'pass' : 'fail';
+    }
 
-    match.winner = winner;
-    updateNextRound(roundIndex);
+    if (isMatchComplete(match)) {
+        match.completed = true;
+        buildNextRoundFromRound(roundIndex);
+    }
+
+    saveState();
+    renderBracket();
+}
+
+function disqualifyBoth(roundIndex, matchIndex) {
+    const match = state.rounds[roundIndex][matchIndex];
+    if (match.completed) return;
+
+    match.player1Result = 'fail';
+    match.player2Result = 'fail';
+    match.completed = true;
+
+    buildNextRoundFromRound(roundIndex);
     saveState();
     renderBracket();
 }
@@ -183,16 +199,29 @@ function renderBracket() {
             const card = document.createElement('div');
             card.className = 'match-card';
 
-            if (match.winner) {
+            if (match.completed) {
                 card.classList.add('match-complete');
             }
 
-            const player1 = createPlayerRow(match.player1, match.winner === match.player1, roundIndex, matchIndex, 1, !match.player2 && !!match.player1);
-            const player2 = createPlayerRow(match.player2, match.winner === match.player2, roundIndex, matchIndex, 2, false);
+            const player1 = createPlayerRow(match.player1, roundIndex, matchIndex, 1, !match.player2 && !!match.player1, match.player1Result);
+            const player2 = createPlayerRow(match.player2, roundIndex, matchIndex, 2, false, match.player2Result);
 
             card.appendChild(player1);
             if (match.player2 !== null) {
                 card.appendChild(player2);
+            }
+
+            if (match.player1 && match.player2 && !match.completed) {
+                const bothDisq = document.createElement('div');
+                bothDisq.className = 'match-actions match-actions-all';
+
+                const bothBtn = document.createElement('button');
+                bothBtn.className = 'match-btn match-btn-dq';
+                bothBtn.textContent = 'Ambos fallan';
+                bothBtn.addEventListener('click', () => disqualifyBoth(roundIndex, matchIndex));
+
+                bothDisq.appendChild(bothBtn);
+                card.appendChild(bothDisq);
             }
 
             column.appendChild(card);
@@ -202,7 +231,8 @@ function renderBracket() {
     });
 
     const finalRound = state.rounds[state.rounds.length - 1];
-    const champion = finalRound?.[0]?.winner;
+    const champion = getChampion();
+    const finalRoundComplete = finalRound?.every(isMatchComplete);
 
     if (champion) {
         const championBox = document.createElement('div');
@@ -213,14 +243,21 @@ function renderBracket() {
             <div class="champion-name">${champion}</div>
             `;
         elements.bracketContainer.appendChild(championBox);
+    } else if (finalRoundComplete) {
+        const championBox = document.createElement('div');
+        championBox.className = 'champion-box';
+        championBox.innerHTML = `
+            <div class="champion-crown">✖</div>
+            <div class="champion-title">Torneo sin campeón</div>
+            <div class="champion-name">Nadie avanzó</div>
+            `;
+        elements.bracketContainer.appendChild(championBox);
     }
 }
 
-function createPlayerRow(name, isWinner, roundIndex, matchIndex, slot, isBye = false) {
+function createPlayerRow(name, roundIndex, matchIndex, slot, isBye = false, result = null) {
     const row = document.createElement('div');
     row.className = 'match-player';
-
-    if (isWinner) row.classList.add('winner');
     if (isBye) row.classList.add('bye');
 
     const span = document.createElement('span');
@@ -233,33 +270,92 @@ function createPlayerRow(name, isWinner, roundIndex, matchIndex, slot, isBye = f
     }
 
     if (name && !isBye) {
-        const btn = document.createElement('button');
-        btn.className = 'match-btn';
-        btn.textContent = 'Gana';
-        btn.addEventListener('click', () => setWinner(roundIndex, matchIndex, slot));
-        row.appendChild(btn);
-    } else if (isBye) {
-        const byeText = document.createElement('span');
-        byeText.className = 'match-name';
-        byeText.textContent = 'Pasa libre';
-        row.appendChild(byeText);
+        const actions = document.createElement('div');
+        actions.className = 'match-actions';
+
+        if (!result) {
+            const passBtn = document.createElement('button');
+            passBtn.className = 'match-btn';
+            passBtn.textContent = 'Pasa';
+            passBtn.addEventListener('click', () => recordResult(roundIndex, matchIndex, slot, true));
+            actions.appendChild(passBtn);
+
+            const failBtn = document.createElement('button');
+            failBtn.className = 'match-btn match-btn-dq';
+            failBtn.textContent = 'Falla';
+            failBtn.addEventListener('click', () => recordResult(roundIndex, matchIndex, slot, false));
+            actions.appendChild(failBtn);
+        } else {
+            const status = document.createElement('span');
+            status.className = 'match-status';
+            status.textContent = result === 'pass' ? 'Pasa' : 'Falla';
+            if (result === 'pass') {
+                status.style.color = '#7ed7a6';
+            }
+            actions.appendChild(status);
+        }
+
+        row.appendChild(actions);
+    } else if (name && isBye) {
+        const actions = document.createElement('div');
+        actions.className = 'match-actions';
+
+        if (!result) {
+            const passBtn = document.createElement('button');
+            passBtn.className = 'match-btn';
+            passBtn.textContent = 'Pasa';
+            passBtn.addEventListener('click', () => recordResult(roundIndex, matchIndex, slot, true));
+            actions.appendChild(passBtn);
+
+            const failBtn = document.createElement('button');
+            failBtn.className = 'match-btn match-btn-dq';
+            failBtn.textContent = 'Falla';
+            failBtn.addEventListener('click', () => recordResult(roundIndex, matchIndex, slot, false));
+            actions.appendChild(failBtn);
+        } else {
+            const status = document.createElement('span');
+            status.className = 'match-status';
+            status.textContent = result === 'pass' ? 'Pasa (bye)' : 'Falla (bye)';
+            if (result === 'pass') {
+                status.style.color = '#7ed7a6';
+            }
+            actions.appendChild(status);
+        }
+
+        row.appendChild(actions);
     }
 
     return row;
 }
 
 function addPlayer() {
-    const name = elements.playerName.value.trim();
-    if (!name) return;
-    if (state.players.includes(name)) {
-        alert('Ese participante ya existe.');
-        return;
+    const text = elements.playerName.value.trim();
+    if (!text) return;
+
+    const names = text.split('\n').map(name => name.trim()).filter(name => name.length > 0);
+    if (names.length === 0) return;
+
+    let added = 0;
+    let duplicates = [];
+
+    names.forEach(name => {
+        if (state.players.includes(name)) {
+            duplicates.push(name);
+        } else {
+            state.players.push(name);
+            added++;
+        }
+    });
+
+    if (duplicates.length > 0) {
+        alert(`Algunos nombres ya existen: ${duplicates.join(', ')}`);
     }
 
-    state.players.push(name);
-    elements.playerName.value = '';
-    saveState();
-    renderPlayers();
+    if (added > 0) {
+        elements.playerName.value = '';
+        saveState();
+        renderPlayers();
+    }
 }
 
 function removePlayer(index) {
@@ -284,7 +380,7 @@ function attachEvents() {
     elements.btnGenerateBracket.addEventListener('click', generateBracket);
 
     elements.playerName.addEventListener('keydown', event => {
-        if (event.key === 'Enter') addPlayer();
+        if (event.key === 'Enter' && event.ctrlKey) addPlayer();
     });
 }
 

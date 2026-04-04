@@ -98,6 +98,7 @@ function loadState() {
     state.timerInitial = parsed.timerInitial ?? 0;
     state.timerRunning = false;
     state.timerInterval = null;
+    updateTimerButton();
     return true;
   } catch {
     return false;
@@ -116,18 +117,37 @@ function stopTimer() {
     state.timerInterval = null;
   }
   state.timerRunning = false;
+  updateTimerButton();
 }
 
-function formatTime(totalSeconds) {
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+function pauseTimer() {
+  stopTimer();
+  saveState();
+}
+
+function toggleTimer() {
+  if (state.timerRunning) {
+    pauseTimer();
+  } else {
+    startTimer();
+  }
+}
+
+function updateTimerButton() {
+  elements.btnStartTimer.textContent = state.timerRunning ? 'Pausar tiempo' : 'Iniciar tiempo';
+}
+
+function formatTime(totalTenths) {
+  const minutes = Math.floor(totalTenths / 600);
+  const seconds = Math.floor((totalTenths % 600) / 10);
+  const tenths = totalTenths % 10;
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}<small>.${tenths}</small>`;
 }
 
 function renderTimer() {
-  elements.timerDisplay.textContent = formatTime(state.timerRemaining);
+  elements.timerDisplay.innerHTML = formatTime(state.timerRemaining);
 
-  if (state.timerRemaining <= 30) {
+  if (state.timerRemaining <= 300) {
     elements.timerDisplay.classList.add('danger');
   } else {
     elements.timerDisplay.classList.remove('danger');
@@ -137,7 +157,7 @@ function renderTimer() {
 function setTimerForCurrentChallenge() {
   const current = state.assigned[state.currentRound];
   const minutes = current?.timeLimit ?? 6;
-  state.timerInitial = minutes * 60;
+  state.timerInitial = minutes * 60 * 10;
   state.timerRemaining = state.timerInitial;
   stopTimer();
   renderTimer();
@@ -160,6 +180,7 @@ function startTimer() {
   if (state.timerRemaining <= 0) setTimerForCurrentChallenge();
 
   state.timerRunning = true;
+  updateTimerButton();
 
   state.timerInterval = setInterval(() => {
     state.timerRemaining -= 1;
@@ -174,11 +195,12 @@ function startTimer() {
     }
 
     saveState();
-  }, 1000);
+  }, 100);
 }
 
 function resetTimer() {
   setTimerForCurrentChallenge();
+  updateTimerButton();
 }
 
 function initNewGame() {
@@ -192,6 +214,7 @@ function initNewGame() {
   clearBanner();
   renderAll();
   setTimerForCurrentChallenge();
+  updateTimerButton();
   saveState();
 }
 
@@ -429,7 +452,7 @@ function attachEvents() {
   elements.btnSaveModal.addEventListener('click', saveModal);
   elements.btnCloseModal.addEventListener('click', closeModal);
 
-  elements.btnStartTimer.addEventListener('click', startTimer);
+  elements.btnStartTimer.addEventListener('click', toggleTimer);
   elements.btnResetTimer.addEventListener('click', resetTimer);
 
   elements.modalOverlay.addEventListener('click', event => {
