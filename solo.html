@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prueba Lunar · Modo Solo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body data-mode="solo">
+  <div class="page-wrap">
+    <div class="header">
+      <div class="moon-sigil">☾</div>
+      <div class="header-kana" id="header-kana">Genshin Impact · Modo Solo</div>
+      <h1 class="header-title" id="page-title">Prueba Lunar</h1>
+      <p class="header-subtitle" id="header-subtitle">Tres sellos. Dos victorias. Una sola recompensa.</p>
+      <div class="prize-pill"><span>☾</span><span id="prize-label">Premio: Bendicion Lunar</span></div>
+    </div>
+
+    <div class="warning-box">
+      <span class="warning-symbol">&#9888;</span>
+      <span id="warning-text"></span>
+    </div>
+
+    <div class="global-rules-box">
+      <div class="global-rules-title" id="rules-title">Reglas del Modo Solo</div>
+      <div class="mode-badge" id="mode-badge"></div>
+      <ul class="global-rules-list" id="rules-list"></ul>
+    </div>
+
+    <div id="result-banner" class="result-banner" aria-live="polite">
+      <div class="banner-icon" id="banner-icon">☾</div>
+      <div class="banner-title" id="banner-title">Bendicion Lunar Obtenida</div>
+      <div class="banner-sub" id="banner-sub">Ha demostrado valentia y habilidad en Teyvat.</div>
+    </div>
+
+    <div class="scoreboard">
+      <div class="rounds-row">
+        <div class="round-orb" id="orb1"><span class="orb-icon" id="orb1-icon">I</span><span class="orb-label">RETO</span></div>
+        <div class="round-orb" id="orb2"><span class="orb-icon" id="orb2-icon">II</span><span class="orb-label">RETO</span></div>
+        <div class="round-orb" id="orb3"><span class="orb-icon" id="orb3-icon">III</span><span class="orb-label">RETO</span></div>
+      </div>
+      <div class="score-center">
+        <div class="score-nums" id="score-nums">0 · 0</div>
+        <div class="score-caption">victorias · derrotas</div>
+        <div class="score-needed">necesita 2 victorias</div>
+      </div>
+      <div class="status-box">
+        <div class="status-title">ESTADO</div>
+        <div id="status-label" class="status-label">En curso...</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="select-wrap">
+        <select id="type-filter"></select>
+      </div>
+      <button class="btn btn-gold" id="btn-shuffle">Sortear reto</button>
+      <button class="btn btn-ghost" id="btn-reset">Reiniciar todo</button>
+    </div>
+
+    <div class="challenge-wrap">
+      <div class="challenge-card">
+        <div class="card-header">
+          <div class="round-badge" id="round-badge">1</div>
+          <span class="type-tag" id="type-tag">-</span>
+          <span class="diff-badge" id="diff-tag">-</span>
+          <button class="edit-btn" id="btn-edit">Editar</button>
+        </div>
+        <div class="card-body">
+          <div class="enemy-banner">
+            <div class="enemy-icon" id="enemy-icon">&#128065;</div>
+            <div>
+              <div class="enemy-name" id="enemy-name">Leyenda Local</div>
+              <div class="enemy-region" id="enemy-region">Region · Tipo</div>
+            </div>
+          </div>
+          <div class="challenge-name" id="c-name">-</div>
+          <div class="challenge-desc" id="c-desc">-</div>
+          <div class="mechanic-tip" id="c-tip">
+            <span class="tip-symbol">&#128161;</span>
+            <span id="c-tip-text"></span>
+          </div>
+          <div class="time-section">
+            <div class="time-limit-box" id="time-limit-box">
+              <div class="time-limit-title">Tiempo Limite</div>
+              <div class="time-limit-value" id="time-limit-value">6 minutos</div>
+            </div>
+
+            <div class="timer-box">
+              <div class="timer-label">Tiempo del reto</div>
+              <div class="timer-ornament">&#9719;</div>
+              <div class="timer-display" id="timer-display">06:00<small>.0</small></div>
+              <div class="timer-actions">
+                <button class="btn btn-gold" id="btn-start-timer">Iniciar tiempo</button>
+                <button class="btn btn-ghost" id="btn-reset-timer">Reiniciar tiempo</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="conditions">
+          <div class="conditions-title">Condiciones del Sello</div>
+          <ul id="c-conditions"></ul>
+        </div>
+        <div class="result-btns">
+          <button class="btn-win" id="btn-win">Reto Superado</button>
+          <button class="btn-lose" id="btn-lose">Reto Fallido</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-dots">
+      <div class="dot" id="dot0"></div>
+      <div class="dot" id="dot1"></div>
+      <div class="dot" id="dot2"></div>
+    </div>
+
+    <div class="divider-ornament">Version 3.0</div>
+    <div class="footer" id="footer-version">Prueba Lunar v3.0 · Modo Solo</div>
+  </div>
+
+  <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+      <div class="modal-title" id="modal-title">Personalizar Reto</div>
+      <label class="form-label" for="m-title">Nombre del reto</label>
+      <input class="form-input" id="m-title" placeholder="Nombre...">
+      <label class="form-label" for="m-desc">Descripcion</label>
+      <textarea class="form-textarea" id="m-desc" rows="2" placeholder="Descripcion..."></textarea>
+      <label class="form-label" for="m-conds">Condiciones (separadas por | )</label>
+      <input class="form-input" id="m-conds" placeholder="Cond 1 | Cond 2 | Tiempo limite: 7">
+      <div class="modal-actions">
+        <button class="btn btn-gold" id="btn-save-modal" style="flex:1">Guardar</button>
+        <button class="btn btn-ghost" id="btn-close-modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="floating-nav-group">
+    <a href="index.html" class="floating-nav-btn" title="Volver al selector">☾</a>
+    <a href="torneo.html" class="floating-nav-btn floating-nav-btn-secondary" title="Ir al modo torneo">&#10022;</a>
+  </div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+
+</html>

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prueba Lunar — Genshin Impact</title>
+  <title>Prueba Lunar v3.0</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap"
@@ -12,160 +12,73 @@
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
-<body>
+<body class="mode-selector-body">
   <div class="page-wrap">
-
     <div class="header">
       <div class="moon-sigil">☾</div>
-      <div class="header-kana">Genshin Impact · Reto Especial</div>
+      <div class="header-kana">Genshin Impact · Version 3.0</div>
       <h1 class="header-title">Prueba Lunar</h1>
-      <p class="header-subtitle">Tres sellos. Dos victorias. Una sola recompensa.</p>
-      <div class="prize-pill"><span>☾</span><span>Premio: Bendición Lunar</span></div>
+      <p class="header-subtitle">Selecciona el formato adecuado antes de iniciar el reto.</p>
+      <div class="prize-pill"><span>&#10022;</span><span>Selector general de modos</span></div>
     </div>
 
     <div class="warning-box">
-      <span class="warning-symbol">⚠</span>
-      <span>Los retos involucran <strong>Leyendas Locales</strong> — los enemigos más brutales del overworld de Teyvat.
-        Muchos tienen ataques de un solo golpe, barras de vida enormes y mecánicas únicas. No es una pelea
-        normal.</span>
+      <span class="warning-symbol">&#9888;</span>
+      <span>La experiencia ahora se divide en dos formatos para adaptarse a cada participante sin perder el sistema general ni las reglas base del evento.</span>
     </div>
 
-    <div class="global-rules-box">
-      <div class="global-rules-title">✦ Reglas del Modo ✦</div>
-      <ul class="global-rules-list">
-        <li>El equipo debe definirse antes de entrar</li>
-        <li>Sin cambiar el equipo después de iniciar</li>
-        <li>Sin pausar el juego durante el intento</li>
-        <li>Sin bajar el nivel de mundo, el reto se ejecuta en la dificultad maxima de la cuenta</li>
-        <li>Solo 1 intento por reto</li>
-        <li>Si el jefe se reinicia, el desafio se considerara como perdido</li>
-        <li>El desarrollo del reto debe ejecutarse en directo</li>
-        <li>Se considera como personaje principal al primer personaje de izquierda a derecha en el editor de equipos
-        </li>
-        <li>No se permite forzar mecanicas de los personajes (mele/distancia) para que se consideren de otra categoria
-          (Por ejemplo Neuvillette como personaje cuerpo a cuerpo)</li>
-        <li>No se permite bugear los jefes (Por ejemplo interponer estructuras para evitar ataques o ahogarlos)</li>
-      </ul>
-    </div>
-
-    <div id="result-banner" class="result-banner" aria-live="polite">
-      <div class="banner-icon" id="banner-icon">☾</div>
-      <div class="banner-title" id="banner-title">¡Bendición Lunar Obtenida!</div>
-      <div class="banner-sub" id="banner-sub">Ha demostrado valentía y habilidad en Teyvat.</div>
-    </div>
-
-    <div class="scoreboard">
-      <div class="rounds-row">
-        <div class="round-orb" id="orb1"><span class="orb-icon" id="orb1-icon">I</span><span
-            class="orb-label">RETO</span></div>
-        <div class="round-orb" id="orb2"><span class="orb-icon" id="orb2-icon">II</span><span
-            class="orb-label">RETO</span></div>
-        <div class="round-orb" id="orb3"><span class="orb-icon" id="orb3-icon">III</span><span
-            class="orb-label">RETO</span></div>
-      </div>
-      <div class="score-center">
-        <div class="score-nums" id="score-nums">0 · 0</div>
-        <div class="score-caption">victorias · derrotas</div>
-        <div class="score-needed">necesita 2 victorias</div>
-      </div>
-      <div class="status-box">
-        <div class="status-title">ESTADO</div>
-        <div id="status-label" class="status-label">En curso...</div>
-      </div>
-    </div>
-
-    <div class="controls">
-      <div class="select-wrap">
-        <select id="type-filter">
-          <option value="all">Todos los tipos de reto</option>
-          <option value="combat">Derrotar Leyenda Local</option>
-          <option value="nohit">Sin recibir daño</option>
-          <option value="restriction">Restricción de equipo</option>
-          <option value="speedrun">Contra el tiempo</option>
-        </select>
-      </div>
-      <button class="btn btn-gold" id="btn-shuffle">⟳ Sortear reto</button>
-      <button class="btn btn-ghost" id="btn-reset">Reiniciar todo</button>
-    </div>
-
-    <div class="challenge-wrap">
-      <div class="challenge-card">
-        <div class="card-header">
-          <div class="round-badge" id="round-badge">1</div>
-          <span class="type-tag" id="type-tag">—</span>
-          <span class="diff-badge" id="diff-tag">—</span>
-          <button class="edit-btn" id="btn-edit">✎ Editar</button>
+    <section class="mode-selector-grid">
+      <article class="mode-selector-card">
+        <div class="mode-selector-top">
+          <span class="mode-selector-label">Modo Solo</span>
+          <span class="diff-badge diff-extremo">Pool completo</span>
         </div>
-        <div class="card-body">
-          <div class="enemy-banner">
-            <div class="enemy-icon" id="enemy-icon">👁</div>
-            <div>
-              <div class="enemy-name" id="enemy-name">Leyenda Local</div>
-              <div class="enemy-region" id="enemy-region">Región · Tipo</div>
-            </div>
-          </div>
-          <div class="challenge-name" id="c-name">—</div>
-          <div class="challenge-desc" id="c-desc">—</div>
-          <div class="mechanic-tip" id="c-tip">
-            <span class="tip-symbol">💡</span>
-            <span id="c-tip-text"></span>
-          </div>
-          <div class="time-section">
-            <div class="time-limit-box" id="time-limit-box">
-              <div class="time-limit-title">◷ Tiempo Límite</div>
-              <div class="time-limit-value" id="time-limit-value">6 minutos</div>
-            </div>
+        <h2 class="mode-selector-title">Formato principal</h2>
+        <p class="mode-selector-copy">Pensado para quienes pueden transmitir o compartir bien la partida. Mantiene las reglas actuales, 4 personajes y el pool completo de Leyendas Locales.</p>
+        <ul class="mode-selector-list">
+          <li>4 personajes elegidos antes de entrar</li>
+          <li>Pool completo y dificultad actual</li>
+          <li>Mismas condiciones y flujo de la version anterior</li>
+        </ul>
+        <a class="btn btn-gold mode-selector-btn" href="solo.html">Entrar al Modo Solo</a>
+      </article>
 
-            <div class="timer-box">
-              <div class="timer-label">Tiempo del reto</div>
-              <div class="timer-ornament">◷</div>
-              <div class="timer-display" id="timer-display">06:00<small>.0</small></div>
-              <div class="timer-actions">
-                <button class="btn btn-gold" id="btn-start-timer">Iniciar tiempo</button>
-                <button class="btn btn-ghost" id="btn-reset-timer">Reiniciar tiempo</button>
-              </div>
-            </div>
-          </div>
+      <article class="mode-selector-card mode-selector-card-alt">
+        <div class="mode-selector-top">
+          <span class="mode-selector-label">Modo Supervisado</span>
+          <span class="diff-badge diff-dificil">Pool balanceado</span>
         </div>
-        <div class="conditions">
-          <div class="conditions-title">Condiciones del Sello</div>
-          <ul id="c-conditions"></ul>
-        </div>
-        <div class="result-btns">
-          <button class="btn-win" id="btn-win">✓ Reto Superado</button>
-          <button class="btn-lose" id="btn-lose">✗ Reto Fallido</button>
-        </div>
+        <h2 class="mode-selector-title">Formato adaptado</h2>
+        <p class="mode-selector-copy">Pensado para quienes juegan en celular o no pueden transmitir. El participante usa 2 personajes y el supervisor valida sin intervenir en combate.</p>
+        <ul class="mode-selector-list">
+          <li>2 personajes elegidos por el participante</li>
+          <li>Supervisor como juez, sin atacar ni usar habilidades</li>
+          <li>Pool reducido y tiempos mas razonables</li>
+        </ul>
+        <a class="btn btn-gold mode-selector-btn" href="supervisado.html">Entrar al Modo Supervisado</a>
+      </article>
+    </section>
+
+    <section class="selector-support-grid">
+      <div class="panel-card">
+        <div class="panel-title">Criterio rapido</div>
+        <ul class="global-rules-list selector-rules-list">
+          <li>Usa Modo Solo si la partida puede verse con claridad en directo.</li>
+          <li>Usa Modo Supervisado si el participante necesita validacion asistida.</li>
+          <li>Ambos formatos conservan el sistema de 3 retos y 2 victorias necesarias.</li>
+          <li>La pagina de torneo se mantiene disponible como modulo separado.</li>
+        </ul>
       </div>
-    </div>
-    <div class="progress-dots">
-      <div class="dot" id="dot0"></div>
-      <div class="dot" id="dot1"></div>
-      <div class="dot" id="dot2"></div>
-    </div>
+
+      <div class="panel-card selector-actions-card">
+        <div class="panel-title">Herramientas del evento</div>
+        <p class="mode-selector-copy">El bracket competitivo sigue disponible aparte para cuando necesites organizar cruces entre participantes.</p>
+        <a class="btn btn-ghost selector-secondary-btn" href="torneo.html">Abrir Torneo Lunar</a>
+      </div>
+    </section>
+
+    <div class="footer">Prueba Lunar v3.0 · Selector General</div>
   </div>
-
-  <div class="divider-ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
-  <div class="footer">Genshin Impact Fan Challenge · Prueba Lunar v2.0</div>
-  </div>
-
-  <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    <div class="modal">
-      <div class="modal-title" id="modal-title">✦ Personalizar Reto</div>
-      <label class="form-label" for="m-title">Nombre del reto</label>
-      <input class="form-input" id="m-title" placeholder="Nombre...">
-      <label class="form-label" for="m-desc">Descripción</label>
-      <textarea class="form-textarea" id="m-desc" rows="2" placeholder="Descripción..."></textarea>
-      <label class="form-label" for="m-conds">Condiciones (separadas por | )</label>
-      <input class="form-input" id="m-conds" placeholder="Cond 1 | Cond 2 | Cond 3">
-      <div class="modal-actions">
-        <button class="btn btn-gold" id="btn-save-modal" style="flex:1">Guardar</button>
-        <button class="btn btn-ghost" id="btn-close-modal">Cancelar</button>
-      </div>
-    </div>
-  </div>
-  <a href="torneo.html" class="floating-nav-btn" title="Ir al modo torneo">✦</a>
-  <script src="assets/js/data.js"></script>
-  <script src="assets/js/app.js"></script>
 </body>
 
 </html>
