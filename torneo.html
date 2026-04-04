@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba Lunar — Torneo</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+    <div class="page-wrap">
+
+        <div class="header">
+            <div class="moon-sigil">☾</div>
+            <div class="header-kana">Genshin Impact · Modo Competitivo</div>
+            <h1 class="header-title">Torneo Lunar</h1>
+            <p class="header-subtitle">Solo uno puede alzarse como campeón.</p>
+            <div class="prize-pill"><span>✦</span><span>Eliminación directa</span></div>
+        </div>
+
+        <div class="tournament-layout">
+            <div class="panel-card">
+                <div class="panel-title">Participantes</div>
+
+                <div class="participant-form">
+                    <input type="text" id="player-name" class="form-input" placeholder="Nombre del participante">
+                    <button class="btn btn-gold" id="btn-add-player">Agregar</button>
+                </div>
+
+                <div class="participant-actions">
+                    <button class="btn btn-ghost" id="btn-clear-players">Limpiar lista</button>
+                    <button class="btn btn-gold" id="btn-generate-bracket">Generar torneo</button>
+                </div>
+
+                <ul id="players-list" class="players-list"></ul>
+            </div>
+
+            <div class="panel-card">
+                <div class="panel-title">Bracket</div>
+                <div id="bracket-container" class="bracket-container">
+                    <p class="empty-state">Agrega participantes y genera el torneo.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="index.html" class="floating-nav-btn" title="Volver a Prueba Lunar">☾</a>
+
+    <script src="assets/js/torneo.js"></script>
+</body>
+
+</html>
