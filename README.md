@@ -168,29 +168,67 @@ No utiliza frameworks externos para la lógica principal.
 
 ---
 
-## 🔧 Personalización
+## � Instalación y Uso
 
-El proyecto está preparado para seguir creciendo. Algunas ideas de ampliación son:
+### Requisitos previos
+- Un navegador web moderno (Chrome, Firefox, Edge, etc.)
+- Conexión a internet (opcional, para fuentes externas)
 
-- agregar más jefes
-- agregar más condiciones compatibles
-- crear modos de dificultad
-- ponderar la frecuencia de retos extremos
-- añadir efectos de sonido
-- incluir historial de partidas
-- mostrar badges para condiciones medias y duras
-- separar aún más las categorías de retos
+### Instalación
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/tu-usuario/prueba-lunar.git
+   ```
+2. Navega al directorio del proyecto:
+   ```bash
+   cd prueba-lunar
+   ```
+3. Abre `index.html` en tu navegador web.
+
+### Uso
+- **Modo Prueba Lunar**: Abre `index.html` para generar retos aleatorios.
+- **Modo Torneo Lunar**: Abre `torneo.html` para organizar torneos.
+- Los datos se guardan automáticamente en el navegador usando `localStorage`.
+
+### Demo en línea
+Si está desplegado, incluye un enlace aquí: [Demo](https://tu-usuario.github.io/prueba-lunar/)
 
 ---
 
-## 📌 Estado del proyecto
+## 🤝 Contribución
 
-Actualmente el proyecto se encuentra en una etapa funcional y jugable, con una base sólida para seguir iterando tanto en:
+¡Las contribuciones son bienvenidas! Para contribuir:
 
-- balance de condiciones
-- compatibilidad entre reglas
-- interfaz
-- experiencia para stream
+1. Haz un fork del proyecto.
+2. Crea una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`).
+3. Realiza tus cambios y haz commit (`git commit -am 'Agrega nueva funcionalidad'`).
+4. Push a la rama (`git push origin feature/nueva-funcionalidad`).
+5. Abre un Pull Request.
+
+### Ideas para contribuir
+- Agregar más jefes o condiciones.
+- Mejorar la accesibilidad (ARIA, navegación por teclado).
+- Traducir a otros idiomas.
+- Optimizar el rendimiento.
+
+---
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver el archivo [LICENSE](LICENSE) para más detalles.
+
+---
+
+## 📝 Changelog
+
+### v2.0
+- Agregado modo torneo con bracket de eliminación directa.
+- Mejoras en la interfaz y persistencia de datos.
+- Soporte para personalización manual de retos.
+
+### v1.0
+- Versión inicial con generación de retos aleatorios.
+- Cronómetro integrado y reglas globales.
 
 ---
 
