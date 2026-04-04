@@ -30,6 +30,18 @@
         normal.</span>
     </div>
 
+    <div class="global-rules-box">
+      <div class="global-rules-title">✦ Reglas del Modo ✦</div>
+      <ul class="global-rules-list">
+        <li>El equipo debe definirse antes de entrar</li>
+        <li>Sin cambiar el equipo después de iniciar</li>
+        <li>Sin pausar el juego durante el intento</li>
+        <li>Sin bajar el nivel de mundo</li>
+        <li>No se admiten video pregrabados, debe ser en directo del gato gatoso 🐱</li>
+        <li>Solo 1 intento por reto</li>
+      </ul>
+    </div>
+
     <div id="result-banner" class="result-banner" aria-live="polite">
       <div class="banner-icon" id="banner-icon">☾</div>
       <div class="banner-title" id="banner-title">¡Bendición Lunar Obtenida!</div>
@@ -92,25 +104,42 @@
             <span class="tip-symbol">💡</span>
             <span id="c-tip-text"></span>
           </div>
-          <div class="conditions">
-            <div class="conditions-title">Condiciones del Sello</div>
-            <ul id="c-conditions"></ul>
-          </div>
-          <div class="result-btns">
-            <button class="btn-win" id="btn-win">✓ Reto Superado</button>
-            <button class="btn-lose" id="btn-lose">✗ Reto Fallido</button>
+          <div class="time-section">
+            <div class="time-limit-box" id="time-limit-box">
+              <div class="time-limit-title">◷ Tiempo Límite</div>
+              <div class="time-limit-value" id="time-limit-value">6 minutos</div>
+            </div>
+
+            <div class="timer-box">
+              <div class="timer-label">Tiempo del reto</div>
+              <div class="timer-ornament">◷</div>
+              <div class="timer-display" id="timer-display">06:00</div>
+              <div class="timer-actions">
+                <button class="btn btn-gold" id="btn-start-timer">Iniciar tiempo</button>
+                <button class="btn btn-ghost" id="btn-reset-timer">Reiniciar tiempo</button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="progress-dots">
-        <div class="dot" id="dot0"></div>
-        <div class="dot" id="dot1"></div>
-        <div class="dot" id="dot2"></div>
+        <div class="conditions">
+          <div class="conditions-title">Condiciones del Sello</div>
+          <ul id="c-conditions"></ul>
+        </div>
+        <div class="result-btns">
+          <button class="btn-win" id="btn-win">✓ Reto Superado</button>
+          <button class="btn-lose" id="btn-lose">✗ Reto Fallido</button>
+        </div>
       </div>
     </div>
+    <div class="progress-dots">
+      <div class="dot" id="dot0"></div>
+      <div class="dot" id="dot1"></div>
+      <div class="dot" id="dot2"></div>
+    </div>
+  </div>
 
-    <div class="divider-ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
-    <div class="footer">Genshin Impact Fan Challenge · Prueba Lunar v2.0</div>
+  <div class="divider-ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
+  <div class="footer">Genshin Impact Fan Challenge · Prueba Lunar v2.0</div>
   </div>
 
   <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">

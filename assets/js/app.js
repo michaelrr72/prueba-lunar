@@ -1,13 +1,17 @@
-const STORAGE_KEY = 'prueba-lunar-state';
+const STORAGE_KEY = 'prueba-lunar-state-v2';
 
 const state = {
   assigned: [],
   results: [null, null, null],
   currentRound: 0,
-  gameOver: false
+  gameOver: false,
+  timerRemaining: 0,
+  timerInitial: 0,
+  timerRunning: false,
+  timerInterval: null
 };
 
-const el = {
+const elements = {
   typeFilter: document.getElementById('type-filter'),
   resultBanner: document.getElementById('result-banner'),
   bannerIcon: document.getElementById('banner-icon'),
@@ -15,6 +19,7 @@ const el = {
   bannerSub: document.getElementById('banner-sub'),
   statusLabel: document.getElementById('status-label'),
   scoreNums: document.getElementById('score-nums'),
+
   roundBadge: document.getElementById('round-badge'),
   typeTag: document.getElementById('type-tag'),
   diffTag: document.getElementById('diff-tag'),
@@ -26,22 +31,29 @@ const el = {
   cTip: document.getElementById('c-tip'),
   cTipText: document.getElementById('c-tip-text'),
   cConditions: document.getElementById('c-conditions'),
+
   btnShuffle: document.getElementById('btn-shuffle'),
   btnReset: document.getElementById('btn-reset'),
   btnEdit: document.getElementById('btn-edit'),
   btnWin: document.getElementById('btn-win'),
   btnLose: document.getElementById('btn-lose'),
+
   modalOverlay: document.getElementById('modal-overlay'),
   modalTitleInput: document.getElementById('m-title'),
   modalDescInput: document.getElementById('m-desc'),
   modalCondsInput: document.getElementById('m-conds'),
   btnSaveModal: document.getElementById('btn-save-modal'),
-  btnCloseModal: document.getElementById('btn-close-modal')
+  btnCloseModal: document.getElementById('btn-close-modal'),
+
+  timeLimitBox: document.getElementById('time-limit-box'),
+  timeLimitValue: document.getElementById('time-limit-value'),
+  timerDisplay: document.getElementById('timer-display'),
+  btnStartTimer: document.getElementById('btn-start-timer'),
+  btnResetTimer: document.getElementById('btn-reset-timer')
 };
 
-function getFilteredPool() {
-  const type = el.typeFilter.value;
-  return type === 'all' ? POOL : POOL.filter(challenge => challenge.type === type);
+function getBossPool() {
+  return BOSS_POOL;
 }
 
 function shuffleArray(array) {
@@ -54,19 +66,22 @@ function shuffleArray(array) {
 }
 
 function buildAssignedChallenges(pool) {
-  if (pool.length === 0) return [];
   const shuffled = shuffleArray(pool);
-  if (pool.length >= 3) return shuffled.slice(0, 3);
-
-  const result = [];
-  for (let i = 0; i < 3; i++) {
-    result.push(shuffled[i % shuffled.length]);
-  }
-  return result;
+  const selected = shuffled.slice(0, 3);
+  return selected.map(boss => buildChallengeFromBoss(boss));
 }
 
 function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  const serializable = {
+    assigned: state.assigned,
+    results: state.results,
+    currentRound: state.currentRound,
+    gameOver: state.gameOver,
+    timerRemaining: state.timerRemaining,
+    timerInitial: state.timerInitial,
+    timerRunning: false
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(serializable));
 }
 
 function loadState() {
@@ -75,12 +90,14 @@ function loadState() {
 
   try {
     const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed.assigned) || !Array.isArray(parsed.results)) return false;
-
-    state.assigned = parsed.assigned;
-    state.results = parsed.results;
+    state.assigned = parsed.assigned || [];
+    state.results = parsed.results || [null, null, null];
     state.currentRound = parsed.currentRound ?? 0;
     state.gameOver = parsed.gameOver ?? false;
+    state.timerRemaining = parsed.timerRemaining ?? 0;
+    state.timerInitial = parsed.timerInitial ?? 0;
+    state.timerRunning = false;
+    state.timerInterval = null;
     return true;
   } catch {
     return false;
@@ -88,17 +105,84 @@ function loadState() {
 }
 
 function clearBanner() {
-  el.resultBanner.className = 'result-banner';
-  el.statusLabel.textContent = 'En curso...';
-  el.statusLabel.style.color = 'var(--text2)';
+  elements.resultBanner.className = 'result-banner';
+  elements.statusLabel.textContent = 'En curso...';
+  elements.statusLabel.style.color = 'var(--text2)';
+}
+
+function stopTimer() {
+  if (state.timerInterval) {
+    clearInterval(state.timerInterval);
+    state.timerInterval = null;
+  }
+  state.timerRunning = false;
+}
+
+function formatTime(totalSeconds) {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+function renderTimer() {
+  elements.timerDisplay.textContent = formatTime(state.timerRemaining);
+
+  if (state.timerRemaining <= 30) {
+    elements.timerDisplay.classList.add('danger');
+  } else {
+    elements.timerDisplay.classList.remove('danger');
+  }
+}
+
+function setTimerForCurrentChallenge() {
+  const current = state.assigned[state.currentRound];
+  const minutes = current?.timeLimit ?? 6;
+  state.timerInitial = minutes * 60;
+  state.timerRemaining = state.timerInitial;
+  stopTimer();
+  renderTimer();
+  saveState();
+}
+
+function onTimerFinished() {
+  stopTimer();
+  renderTimer();
+
+  const success = window.confirm(
+    'Se acabó el tiempo. ¿El participante logró cumplir el reto antes de que terminara?\\n\\nAceptar = Sí, cumplió\\nCancelar = No, falló'
+  );
+
+  recordResult(success ? 'win' : 'lose');
+}
+
+function startTimer() {
+  if (state.gameOver || state.timerRunning) return;
+  if (state.timerRemaining <= 0) setTimerForCurrentChallenge();
+
+  state.timerRunning = true;
+
+  state.timerInterval = setInterval(() => {
+    state.timerRemaining -= 1;
+    renderTimer();
+
+    if (state.timerRemaining <= 0) {
+      state.timerRemaining = 0;
+      renderTimer();
+      saveState();
+      onTimerFinished();
+      return;
+    }
+
+    saveState();
+  }, 1000);
+}
+
+function resetTimer() {
+  setTimerForCurrentChallenge();
 }
 
 function initNewGame() {
-  const pool = getFilteredPool();
-  if (!pool.length) {
-    alert('No hay retos de ese tipo. Prueba con "Todos".');
-    return;
-  }
+  const pool = getBossPool();
 
   state.assigned = buildAssignedChallenges(pool);
   state.results = [null, null, null];
@@ -107,6 +191,7 @@ function initNewGame() {
 
   clearBanner();
   renderAll();
+  setTimerForCurrentChallenge();
   saveState();
 }
 
@@ -116,6 +201,7 @@ function renderOrbs() {
   for (let i = 0; i < 3; i++) {
     const orb = document.getElementById(`orb${i + 1}`);
     const icon = document.getElementById(`orb${i + 1}-icon`);
+
     orb.className = 'round-orb';
 
     if (state.results[i] === 'win') {
@@ -126,17 +212,20 @@ function renderOrbs() {
       icon.textContent = '✗';
     } else {
       icon.textContent = labels[i];
-      if (i === state.currentRound && !state.gameOver) orb.classList.add('active');
+      if (i === state.currentRound && !state.gameOver) {
+        orb.classList.add('active');
+      }
     }
   }
 }
 
 function renderConditions(conditions) {
-  el.cConditions.innerHTML = '';
+  elements.cConditions.innerHTML = '';
+
   conditions.forEach(condition => {
     const li = document.createElement('li');
     li.textContent = condition;
-    el.cConditions.appendChild(li);
+    elements.cConditions.appendChild(li);
   });
 }
 
@@ -144,27 +233,40 @@ function renderChallenge() {
   const current = state.assigned[state.currentRound];
   if (!current) return;
 
-  el.roundBadge.textContent = String(state.currentRound + 1);
-  el.typeTag.textContent = current.tag;
-  el.typeTag.className = `type-tag ${current.tagClass}`;
-  el.diffTag.textContent = current.diffLabel;
-  el.diffTag.className = `diff-badge ${current.diffClass}`;
-  el.enemyIcon.textContent = current.enemyIcon;
-  el.enemyName.textContent = current.enemy;
-  el.enemyRegion.textContent = current.region;
-  el.cName.textContent = current.title;
-  el.cDesc.textContent = current.desc;
-  el.cTip.style.display = current.tip ? 'flex' : 'none';
-  el.cTipText.textContent = current.tip || '';
+  elements.roundBadge.textContent = String(state.currentRound + 1);
+
+  elements.typeTag.textContent = current.tag;
+  elements.typeTag.className = `type-tag ${current.tagClass}`;
+
+  elements.diffTag.textContent = current.diffLabel;
+  elements.diffTag.className = `diff-badge ${current.diffClass}`;
+
+  elements.enemyIcon.textContent = current.enemyIcon;
+  elements.enemyName.textContent = current.enemy;
+  elements.enemyRegion.textContent = current.region;
+  elements.cName.textContent = current.title;
+  elements.cDesc.textContent = current.desc;
+
+  if (current.tip) {
+    elements.cTip.style.display = 'flex';
+    elements.cTipText.textContent = current.tip;
+  } else {
+    elements.cTip.style.display = 'none';
+    elements.cTipText.textContent = '';
+  }
+
+  elements.timeLimitValue.textContent = `${current.timeLimit} minuto${current.timeLimit === 1 ? '' : 's'}`;
+
   renderConditions(current.conditions || []);
-  el.btnWin.disabled = state.gameOver;
-  el.btnLose.disabled = state.gameOver;
+
+  elements.btnWin.disabled = state.gameOver;
+  elements.btnLose.disabled = state.gameOver;
 }
 
 function renderScore() {
-  const wins = state.results.filter(value => value === 'win').length;
-  const losses = state.results.filter(value => value === 'lose').length;
-  el.scoreNums.textContent = `${wins} · ${losses}`;
+  const wins = state.results.filter(result => result === 'win').length;
+  const loses = state.results.filter(result => result === 'lose').length;
+  elements.scoreNums.textContent = `${wins} · ${loses}`;
 }
 
 function renderDots() {
@@ -172,9 +274,13 @@ function renderDots() {
     const dot = document.getElementById(`dot${i}`);
     dot.className = 'dot';
 
-    if (state.results[i] === 'win') dot.classList.add('won');
-    else if (state.results[i] === 'lose') dot.classList.add('lost');
-    else if (i === state.currentRound && !state.gameOver) dot.classList.add('active');
+    if (state.results[i] === 'win') {
+      dot.classList.add('won');
+    } else if (state.results[i] === 'lose') {
+      dot.classList.add('lost');
+    } else if (i === state.currentRound && !state.gameOver) {
+      dot.classList.add('active');
+    }
   }
 }
 
@@ -183,62 +289,69 @@ function renderAll() {
   renderChallenge();
   renderScore();
   renderDots();
+  renderTimer();
 }
 
 function showVictory() {
-  el.resultBanner.className = 'result-banner victory show';
-  el.bannerIcon.textContent = '☾';
-  el.bannerTitle.textContent = '¡Bendición Lunar Obtenida!';
-  el.bannerSub.textContent = 'Ha demostrado valentía y habilidad real frente a las Leyendas de Teyvat. La luna sonríe. ¡Entrega la recompensa merecida!';
-  el.statusLabel.textContent = '¡Victoria!';
-  el.statusLabel.style.color = 'var(--win)';
-  el.resultBanner.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  elements.resultBanner.className = 'result-banner victory show';
+  elements.bannerIcon.textContent = '☾';
+  elements.bannerTitle.textContent = '¡Bendición Lunar Obtenida!';
+  elements.bannerSub.textContent = 'Ha demostrado valentía y habilidad real frente a las Leyendas de Teyvat. La luna sonríe. ¡Entrega la recompensa merecida!';
+  elements.statusLabel.textContent = '¡Victoria!';
+  elements.statusLabel.style.color = 'var(--win)';
+  elements.resultBanner.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function showDefeat() {
-  el.resultBanner.className = 'result-banner defeat show';
-  el.bannerIcon.textContent = '✗';
-  el.bannerTitle.textContent = 'Las Leyendas permanecen invictas';
-  el.bannerSub.textContent = 'Los sellos lunares no han sido rotos. Las Leyendas de Teyvat han ganado hoy. La Bendición Lunar aguarda a quien tenga el coraje de intentarlo de nuevo.';
-  el.statusLabel.textContent = 'Derrota';
-  el.statusLabel.style.color = 'var(--lose)';
-  el.resultBanner.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  elements.resultBanner.className = 'result-banner defeat show';
+  elements.bannerIcon.textContent = '✗';
+  elements.bannerTitle.textContent = 'Las Leyendas permanecen invictas';
+  elements.bannerSub.textContent = 'Los sellos lunares no han sido rotos. La bendición espera a quien lo intente de nuevo.';
+  elements.statusLabel.textContent = 'Derrota';
+  elements.statusLabel.style.color = 'var(--lose)';
+  elements.resultBanner.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function moveToNextRoundIfNeeded() {
+  if (!state.gameOver) {
+    setTimerForCurrentChallenge();
+  }
 }
 
 function recordResult(result) {
   if (state.gameOver) return;
 
+  stopTimer();
   state.results[state.currentRound] = result;
+
   const wins = state.results.filter(value => value === 'win').length;
-  const losses = state.results.filter(value => value === 'lose').length;
+  const loses = state.results.filter(value => value === 'lose').length;
 
   if (wins >= 2) {
     state.gameOver = true;
     showVictory();
-  } else if (losses >= 2) {
+  } else if (loses >= 2) {
     state.gameOver = true;
     showDefeat();
   } else {
     state.currentRound += 1;
+    moveToNextRoundIfNeeded();
   }
 
   renderAll();
   saveState();
 }
 
-function shuffleCurrentChallenge() {
+function rerollCurrentChallenge() {
   if (state.gameOver) return;
 
-  const pool = getFilteredPool();
-  if (!pool.length) return;
+  const currentBossId = state.assigned[state.currentRound]?.bossId;
+  const pool = getBossPool().filter(boss => boss.id !== currentBossId);
+  const boss = pickRandom(pool.length ? pool : getBossPool());
 
-  const usedTitles = state.assigned.map(challenge => challenge.title);
-  const available = pool.filter(challenge => !usedTitles.includes(challenge.title));
-  const source = available.length ? available : pool;
-  const randomIndex = Math.floor(Math.random() * source.length);
-
-  state.assigned[state.currentRound] = source[randomIndex];
+  state.assigned[state.currentRound] = buildChallengeFromBoss(boss);
   renderChallenge();
+  setTimerForCurrentChallenge();
   saveState();
 }
 
@@ -246,70 +359,108 @@ function openModal() {
   const current = state.assigned[state.currentRound];
   if (!current) return;
 
-  el.modalTitleInput.value = current.title;
-  el.modalDescInput.value = current.desc;
-  el.modalCondsInput.value = (current.conditions || []).join(' | ');
-  el.modalOverlay.classList.add('open');
+  elements.modalTitleInput.value = current.title;
+  elements.modalDescInput.value = current.desc;
+  elements.modalCondsInput.value = (current.conditions || []).join(' | ');
+  elements.modalOverlay.classList.add('open');
 }
 
 function closeModal() {
-  el.modalOverlay.classList.remove('open');
+  elements.modalOverlay.classList.remove('open');
+}
+
+function extractTimeLimitFromConditions(conditions, fallbackMinutes = 6) {
+  const timeText = conditions.find(text => text.toLowerCase().includes('tiempo límite:'));
+  if (!timeText) return fallbackMinutes;
+
+  const match = timeText.match(/(\d+)/);
+  return match ? Number(match[1]) : fallbackMinutes;
+}
+
+function extractTimeLimitFromConditions(conditions, fallbackMinutes = 6) {
+  const timeText = conditions.find(text => text.toLowerCase().includes('tiempo límite:'));
+  if (!timeText) return fallbackMinutes;
+
+  const match = timeText.match(/(\d+)/);
+  return match ? Number(match[1]) : fallbackMinutes;
 }
 
 function saveModal() {
-  const title = el.modalTitleInput.value.trim();
-  const desc = el.modalDescInput.value.trim();
-  const condStr = el.modalCondsInput.value.trim();
+  const title = elements.modalTitleInput.value.trim();
+  const desc = elements.modalDescInput.value.trim();
+  const condStr = elements.modalCondsInput.value.trim();
+
   if (!title) return;
 
   const conditions = condStr
     ? condStr.split('|').map(item => item.trim()).filter(Boolean)
     : [];
 
+  const newTimeLimit = extractTimeLimitFromConditions(
+    conditions,
+    state.assigned[state.currentRound]?.timeLimit ?? 6
+  );
+
+  const cleanConditions = conditions.filter(
+    item => !item.toLowerCase().includes('tiempo límite:')
+  );
+
   state.assigned[state.currentRound] = {
     ...state.assigned[state.currentRound],
     title,
     desc,
-    conditions
+    conditions: cleanConditions,
+    timeLimit: newTimeLimit,
+    timeText: `Tiempo límite: ${newTimeLimit} minuto${newTimeLimit === 1 ? '' : 's'}`
   };
 
   closeModal();
   renderChallenge();
+  setTimerForCurrentChallenge();
   saveState();
 }
 
 function attachEvents() {
-  el.btnShuffle.addEventListener('click', shuffleCurrentChallenge);
-  el.btnReset.addEventListener('click', initNewGame);
-  el.btnEdit.addEventListener('click', openModal);
-  el.btnWin.addEventListener('click', () => recordResult('win'));
-  el.btnLose.addEventListener('click', () => recordResult('lose'));
-  el.btnSaveModal.addEventListener('click', saveModal);
-  el.btnCloseModal.addEventListener('click', closeModal);
+  elements.btnShuffle.addEventListener('click', rerollCurrentChallenge);
+  elements.btnReset.addEventListener('click', initNewGame);
+  elements.btnEdit.addEventListener('click', openModal);
+  elements.btnWin.addEventListener('click', () => recordResult('win'));
+  elements.btnLose.addEventListener('click', () => recordResult('lose'));
+  elements.btnSaveModal.addEventListener('click', saveModal);
+  elements.btnCloseModal.addEventListener('click', closeModal);
 
-  el.modalOverlay.addEventListener('click', event => {
-    if (event.target === el.modalOverlay) closeModal();
+  elements.btnStartTimer.addEventListener('click', startTimer);
+  elements.btnResetTimer.addEventListener('click', resetTimer);
+
+  elements.modalOverlay.addEventListener('click', event => {
+    if (event.target === elements.modalOverlay) {
+      closeModal();
+    }
   });
 
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape') closeModal();
   });
-
-  el.typeFilter.addEventListener('change', initNewGame);
 }
 
 function bootstrap() {
   attachEvents();
 
   const restored = loadState();
+
   if (restored && state.assigned.length) {
     renderAll();
 
     if (state.gameOver) {
       const wins = state.results.filter(value => value === 'win').length;
-      const losses = state.results.filter(value => value === 'lose').length;
+      const loses = state.results.filter(value => value === 'lose').length;
+
       if (wins >= 2) showVictory();
-      else if (losses >= 2) showDefeat();
+      else if (loses >= 2) showDefeat();
+    } else if (!state.timerInitial) {
+      setTimerForCurrentChallenge();
+    } else {
+      renderTimer();
     }
   } else {
     initNewGame();
