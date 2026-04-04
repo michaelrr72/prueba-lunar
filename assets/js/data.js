@@ -1,6 +1,6 @@
 const BOSS_POOL = [
     {
-        id: 'vivianne',
+        id: 1,
         name: 'Vivianne del Lago',
         enemyIcon: '💧',
         region: 'Fontaine · Leyenda Local',
@@ -15,7 +15,7 @@ const BOSS_POOL = [
         defaultTimeLimit: 8
     },
     {
-        id: 'rocky',
+        id: 2,
         name: 'Rocky Avildsen',
         enemyIcon: '🥊',
         region: 'Fontaine · Leyenda Local',
@@ -30,7 +30,7 @@ const BOSS_POOL = [
         defaultTimeLimit: 7
     },
     {
-        id: 'liam',
+        id: 3,
         name: 'Liam, el Arcoíris Fugaz',
         enemyIcon: '🎸',
         region: 'Fontaine · Leyenda Local',
@@ -45,7 +45,7 @@ const BOSS_POOL = [
         defaultTimeLimit: 6
     },
     {
-        id: 'ninianne',
+        id: 4,
         name: 'Ninianne del Lago',
         enemyIcon: '🌊',
         region: 'Fontaine · Leyenda Local',
@@ -60,7 +60,7 @@ const BOSS_POOL = [
         defaultTimeLimit: 6
     },
     {
-        id: 'yseut',
+        id: 5,
         name: 'Yseut',
         enemyIcon: '❄️',
         region: 'Fontaine · Leyenda Local',
@@ -75,7 +75,7 @@ const BOSS_POOL = [
         defaultTimeLimit: 5
     },
     {
-        id: 'deianeira',
+        id: 6,
         name: 'Deianeira of Snezhevna',
         enemyIcon: '🌪️',
         region: 'Fontaine · Leyenda Local',
@@ -90,7 +90,7 @@ const BOSS_POOL = [
         defaultTimeLimit: 5
     },
     {
-        id: 'rilai',
+        id: 7,
         name: 'Rilai',
         enemyIcon: '🎵',
         region: 'Natlan · Leyenda Local',
@@ -105,7 +105,7 @@ const BOSS_POOL = [
         defaultTimeLimit: 6
     },
     {
-        id: 'field_generator',
+        id: 8,
         name: 'Automated Supercomputing Field Generator',
         enemyIcon: '⚙️',
         region: 'Fontaine · Leyenda Local',
@@ -120,7 +120,7 @@ const BOSS_POOL = [
         defaultTimeLimit: 6
     },
     {
-        id: 'chassanion',
+        id: 9,
         name: 'Chassanion',
         enemyIcon: '🫧',
         region: 'Fontaine · Leyenda Local',
@@ -135,7 +135,7 @@ const BOSS_POOL = [
         defaultTimeLimit: 5
     },
     {
-        id: 'cineas',
+        id: 10,
         name: 'Cineas',
         enemyIcon: '🔷',
         region: 'Sea of Bygone Eras · Leyenda Local',
@@ -150,7 +150,7 @@ const BOSS_POOL = [
         defaultTimeLimit: 6
     },
     {
-        id: 'cocijo',
+        id: 11,
         name: 'Cocijo',
         enemyIcon: '⚡',
         region: 'Natlan · Leyenda Local',
@@ -165,7 +165,7 @@ const BOSS_POOL = [
         defaultTimeLimit: 5
     },
     {
-        id: 'the_peak',
+        id: 12,
         name: 'The Peak',
         enemyIcon: '🐂',
         region: 'Natlan · Leyenda Local',
@@ -181,24 +181,11 @@ const BOSS_POOL = [
     }
 ];
 
-const GLOBAL_RULES = [
-    'El equipo debe definirse antes de entrar',
-    'Sin cambiar el equipo después de iniciar',
-    'Sin pausar el juego durante el intento',
-    'Sin bajar el nivel de mundo'
-];
-
 const MEDIUM_CONDITIONS = [
     {
         id: 'max-one-death',
         text: 'Máximo 1 personaje caído',
         category: 'survival',
-        conflictsWith: []
-    },
-    {
-        id: 'single-attempt',
-        text: 'Un solo intento válido',
-        category: 'attempt',
         conflictsWith: []
     },
     {
@@ -388,45 +375,45 @@ function buildTimeCondition(minutes) {
 }
 
 function buildChallengeFromBoss(boss) {
-  const mediumConditions = pickCompatibleConditions(MEDIUM_CONDITIONS, 2);
+    const mediumConditions = pickCompatibleConditions(MEDIUM_CONDITIONS, 2);
 
-  const hardPool = HARD_CONDITIONS_BY_TYPE[boss.type] || [];
-  const compatibleHardPool = hardPool.filter(candidate =>
-    areConditionsCompatible(mediumConditions, candidate)
-  );
+    const hardPool = HARD_CONDITIONS_BY_TYPE[boss.type] || [];
+    const compatibleHardPool = hardPool.filter(candidate =>
+        areConditionsCompatible(mediumConditions, candidate)
+    );
 
-  const hardCondition = compatibleHardPool.length
-    ? pickRandom(compatibleHardPool)
-    : pickRandom(hardPool);
+    const hardCondition = compatibleHardPool.length
+        ? pickRandom(compatibleHardPool)
+        : pickRandom(hardPool);
 
-  const timeLimit = boss.defaultTimeLimit || 6;
-  const timeCondition = buildTimeCondition(timeLimit);
+    const timeLimit = boss.defaultTimeLimit || 6;
+    const timeCondition = buildTimeCondition(timeLimit);
 
-  const titleBase = pickRandom(TITLE_BY_TYPE[boss.type] || ['Prueba Especial']);
+    const titleBase = pickRandom(TITLE_BY_TYPE[boss.type] || ['Prueba Especial']);
 
-  return {
-    bossId: boss.id,
-    type: boss.type,
-    tag: boss.tag,
-    tagClass: boss.tagClass,
-    diff: boss.difficulty,
-    diffClass: boss.diffClass,
-    diffLabel: boss.diffLabel,
-    enemy: boss.name,
-    enemyIcon: boss.enemyIcon,
-    region: boss.region,
-    title: `${titleBase}: ${boss.name}`,
-    desc: boss.baseDesc,
-    tip: boss.baseTip,
-    timeLimit,
-    mediumConditions: mediumConditions.map(item => item.text),
-    hardCondition: hardCondition.text,
-    conditions: [
-      ...mediumConditions.map(item => item.text),
-      hardCondition.text
-    ],
-    timeText: timeCondition.text
-  };
+    return {
+        bossId: boss.id,
+        type: boss.type,
+        tag: boss.tag,
+        tagClass: boss.tagClass,
+        diff: boss.difficulty,
+        diffClass: boss.diffClass,
+        diffLabel: boss.diffLabel,
+        enemy: boss.name,
+        enemyIcon: boss.enemyIcon,
+        region: boss.region,
+        title: `${titleBase}: ${boss.name}`,
+        desc: boss.baseDesc,
+        tip: boss.baseTip,
+        timeLimit,
+        mediumConditions: mediumConditions.map(item => item.text),
+        hardCondition: hardCondition.text,
+        conditions: [
+            ...mediumConditions.map(item => item.text),
+            hardCondition.text
+        ],
+        timeText: timeCondition.text
+    };
 }
 
 function areConditionsCompatible(selected, candidate) {

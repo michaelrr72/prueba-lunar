@@ -371,7 +371,7 @@ function rerollCurrentChallenge() {
   if (state.gameOver) return;
 
   const currentBossId = state.assigned[state.currentRound]?.bossId;
-  const pool = getBossPool().filter(boss => boss.id !== currentBossId);
+  const pool = getBossPool().filter(boss => boss.id !== Number(currentBossId));
   const boss = pickRandom(pool.length ? pool : getBossPool());
 
   state.assigned[state.currentRound] = buildChallengeFromBoss(boss);
