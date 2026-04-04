@@ -191,7 +191,7 @@ No utiliza frameworks externos para la lógica principal.
 - Los datos se guardan automáticamente en el navegador usando `localStorage`.
 
 ### Demo en línea
-Si está desplegado, incluye un enlace aquí: [Demo](https://tu-usuario.github.io/prueba-lunar/)
+[Demo](https://michaelrr72.github.io/prueba-lunar/)
 
 ---
 
