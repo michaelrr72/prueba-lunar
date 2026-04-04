@@ -169,7 +169,9 @@ function onTimerFinished() {
   renderTimer();
 
   const success = window.confirm(
-    'Se acabó el tiempo. ¿El participante logró cumplir el reto antes de que terminara?\\n\\nAceptar = Sí, cumplió\\nCancelar = No, falló'
+    `Se acabó el tiempo. ¿El participante logró cumplir el reto antes de que terminara?
+Aceptar = Sí, cumplió
+Cancelar = No, falló`
   );
 
   recordResult(success ? 'win' : 'lose');
