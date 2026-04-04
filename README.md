@@ -236,9 +236,3 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo [LICENSE](LICENSE) para
 
 Este proyecto es una creación de fans inspirada en la experiencia de juego de Genshin Impact.
 No está afiliado oficialmente a HoYoverse.
-
----
-
-## 👤 Autor
-
-Proyecto desarrollado y adaptado como herramienta de retos temáticos para dinámicas en directo.
