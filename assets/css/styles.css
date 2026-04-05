@@ -112,7 +112,7 @@ body::before {
 
 .header-subtitle {
   font-size: 19px;
-  color: var(--text2);
+  color: var(--text);
   font-style: italic;
   margin-bottom: 22px;
 }
@@ -142,7 +142,7 @@ body::before {
   background: rgba(192, 68, 58, 0.06);
   margin-bottom: 30px;
   font-size: 18px;
-  color: var(--text2);
+  color: var(--text);
   animation: fadeUp 0.7s 0.05s ease both;
 }
 
@@ -236,7 +236,7 @@ body::before {
 
 .score-needed {
   font-size: 12px;
-  color: var(--text2);
+  color: var(--text);
   text-align: center;
   margin-top: 6px;
   font-style: italic;
@@ -262,7 +262,7 @@ select {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 10px;
-  color: var(--text2);
+  color: var(--text);
   font-family: 'Crimson Text', serif;
   font-size: 18px;
   cursor: pointer;
@@ -304,7 +304,7 @@ select:focus {
 .btn-ghost {
   background: var(--surface);
   border: 1px solid var(--border);
-  color: var(--text2);
+  color: var(--text);
 }
 
 .btn-ghost:hover {
@@ -483,7 +483,7 @@ select:focus {
 
 .challenge-desc {
   font-size: 19px;
-  color: var(--text2);
+  color: var(--text);
   font-style: italic;
   margin-bottom: 18px;
   line-height: 1.65;
@@ -498,7 +498,7 @@ select:focus {
   border: 1px solid rgba(122, 174, 238, 0.15);
   margin-bottom: 18px;
   font-size: 13px;
-  color: var(--text2);
+  color: var(--text);
   line-height: 1.5;
 }
 
@@ -521,7 +521,7 @@ select:focus {
 .conditions li {
   list-style: none;
   font-size: 17px;
-  color: var(--text2);
+  color: var(--text);
   padding: 5px 0 5px 20px;
   position: relative;
   line-height: 1.65;
@@ -679,7 +679,7 @@ select:focus {
 
 .banner-sub {
   font-size: 16px;
-  color: var(--text2);
+  color: var(--text);
   font-style: italic;
   line-height: 1.7;
   max-width: 420px;
@@ -854,7 +854,7 @@ select:focus {
 
 .status-label {
   font-size: 18px;
-  color: var(--text2);
+  color: var(--text);
   font-style: italic;
 }
 
@@ -939,7 +939,7 @@ select:focus {
 .global-rules-list li {
   position: relative;
   padding-left: 16px;
-  color: var(--text2);
+  color: var(--text);
   font-size: 14px;
   line-height: 1.5;
 }
@@ -1017,15 +1017,50 @@ select:focus {
   transform-origin: center;
 }
 
+/* Grupo de elementos con estilos uniformes */
 .header-kana,
 .score-caption,
 .conditions-title,
 .timer-label,
 .time-limit-title,
-.global-rules-title {
+.global-rules-title,
+.panel-title,
+.round-title,
+.champion-title,
+.modal-title {
   font-family: 'Cinzel', serif;
-  font-size: 13px;
   letter-spacing: 2px;
+}
+
+.header-kana {
+  font-size: 11px;
+  color: var(--gold);
+  opacity: .7;
+}
+
+.score-caption,
+.conditions-title,
+.timer-label,
+.time-limit-title,
+.global-rules-title {
+  font-size: 10px;
+  color: var(--gold);
+}
+
+.panel-title {
+  font-size: 17px;
+  color: var(--gold);
+}
+
+.round-title,
+.champion-title {
+  font-size: 13px;
+  color: var(--gold);
+}
+
+.modal-title {
+  font-size: 16px;
+  color: var(--gold);
 }
 
 body::after {
@@ -1154,7 +1189,7 @@ body::after {
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.02);
   padding: 12px 14px;
-  color: var(--text2);
+  color: var(--text);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1186,24 +1221,6 @@ body::after {
 }
 
 .round-column::after {
-  content: '';
-  position: absolute;
-  top: 30px;
-  right: -14px;
-  width: 1px;
-  height: calc(100% - 30px);
-  background: linear-gradient(180deg,
-      transparent,
-      rgba(196, 163, 90, 0.10),
-      transparent);
-}
-
-.round-column:last-child::after {
-  display: none;
-}
-
-
-.round-column:not(:last-child)::after {
   content: '';
   position: absolute;
   top: 44px;
@@ -1332,7 +1349,7 @@ body::after {
   border-radius: 8px;
   border: 1px solid var(--border);
   background: rgba(255, 255, 255, 0.03);
-  color: var(--text2);
+  color: var(--text);
   cursor: pointer;
   font-family: 'Cinzel', serif;
   font-size: 11px;
@@ -1364,7 +1381,7 @@ body::after {
 }
 
 .empty-state {
-  color: var(--text3);
+  color: var(--text);
   font-style: italic;
   font-size: 16px;
 }
@@ -1491,7 +1508,7 @@ body::after {
 
 .floating-nav-btn-secondary {
   border-color: rgba(196, 163, 90, 0.3);
-  color: var(--text2);
+  color: var(--gold);
 }
 
 .mode-selector-grid,
@@ -1542,7 +1559,7 @@ body::after {
 }
 
 .mode-selector-copy {
-  color: var(--text2);
+  color: var(--text);
   font-size: 18px;
   line-height: 1.6;
 }
@@ -1558,7 +1575,7 @@ body::after {
 .mode-selector-list li {
   position: relative;
   padding-left: 18px;
-  color: var(--text2);
+  color: var(--text);
 }
 
 .mode-selector-list li::before {

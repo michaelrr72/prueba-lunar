@@ -10,8 +10,8 @@ const BASE_BOSS_POOL = [
     diffLabel: 'EXTREMO',
     tag: 'Combate',
     tagClass: 'tag-combat',
-    baseDesc: 'Derrota a Vivianne del Lago. Sus ataques tienen altisimo daño y castigan mucho los errores de posicion.',
-    baseTip: 'Hydro no funciona bien contra ella. Dendro o Pyro suelen rendir mejor.',
+    baseDesc: 'Derrota a Vivianne del Lago. Sus ataques tienen altísimo daño y castigan mucho los errores de posición.',
+    baseTip: 'Prioriza Dendro/Pyro para romper su barra de estasis rápido. Sus ataques castigan errores de posición; evita acercamientos directos. Mantén escudo activo durante oleadas iniciales.',
     defaultTimeLimit: 8
   },
   {
@@ -25,8 +25,8 @@ const BASE_BOSS_POOL = [
     diffLabel: 'EXTREMO',
     tag: 'Combate',
     tagClass: 'tag-combat',
-    baseDesc: 'Derrota a Rocky Avildsen. Su fase de furia aumenta mucho la presion y castiga errores de lectura.',
-    baseTip: 'En fase de furia es mejor priorizar supervivencia antes que greed de daño.',
+    baseDesc: 'Derrota a Rocky Avildsen. Su fase de furia aumenta mucho la presión y castiga errores de lectura.',
+    baseTip: 'En Rage Mode (rojo), sus combos son predecibles: 3 golpes + pausa de 2-3 seg. Concentra daño SOLO en esas pausas. Si no tienes 60% HP, espera sin atacar.',
     defaultTimeLimit: 7
   },
   {
@@ -41,7 +41,7 @@ const BASE_BOSS_POOL = [
     tag: 'Combate',
     tagClass: 'tag-combat',
     baseDesc: 'Derrota a Liam mientras controlas sus zonas peligrosas y su movilidad constante.',
-    baseTip: 'Si el suelo se vuelve peligroso, reposicionate rapido y evita quedarte encerrado.',
+    baseTip: 'Genera zonas peligrosas cada 8-10 seg en patrón predecible. Mantén máxima movilidad. Sus saltos son lentos; responde con burst durante su ascenso para resetear su posición.',
     defaultTimeLimit: 6
   },
   {
@@ -56,7 +56,7 @@ const BASE_BOSS_POOL = [
     tag: 'Combate',
     tagClass: 'tag-combat',
     baseDesc: 'Derrota a Ninianne del Lago. Menos opresiva que Vivianne, pero igual exige control y constancia.',
-    baseTip: 'Manten presion constante y evita regalar daño innecesario.',
+    baseTip: 'Su barra energética crece lentamente; dispara ataque especial cada 15-18 seg. Después de disparar hay 5-7 seg de ventana segura. Acumula burst para esas ventanas ofensivas.',
     defaultTimeLimit: 6
   },
   {
@@ -70,8 +70,8 @@ const BASE_BOSS_POOL = [
     diffLabel: 'DIFICIL',
     tag: 'Tecnico',
     tagClass: 'tag-nohit',
-    baseDesc: 'Derrota a Yseut controlando bien los errores, porque castiga mucho las fallas de ejecucion.',
-    baseTip: 'Es un buen jefe para premiar lectura de patrones y disciplina.',
+    baseDesc: 'Derrota a Yseut controlando bien los errores, porque castiga mucho las fallas de ejecución.',
+    baseTip: 'Ciclo fijo: Salto > Barrido > Explosión Congelante. Los dos primeros ataques te advierten del tercero. Esquiva en secuencia o recibe todo el daño. Un error = reset total.',
     defaultTimeLimit: 5
   },
   {
@@ -86,7 +86,7 @@ const BASE_BOSS_POOL = [
     tag: 'Tecnico',
     tagClass: 'tag-nohit',
     baseDesc: 'Derrota a Deianeira manteniendo control del combate y evitando errores acumulativos.',
-    baseTip: 'No es solo daño: la constancia importa mucho.',
+    baseTip: 'Sus ciclos de ataque escalan en velocidad: primeros 30 seg son lentos (70% HP), últimos son caóticos (30% final). Aprende patrones en el primer minuto. Muy indulgente al inicio, brutal al final.',
     defaultTimeLimit: 5
   },
   {
@@ -100,8 +100,8 @@ const BASE_BOSS_POOL = [
     diffLabel: 'DIFICIL',
     tag: 'Tecnico',
     tagClass: 'tag-nohit',
-    baseDesc: 'Derrota a Rilai superando correctamente sus patrones mas peligrosos.',
-    baseTip: 'Este jefe luce mucho mejor cuando el reto exige ejecucion limpia.',
+    baseDesc: 'Derrota a Rilai superando correctamente sus patrones más peligrosos.',
+    baseTip: 'Sus ataques de fuego tienen AoE pequeño pero daño alto puntual. Si esquivas el primer ataque, tienes 2-3 seg para aplicar buff o sacar daño. Requiere timing exacto.',
     defaultTimeLimit: 6
   },
   {
@@ -113,10 +113,10 @@ const BASE_BOSS_POOL = [
     difficulty: 'hard',
     diffClass: 'diff-dificil',
     diffLabel: 'DIFICIL',
-    tag: 'Mecanica',
+    tag: 'Mecánica',
     tagClass: 'tag-speedrun',
-    baseDesc: 'Derrota al Field Generator controlando bien su mecanica especial y las ondas del combate.',
-    baseTip: 'Aqui la lectura visual del patron importa muchisimo.',
+    baseDesc: 'Derrota al Field Generator controlando bien su mecánica especial y las ondas del combate.',
+    baseTip: 'Patrón de ondas es cíclico: 3 ondas rápidas > pausa > 2 ondas lentas > pausa. Desactiva torres en orden (derecha > izquierda) o falla mecánica = 40% HP. Necesita precisión 99%.',
     defaultTimeLimit: 6
   },
   {
@@ -128,10 +128,10 @@ const BASE_BOSS_POOL = [
     difficulty: 'hard',
     diffClass: 'diff-dificil',
     diffLabel: 'DIFICIL',
-    tag: 'Mecanica',
+    tag: 'Mecánica',
     tagClass: 'tag-speedrun',
     baseDesc: 'Derrota a Chassanion gestionando correctamente su gimmick principal.',
-    baseTip: 'No todo es DPS: aqui conviene entender la mecanica.',
+    baseTip: 'Cada 20 seg abre 3 portales dimensionales. Solo uno es el real (tiene efecto elemental brillante). Destruye el real o castigo de 30% HP total. Verifica brillo antes de atacar.',
     defaultTimeLimit: 5
   },
   {
@@ -143,10 +143,10 @@ const BASE_BOSS_POOL = [
     difficulty: 'hard',
     diffClass: 'diff-dificil',
     diffLabel: 'DIFICIL',
-    tag: 'Mecanica',
+    tag: 'Mecánica',
     tagClass: 'tag-speedrun',
     baseDesc: 'Derrota a Cineas manejando bien el ritmo del combate y su fase especial.',
-    baseTip: 'Gestiona bien tus recursos y evita perder control del tempo.',
+    baseTip: 'Fases: 50-75% normal (fácil) > 25-50% transición (creciente caos) > 0-25% especial (rompe si no haces daño). El tempo se acelera exponencialmente. Guarda burst completo para fase final.',
     defaultTimeLimit: 6
   },
   {
@@ -158,10 +158,10 @@ const BASE_BOSS_POOL = [
     difficulty: 'extreme',
     diffClass: 'diff-extremo',
     diffLabel: 'EXTREMO',
-    tag: 'Mecanica',
+    tag: 'Mecánica',
     tagClass: 'tag-restriction',
-    baseDesc: 'Derrota a Cocijo antes de que el combate se descontrole con su mecanica mas peligrosa.',
-    baseTip: 'Es un jefe ideal para retos de presion y ejecucion temprana.',
+    baseDesc: 'Derrota a Cocijo antes de que el combate se descontrole con su mecánica más peligrosa.',
+    baseTip: 'Relámpago cambia polaridad cada 10 seg: atracción ↔ repulsión. Afecta tu movimiento. Calcula posicionamiento según polaridad actual. Ambición de daño temprana en fase 1 = muerte garantizada.',
     defaultTimeLimit: 5
   },
   {
@@ -173,10 +173,10 @@ const BASE_BOSS_POOL = [
     difficulty: 'hard',
     diffClass: 'diff-dificil',
     diffLabel: 'DIFICIL',
-    tag: 'Mecanica',
+    tag: 'Mecánica',
     tagClass: 'tag-restriction',
     baseDesc: 'Derrota a The Peak controlando bien su fase potenciada.',
-    baseTip: 'Si dejas que imponga su ritmo, el reto se complica mucho.',
+    baseTip: 'Cada 15 seg marca territorio de poder que reduce tu ataque 20% (acumulable). Destrúyela en máx 5 seg o castigo se multiplica. Control de ritmo desde el inicio es crítico.',
     defaultTimeLimit: 6
   },
   {
@@ -191,7 +191,7 @@ const BASE_BOSS_POOL = [
     tag: 'Tecnico',
     tagClass: 'tag-nohit',
     baseDesc: 'Derrota a Sappho Amidst the Waves controlando las rafagas heladas y los espacios estrechos de la pelea.',
-    baseTip: 'Su reto gira alrededor de leer bien Shattering Ice y no regalar golpes por mala posicion.',
+    baseTip: 'Shattering Ice cae cada 10-12 seg. Esquiva en diagonal HACIA AFUERA, nunca hacia dentro. Las ráfagas congelan 2 seg; si recibes 2 castigos seguidos = inmovilizado = derrota. Espacios estrechos = trampa visual.',
     defaultTimeLimit: 6,
     specificConditions: {
       solo: [
@@ -214,7 +214,7 @@ const BASE_BOSS_POOL = [
         },
         {
           id: 'sappho-participant-dodges',
-          text: 'El participante debe resolver por si mismo las rafagas heladas sin apoyo del juez',
+          text: 'Debes superar una rafaga helada completa sin recibir congelacion ni control seguido',
           conflictsWith: []
         }
       ]
@@ -232,7 +232,7 @@ const BASE_BOSS_POOL = [
     tag: 'Combate',
     tagClass: 'tag-combat',
     baseDesc: 'Derrota a Balachko identificando el cuerpo real entre copias y sobreviviendo a su secuencia de tajos encadenados.',
-    baseTip: 'Durante Shadowblade Tactics, la lectura correcta importa mas que el daño bruto; el objetivo real se distingue por Pyro.',
+    baseTip: 'Shadowblade Tactics = 6 copias + original real. Original tiene brillo Pyro distintivo. Enfoca SOLO al real o vuelves al inicio del ciclo (6 tajos más). Sus combos encadenados tienen iframes específicos; requiere ejecución de fase.',
     defaultTimeLimit: 6,
     specificConditions: {
       solo: [
@@ -250,7 +250,7 @@ const BASE_BOSS_POOL = [
       supervisado: [
         {
           id: 'balachko-real-call',
-          text: 'El juez solo observa: el participante debe identificar por si mismo el objetivo real',
+          text: 'Debes identificar y golpear al cuerpo real en el primer intento de Shadowblade Tactics',
           conflictsWith: []
         },
         {
@@ -270,10 +270,10 @@ const BASE_BOSS_POOL = [
     difficulty: 'hard',
     diffClass: 'diff-dificil',
     diffLabel: 'DIFICIL',
-    tag: 'Mecanica',
+    tag: 'Mecánica',
     tagClass: 'tag-speedrun',
     baseDesc: 'Derrota a Hexadecatonic Mandragora controlando su barra de Fury y resolviendo bien la fase de Sporebloom.',
-    baseTip: 'Pyro, Electro o ataques Lunar-charged ayudan a vaciar Fury; si fallas el control del ritmo, el combate se alarga mucho.',
+    baseTip: 'Fury bar crece constantemente. Pyro/Electro/Lunar reducen rápido (10 seg). Sporebloom ocurre cada 20 seg; debes estar listo. Fallar mecánica = extensión 15 seg + caos acumulativo. Control del ritmo = todo.',
     defaultTimeLimit: 6,
     specificConditions: {
       solo: [
@@ -296,7 +296,7 @@ const BASE_BOSS_POOL = [
         },
         {
           id: 'mandragora-no-judge-fury',
-          text: 'El juez no puede ayudar a vaciar Fury ni a limpiar esporas por el participante',
+          text: 'Debes vaciar la barra de Fury antes de que cierre su primer ciclo principal',
           conflictsWith: []
         }
       ]
@@ -314,7 +314,7 @@ const BASE_BOSS_POOL = [
     tag: 'Tecnico',
     tagClass: 'tag-nohit',
     baseDesc: 'Derrota a The Homesick Lone Wolf leyendo bien sus saltos, barridos y respiraciones de Anemo/Cryo.',
-    baseTip: 'Sus ataques de area castigan mucho quedarse quieto; el reto luce mejor cuando se juega con disciplina y lectura.',
+    baseTip: 'Plunging Strike cada 12 seg (esquiva saltando rápido). Sweeping Breath parece completo pero solo últimos 2 golpes despliegan área de daño. Aprende a predecir; error = daño severo pero evitable.',
     defaultTimeLimit: 6,
     specificConditions: {
       solo: [
@@ -337,7 +337,7 @@ const BASE_BOSS_POOL = [
         },
         {
           id: 'lonewolf-no-judge-bodyblock',
-          text: 'El juez no puede cebar saltos ni bloquear trayectorias por el participante',
+          text: 'Debes esquivar un Plunging Strike y un Sweeping Breath en la misma rotacion sin recibir daño',
           conflictsWith: []
         }
       ]
@@ -354,14 +354,14 @@ const BASE_BOSS_POOL = [
     diffLabel: 'DIFICIL',
     tag: 'Combate',
     tagClass: 'tag-combat',
-    baseDesc: 'Derrota a Hiljetta manteniendo consistencia frente a una duelista de largo alcance con punto debil y presion constante.',
-    baseTip: 'Su punto debil permite ventanas claras, pero el reto sigue siendo no regalar daño por codicia.',
+    baseDesc: 'Derrota a Hiljetta manteniendo consistencia frente a una duelista de largo alcance con punto débil y presión constante.',
+    baseTip: 'Punto débil cada 15-20 seg, dura exactamente 5 seg. Sus disparos tienen 3 fases (rápido > lento > explosión final). Aprende a interrumpir ANTES de explosión con escudo o inversión de ataque. Timing = todo.',
     defaultTimeLimit: 5,
     specificConditions: {
       solo: [
         {
           id: 'hiljetta-weakpoint-window',
-          text: 'Debes castigar al menos una ventana clara de punto debil durante el combate',
+          text: 'Debes castigar al menos una ventana clara de punto débil durante el combate',
           conflictsWith: []
         },
         {
@@ -378,7 +378,7 @@ const BASE_BOSS_POOL = [
         },
         {
           id: 'hiljetta-no-judge-setup',
-          text: 'El juez no puede preparar el punto debil ni distraerla para regalarte apertura',
+          text: 'Debes castigar al menos una apertura de punto debil con el personaje principal',
           conflictsWith: []
         }
       ]
@@ -402,7 +402,7 @@ const SOLO_RULES = [
 const SUPERVISADO_RULES = [
   'El participante define 2 personajes antes de entrar y no puede cambiarlos luego.',
   'El supervisor acompaña como juez, pero no ataca ni usa habilidades.',
-  'El supervisor no esta obligado a complementar consonancias.',
+  'El supervisor no está obligado a complementar consonancia.',
   'El supervisor no debe interferir directa ni indirectamente con curas, escudos o buffs activos.',
   'Se mantiene un solo intento por reto.',
   'Si el jefe se reinicia, el desafio se considera perdido.',
@@ -429,7 +429,7 @@ const MEDIUM_CONDITIONS = [
   {
     id: 'four-elements',
     text: 'El equipo debe usar 4 elementos distintos',
-    conflictsWith: ['max-two-same-element', 'mono-element', 'melee-only', 'ranged-only']
+    conflictsWith: ['max-two-same-element', 'mono-element', 'mono-damage', 'sword-only', 'claymore-only', 'polearm-only', 'bow-only', 'catalyst-only', 'melee-any', 'ranged-any', 'bow-catalyst', 'sword-claymore', 'sword-polearm', 'claymore-polearm', 'no-catalyst']
   },
   {
     id: 'max-two-same-element',
@@ -437,21 +437,106 @@ const MEDIUM_CONDITIONS = [
     conflictsWith: ['four-elements', 'mono-element']
   },
   {
-    id: 'melee-only',
-    text: 'Solo personajes cuerpo a cuerpo',
-    conflictsWith: ['ranged-only', 'four-elements']
+    id: 'sword-only',
+    text: 'Solo Espada Ligera en el equipo (todos los personajes)',
+    conflictsWith: ['claymore-only', 'polearm-only', 'bow-only', 'catalyst-only', 'melee-any', 'ranged-any', 'bow-catalyst', 'sword-claymore', 'sword-polearm', 'claymore-polearm', 'four-elements', 'mono-element', 'no-catalyst']
   },
   {
-    id: 'ranged-only',
-    text: 'Solo personajes a distancia',
-    conflictsWith: ['melee-only', 'four-elements']
+    id: 'claymore-only',
+    text: 'Solo Mandoble en el equipo (todos los personajes)',
+    conflictsWith: ['sword-only', 'polearm-only', 'bow-only', 'catalyst-only', 'melee-any', 'ranged-any', 'bow-catalyst', 'sword-claymore', 'sword-polearm', 'claymore-polearm', 'four-elements', 'mono-element', 'no-catalyst']
+  },
+  {
+    id: 'polearm-only',
+    text: 'Solo Lanza en el equipo (todos los personajes)',
+    conflictsWith: ['sword-only', 'claymore-only', 'bow-only', 'catalyst-only', 'melee-any', 'ranged-any', 'bow-catalyst', 'sword-claymore', 'sword-polearm', 'claymore-polearm', 'four-elements', 'mono-element', 'no-catalyst']
+  },
+  {
+    id: 'bow-only',
+    text: 'Solo Arco en el equipo (todos los personajes)',
+    conflictsWith: ['sword-only', 'claymore-only', 'polearm-only', 'catalyst-only', 'melee-any', 'sword-claymore', 'sword-polearm', 'claymore-polearm', 'ranged-any', 'bow-catalyst', 'no-bow', 'four-elements', 'mono-element', 'no-catalyst']
+  },
+  {
+    id: 'catalyst-only',
+    text: 'Solo Catalizador en el equipo (todos los personajes)',
+    conflictsWith: ['sword-only', 'claymore-only', 'polearm-only', 'bow-only', 'melee-any', 'sword-claymore', 'sword-polearm', 'claymore-polearm', 'ranged-any', 'bow-catalyst', 'no-catalyst', 'four-elements', 'mono-element']
+  },
+  {
+    id: 'sword-claymore',
+    text: 'Solo Espada Ligera y Mandoble permitidos (sin Lanza, Arco, Catalizador)',
+    conflictsWith: ['polearm-only', 'bow-only', 'catalyst-only', 'ranged-any', 'bow-catalyst', 'melee-any', 'no-catalyst', 'four-elements', 'mono-element']
+  },
+  {
+    id: 'sword-polearm',
+    text: 'Solo Espada Ligera y Lanza permitidas (sin Mandoble, Arco, Catalizador)',
+    conflictsWith: ['claymore-only', 'bow-only', 'catalyst-only', 'ranged-any', 'bow-catalyst', 'melee-any', 'no-catalyst', 'four-elements', 'mono-element']
+  },
+  {
+    id: 'claymore-polearm',
+    text: 'Solo Mandoble y Lanza permitidas (sin Espada, Arco, Catalizador)',
+    conflictsWith: ['sword-only', 'bow-only', 'catalyst-only', 'ranged-any', 'bow-catalyst', 'melee-any', 'no-catalyst', 'four-elements', 'mono-element']
+  },
+  {
+    id: 'melee-any',
+    text: 'Solo personajes cuerpo a cuerpo (Espada, Mandoble, Lanza)',
+    conflictsWith: ['bow-only', 'catalyst-only', 'ranged-any', 'bow-catalyst', 'no-catalyst', 'four-elements', 'mono-element', 'sword-only', 'claymore-only', 'polearm-only', 'sword-claymore', 'sword-polearm', 'claymore-polearm']
+  },
+  {
+    id: 'bow-catalyst',
+    text: 'Solo Arco y Catalizador permitidos (sin Espada, Mandoble, Lanza)',
+    conflictsWith: ['sword-only', 'claymore-only', 'polearm-only', 'melee-any', 'sword-claymore', 'sword-polearm', 'claymore-polearm', 'no-bow', 'no-catalyst', 'four-elements', 'mono-element']
+  },
+  {
+    id: 'ranged-any',
+    text: 'Solo personajes a distancia (Arco, Catalizador)',
+    conflictsWith: ['sword-only', 'claymore-only', 'polearm-only', 'melee-any', 'sword-claymore', 'sword-polearm', 'claymore-polearm', 'four-elements', 'mono-element', 'bow-only', 'catalyst-only', 'bow-catalyst']
+  },
+  {
+    id: 'no-catalyst',
+    text: 'Sin Catalizador permitido en el equipo',
+    conflictsWith: ['catalyst-only', 'ranged-any', 'bow-catalyst', 'four-elements']
+  },
+  {
+    id: 'no-bow',
+    text: 'Sin Arco permitido en el equipo',
+    conflictsWith: ['bow-only', 'ranged-any', 'bow-catalyst']
+  },
+  {
+    id: 'energy-chain',
+    text: 'Debes usar al menos 3 Ultimates durante el combate',
+    conflictsWith: ['no-bursts']
+  },
+  {
+    id: 'no-bursts',
+    text: 'Maximo 1 Ultimate por personaje durante todo el combate',
+    conflictsWith: ['energy-chain']
+  },
+  {
+    id: 'switch-limit-3',
+    text: 'Maximo 5 cambios de personaje en todo el combate',
+    conflictsWith: []
+  },
+  {
+    id: 'mono-element',
+    text: 'Todo el equipo debe usar el mismo elemento',
+    conflictsWith: ['four-elements', 'max-two-same-element', 'mono-damage', 'no-catalyst']
+  },
+  {
+    id: 'mono-damage',
+    text: 'El daño principal debe recaer en un solo personaje; el resto del equipo entra solo a apoyar',
+    conflictsWith: ['four-elements', 'mono-element']
+  },
+  {
+    id: 'no-reactions',
+    text: 'No puedes depender de Bloom, Hyperbloom, Burgeon o Sobrecargado como fuente principal de daño',
+    conflictsWith: ['energy-chain']
   }
 ];
 
 const SUPERVISED_MEDIUM_CONDITIONS = [
   {
-    id: 'two-elements-max',
-    text: 'El equipo puede repetir elemento, pero solo entre los 2 personajes elegidos',
+    id: 'different-elements-supervised',
+    text: 'Los 2 personajes deben ser de elementos distintos',
     conflictsWith: []
   },
   {
@@ -466,12 +551,37 @@ const SUPERVISED_MEDIUM_CONDITIONS = [
   },
   {
     id: 'no-double-healer',
-    text: 'No se recomienda doble healer entre los 2 personajes elegidos',
+    text: 'Maximo 1 personaje con rol principal de curacion entre los 2 elegidos',
     conflictsWith: []
   },
   {
-    id: 'melee-or-ranged',
-    text: 'Los 2 personajes deben compartir el mismo enfoque: cuerpo a cuerpo o distancia',
+    id: 'melee-only-supervised',
+    text: 'Los 2 personajes deben ser cuerpo a cuerpo (Espada, Mandoble o Lanza)',
+    conflictsWith: ['ranged-only-supervised', 'bow-catalyst-supervised']
+  },
+  {
+    id: 'ranged-only-supervised',
+    text: 'Los 2 personajes deben ser a distancia (Arco o Catalizador)',
+    conflictsWith: ['melee-only-supervised']
+  },
+  {
+    id: 'bow-catalyst-supervised',
+    text: 'Debes llevar exactamente 1 Arco y 1 Catalizador',
+    conflictsWith: ['melee-only-supervised', 'no-bow-supervised', 'no-catalyst-supervised']
+  },
+  {
+    id: 'no-catalyst-supervised',
+    text: 'Sin Catalizador permitido entre los 2 personajes',
+    conflictsWith: ['ranged-only-supervised', 'bow-catalyst-supervised']
+  },
+  {
+    id: 'no-bow-supervised',
+    text: 'Sin Arco permitido entre los 2 personajes',
+    conflictsWith: ['ranged-only-supervised', 'bow-catalyst-supervised']
+  },
+  {
+    id: 'switch-limit-2-supervised',
+    text: 'Maximo 2 cambios de personaje en todo el combate',
     conflictsWith: []
   }
 ];
@@ -489,13 +599,28 @@ const HARD_CONDITIONS_BY_TYPE = {
       conflictsWith: []
     },
     {
-      id: 'pressure-no-leave',
-      text: 'No salir del rango de combate',
-      conflictsWith: []
+      id: 'pressure-open-clean',
+      text: 'No puedes usar tu primer Ultimate hasta superar la primera rotacion agresiva del jefe',
+      conflictsWith: ['energy-chain']
     },
     {
       id: 'pressure-same-starter',
       text: 'Debes terminar el combate con el mismo personaje con el que lo iniciaste en campo',
+      conflictsWith: []
+    },
+    {
+      id: 'pressure-cycle-match',
+      text: 'Debes sobrevivir la primera rotacion del jefe con tu personaje principal en campo',
+      conflictsWith: []
+    },
+    {
+      id: 'pressure-no-burst',
+      text: 'Sin usar Ultimates durante el combate (solo ataques e habilidades E)',
+      conflictsWith: ['energy-chain', 'no-bursts']
+    },
+    {
+      id: 'pressure-low-hp',
+      text: 'Debes terminar el combate con el personaje principal en campo y por debajo del 50% de vida',
       conflictsWith: []
     }
   ],
@@ -524,6 +649,16 @@ const HARD_CONDITIONS_BY_TYPE = {
       id: 'tech-clean-phase',
       text: 'Debes superar la fase mas peligrosa sin recibir golpes',
       conflictsWith: []
+    },
+    {
+      id: 'tech-perfect-dodge',
+      text: 'Debes esquivar perfectamente 3 ataques seguidos del jefe sin escudos ni bursts',
+      conflictsWith: ['tech-no-shield']
+    },
+    {
+      id: 'tech-no-burst',
+      text: 'Sin usar Ultimates (solo ataques normales y habilidades E)',
+      conflictsWith: ['energy-chain', 'no-bursts']
     }
   ],
   gimmick: [
@@ -534,12 +669,12 @@ const HARD_CONDITIONS_BY_TYPE = {
     },
     {
       id: 'gimmick-phase-clean',
-      text: 'Debes superar la fase especial sin bajas',
+      text: 'Debes superar la fase especial sin bajas (sin personajes caídos)',
       conflictsWith: []
     },
     {
       id: 'gimmick-fast-break',
-      text: 'Debes romper su estado especial rapido o el reto se considera fallido',
+      text: 'Debes romper su estado especial en el primer ciclo disponible o el reto se considera fallido',
       conflictsWith: []
     },
     {
@@ -551,6 +686,16 @@ const HARD_CONDITIONS_BY_TYPE = {
       id: 'gimmick-no-shield',
       text: 'Sin usar escudos',
       conflictsWith: []
+    },
+    {
+      id: 'gimmick-timed-solve',
+      text: 'Debes resolver la mecanica principal dentro de 25 segundos',
+      conflictsWith: []
+    },
+    {
+      id: 'gimmick-no-burst-phase',
+      text: 'Durante la mecanica especial no puedes usar Ultimates',
+      conflictsWith: ['energy-chain', 'no-bursts']
     }
   ]
 };
@@ -558,8 +703,8 @@ const HARD_CONDITIONS_BY_TYPE = {
 const SUPERVISED_HARD_CONDITIONS_BY_TYPE = {
   pressure: [
     {
-      id: 'pressure-participant-carries',
-      text: 'El supervisor no puede absorber mecanicas para facilitar la pelea',
+      id: 'pressure-open-clean-supervised',
+      text: 'Debes superar la primera rotacion agresiva con el personaje principal en campo',
       conflictsWith: []
     },
     {
@@ -568,8 +713,13 @@ const SUPERVISED_HARD_CONDITIONS_BY_TYPE = {
       conflictsWith: []
     },
     {
-      id: 'pressure-no-reset',
-      text: 'Si el participante pierde el control del ritmo, no se reinicia el intento',
+      id: 'pressure-same-starter-supervised',
+      text: 'El personaje principal debe abrir y cerrar el combate',
+      conflictsWith: []
+    },
+    {
+      id: 'pressure-no-burst',
+      text: 'Sin usar Ultimates durante el combate',
       conflictsWith: []
     }
   ],
@@ -588,12 +738,17 @@ const SUPERVISED_HARD_CONDITIONS_BY_TYPE = {
       id: 'tech-no-shield',
       text: 'Sin usar escudos',
       conflictsWith: []
+    },
+    {
+      id: 'tech-no-burst',
+      text: 'Sin usar Ultimates (solo ataques normales)',
+      conflictsWith: []
     }
   ],
   gimmick: [
     {
-      id: 'gimmick-participant-break',
-      text: 'El participante debe resolver por si mismo la mecanica principal',
+      id: 'gimmick-main-field',
+      text: 'La primera mecanica especial debe resolverse con el personaje principal en campo',
       conflictsWith: []
     },
     {
@@ -605,12 +760,17 @@ const SUPERVISED_HARD_CONDITIONS_BY_TYPE = {
       id: 'gimmick-no-heal',
       text: 'Sin curarse durante el combate',
       conflictsWith: []
+    },
+    {
+      id: 'gimmick-timed-solve',
+      text: 'Debes resolver la mecanica principal dentro de 30 segundos',
+      conflictsWith: []
     }
   ]
 };
 
 const TITLE_BY_TYPE = {
-  pressure: ['Prueba de Presion', 'El Sello de la Fortaleza', 'Desafio del Acero'],
+  pressure: ['Prueba de Presión', 'El Sello de la Fortaleza', 'Desafío del Acero'],
   technical: ['Danza de Precision', 'El Juicio del Reflejo', 'Sello de la Ejecucion'],
   gimmick: ['Prueba del Mecanismo', 'Ritual del Engranaje', 'Sello de la Fase']
 };
@@ -629,7 +789,7 @@ const MODE_CONFIGS = {
     rules: SOLO_RULES,
     typeFilterOptions: [
       { value: 'all', label: 'Todos los tipos de reto' },
-      { value: 'pressure', label: 'Combate de presion' },
+      { value: 'pressure', label: 'Combate de presión' },
       { value: 'technical', label: 'Precision y no-hit' },
       { value: 'gimmick', label: 'Mecanica especial' }
     ],
@@ -716,9 +876,12 @@ function buildChallengeFromBoss(boss, modeConfig) {
   const bossSpecificPool = getBossSpecificConditions(boss, modeConfig.key);
   const compatibleHardPool = hardPool.filter(candidate => areConditionsCompatible(mediumConditions, candidate));
   const compatibleBossPool = bossSpecificPool.filter(candidate => areConditionsCompatible(mediumConditions, candidate));
-  const selectedPool = compatibleBossPool.length
-    ? compatibleBossPool
-    : (compatibleHardPool.length ? compatibleHardPool : hardPool);
+
+  let selectedPool = compatibleBossPool;
+  if (!selectedPool.length) {
+    selectedPool = compatibleHardPool.length ? compatibleHardPool : hardPool;
+  }
+
   const hardCondition = selectedPool.length ? pickRandom(selectedPool) : null;
   const titleBase = pickRandom(TITLE_BY_TYPE[boss.type] || ['Prueba Especial']);
   const timeLimit = (boss.defaultTimeLimit || 6) + (modeConfig.timeModifier || 0);

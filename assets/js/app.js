@@ -355,8 +355,8 @@ function showVictory() {
   elements.bannerIcon.textContent = '\u263E';
   elements.bannerTitle.textContent = 'Bendicion Lunar Obtenida';
   elements.bannerSub.textContent = ACTIVE_MODE === 'supervisado'
-    ? 'El participante supero la validacion y el juez confirma el cumplimiento del reto.'
-    : 'La valentia y la ejecucion fueron suficientes para reclamar la recompensa.';
+    ? 'El participante superó la validación y el juez confirma el cumplimiento del reto.'
+    : 'La valentía y la ejecución fueron suficientes para reclamar la recompensa.';
   elements.statusLabel.textContent = 'Victoria';
   elements.statusLabel.style.color = 'var(--win)';
   elements.resultBanner.scrollIntoView({ behavior: 'smooth', block: 'start' });
