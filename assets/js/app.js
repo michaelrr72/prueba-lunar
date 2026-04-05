@@ -12,7 +12,9 @@ const state = {
   timerRemaining: 0,
   timerInitial: 0,
   timerRunning: false,
-  timerInterval: null
+  timerInterval: null,
+  rouletteSpinning: false,
+  rouletteRotation: 0
 };
 
 const elements = {
@@ -26,6 +28,8 @@ const elements = {
   footerVersion: document.getElementById('footer-version'),
   modeBadge: document.getElementById('mode-badge'),
   typeFilter: document.getElementById('type-filter'),
+  rouletteWheel: document.getElementById('roulette-wheel'),
+  rouletteStatus: document.getElementById('roulette-status'),
   resultBanner: document.getElementById('result-banner'),
   bannerIcon: document.getElementById('banner-icon'),
   bannerTitle: document.getElementById('banner-title'),
@@ -96,6 +100,143 @@ function getBossPool() {
   const filter = elements.typeFilter?.value || 'all';
   const pool = getBossPoolForMode(ACTIVE_MODE);
   return filter === 'all' ? pool : pool.filter(boss => boss.type === filter);
+}
+
+function getRouletteColor(boss) {
+  const bossColors = {
+    1: 'rgba(55, 165, 220, 0.56)',
+    2: 'rgba(196, 68, 58, 0.58)',
+    3: 'rgba(230, 120, 60, 0.56)',
+    4: 'rgba(72, 150, 222, 0.56)',
+    5: 'rgba(120, 210, 255, 0.58)',
+    6: 'rgba(170, 185, 205, 0.58)',
+    7: 'rgba(170, 90, 210, 0.56)',
+    8: 'rgba(110, 125, 145, 0.56)',
+    9: 'rgba(80, 215, 180, 0.56)',
+    10: 'rgba(64, 110, 190, 0.58)',
+    11: 'rgba(235, 195, 70, 0.6)',
+    12: 'rgba(145, 120, 90, 0.58)',
+    13: 'rgba(105, 210, 245, 0.58)',
+    14: 'rgba(225, 92, 56, 0.6)',
+    15: 'rgba(95, 175, 95, 0.58)',
+    16: 'rgba(150, 160, 168, 0.56)',
+    17: 'rgba(145, 120, 180, 0.56)'
+  };
+
+  return bossColors[boss.id] || 'rgba(196, 163, 90, 0.45)';
+}
+
+function refreshRoulette(selectedBossId = null) {
+  if (!elements.rouletteWheel) return;
+
+  const pool = getBossPool();
+  const wheel = elements.rouletteWheel;
+  const safePool = pool.length ? pool : getBossPoolForMode(ACTIVE_MODE);
+
+  wheel.classList.remove('is-celebrating');
+  wheel.style.transition = 'none';
+  wheel.innerHTML = '<div class="roulette-center">☾</div>';
+
+  if (!safePool.length) {
+    if (elements.rouletteStatus) {
+      elements.rouletteStatus.textContent = 'No hay jefes disponibles para el filtro actual.';
+    }
+    return;
+  }
+
+  const step = 360 / safePool.length;
+  const startAngle = -90 - (step / 2);
+  const gradient = safePool
+    .map((boss, index) => `${getRouletteColor(boss)} ${index * step}deg ${(index + 1) * step}deg`)
+    .join(', ');
+
+  wheel.style.background = `radial-gradient(circle at center, rgba(10, 12, 16, 0.85) 0 18%, transparent 18%), conic-gradient(from ${startAngle}deg, ${gradient})`;
+  wheel.style.transform = `rotate(${state.rouletteRotation}deg)`;
+
+  safePool.forEach((boss, index) => {
+    const angle = index * step;
+    const label = document.createElement('div');
+    label.className = 'roulette-label';
+    if (boss.id === Number(selectedBossId)) {
+      label.classList.add('is-selected');
+    }
+
+    label.style.transform = `translate(-50%, -50%) rotate(${angle}deg) translateY(calc(var(--roulette-radius) * -1)) rotate(${-angle}deg)`;
+    label.title = boss.name;
+    label.innerHTML = `<span class="roulette-emoji">${boss.enemyIcon}</span>`;
+    wheel.appendChild(label);
+  });
+
+  if (elements.rouletteStatus && !state.rouletteSpinning) {
+    elements.rouletteStatus.textContent = selectedBossId
+      ? 'La rueda señala al jefe actual del reto.'
+      : `La rueda contiene ${safePool.length} leyendas disponibles.`;
+  }
+}
+
+let rouletteAudioContext = null;
+
+function getRouletteAudioContext() {
+  const AudioContextClass = globalThis.AudioContext || globalThis.webkitAudioContext;
+  if (!AudioContextClass) return null;
+
+  if (!rouletteAudioContext) {
+    rouletteAudioContext = new AudioContextClass();
+  }
+
+  if (rouletteAudioContext.state === 'suspended') {
+    rouletteAudioContext.resume().catch(() => {});
+  }
+
+  return rouletteAudioContext;
+}
+
+function playTone(frequency, duration = 0.08, type = 'sine', volume = 0.03, delay = 0) {
+  const audioContext = getRouletteAudioContext();
+  if (!audioContext) return;
+
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+  const startAt = audioContext.currentTime + delay;
+
+  oscillator.type = type;
+  oscillator.frequency.setValueAtTime(frequency, startAt);
+
+  gainNode.gain.setValueAtTime(0.0001, startAt);
+  gainNode.gain.exponentialRampToValueAtTime(volume, startAt + 0.01);
+  gainNode.gain.exponentialRampToValueAtTime(0.0001, startAt + duration);
+
+  oscillator.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+  oscillator.start(startAt);
+  oscillator.stop(startAt + duration + 0.03);
+}
+
+function playRouletteStartSound() {
+  [0, 0.11, 0.22, 0.34, 0.46].forEach((delay, index) => {
+    playTone(520 + (index * 35), 0.05, 'triangle', 0.018, delay);
+  });
+}
+
+function playRouletteWinSound() {
+  playTone(660, 0.08, 'sine', 0.03, 0);
+  playTone(880, 0.1, 'sine', 0.04, 0.08);
+  playTone(1040, 0.16, 'triangle', 0.05, 0.18);
+}
+
+function highlightRouletteWinner(boss) {
+  if (!elements.rouletteWheel || !boss) return;
+
+  const center = elements.rouletteWheel.querySelector('.roulette-center');
+  if (!center) return;
+
+  center.textContent = boss.enemyIcon;
+  center.classList.add('winner-reveal');
+
+  globalThis.setTimeout(() => {
+    center.textContent = '☾';
+    center.classList.remove('winner-reveal');
+  }, 1800);
 }
 
 function buildAssignedChallenges(pool) {
@@ -198,7 +339,7 @@ function onTimerFinished() {
   stopTimer();
   renderTimer();
 
-  const success = window.confirm(
+  const success = globalThis.confirm(
     'Se acabo el tiempo. Aceptar = el participante cumplio el reto antes del limite. Cancelar = el reto se considera fallido.'
   );
 
@@ -246,6 +387,8 @@ function initNewGame() {
   state.results = [...DEFAULT_RESULTS];
   state.currentRound = 0;
   state.gameOver = false;
+  state.rouletteSpinning = false;
+  state.rouletteRotation = 0;
 
   clearBanner();
   renderAll();
@@ -317,6 +460,10 @@ function renderChallenge() {
   renderConditions(current.conditions || []);
   elements.btnWin.disabled = state.gameOver;
   elements.btnLose.disabled = state.gameOver;
+
+  if (!state.rouletteSpinning) {
+    refreshRoulette(current.bossId);
+  }
 }
 
 function renderScore() {
@@ -404,18 +551,92 @@ function recordResult(result) {
   saveState();
 }
 
-function rerollCurrentChallenge() {
-  if (state.gameOver) return;
-
-  const currentBossId = state.assigned[state.currentRound]?.bossId;
-  const pool = getBossPool().filter(boss => boss.id !== Number(currentBossId));
-  const fallbackPool = pool.length ? pool : getBossPoolForMode(ACTIVE_MODE);
-  const boss = pickRandom(fallbackPool);
-
+function assignBossToCurrentChallenge(boss) {
   state.assigned[state.currentRound] = buildChallengeFromBoss(boss, MODE_CONFIG);
   renderChallenge();
   setTimerForCurrentChallenge();
   saveState();
+}
+
+function rerollCurrentChallenge() {
+  if (state.gameOver || state.rouletteSpinning) return;
+
+  const displayPool = getBossPool();
+  const currentBossId = state.assigned[state.currentRound]?.bossId;
+  const eligiblePool = displayPool.filter(boss => boss.id !== Number(currentBossId));
+
+  let fallbackPool = eligiblePool;
+  if (!fallbackPool.length) {
+    fallbackPool = displayPool.length ? displayPool : getBossPoolForMode(ACTIVE_MODE);
+  }
+
+  const boss = pickRandom(fallbackPool);
+
+  if (!boss || !elements.rouletteWheel) {
+    if (boss) assignBossToCurrentChallenge(boss);
+    return;
+  }
+
+  const wheel = elements.rouletteWheel;
+  const wheelPool = displayPool.length ? displayPool : fallbackPool;
+  const bossIndex = wheelPool.findIndex(item => item.id === boss.id);
+  const step = 360 / wheelPool.length;
+  const centerAngle = bossIndex * step;
+  const extraSpins = 5 + Math.floor(Math.random() * 3);
+  const targetRotation = state.rouletteRotation + (extraSpins * 360) + (360 - centerAngle);
+
+  state.rouletteSpinning = true;
+  elements.btnShuffle.disabled = true;
+  elements.btnReset.disabled = true;
+  if (elements.typeFilter) elements.typeFilter.disabled = true;
+  elements.btnShuffle.textContent = 'Girando...';
+
+  if (elements.rouletteStatus) {
+    elements.rouletteStatus.textContent = 'La ruleta está girando...';
+  }
+
+  playRouletteStartSound();
+  refreshRoulette();
+  wheel.style.transition = 'none';
+  wheel.style.transform = `rotate(${state.rouletteRotation}deg)`;
+  wheel.getBoundingClientRect();
+  wheel.style.transition = 'transform 4.6s cubic-bezier(0.12, 0.8, 0.18, 1)';
+
+  requestAnimationFrame(() => {
+    wheel.style.transform = `rotate(${targetRotation}deg)`;
+  });
+
+  let spinFinished = false;
+  const onSpinEnd = () => {
+    if (spinFinished) return;
+    spinFinished = true;
+
+    wheel.removeEventListener('transitionend', onSpinEnd);
+    state.rouletteSpinning = false;
+    state.rouletteRotation = targetRotation;
+    elements.btnShuffle.disabled = false;
+    elements.btnReset.disabled = false;
+    if (elements.typeFilter) elements.typeFilter.disabled = false;
+    elements.btnShuffle.textContent = 'Sortear reto';
+
+    const normalizedRotation = ((state.rouletteRotation % 360) + 360) % 360;
+    const winningAngle = (360 - normalizedRotation) % 360;
+    const winningIndex = Math.round(winningAngle / step) % wheelPool.length;
+    const winningBoss = wheelPool[winningIndex] || boss;
+
+    assignBossToCurrentChallenge(winningBoss);
+    wheel.classList.add('is-celebrating');
+    highlightRouletteWinner(winningBoss);
+    playRouletteWinSound();
+    setTimeout(() => wheel.classList.remove('is-celebrating'), 1500);
+
+    if (elements.rouletteStatus) {
+      elements.rouletteStatus.textContent = `La ruleta eligió: ${winningBoss.enemyIcon} ${winningBoss.name}`;
+    }
+  };
+
+  wheel.addEventListener('transitionend', onSpinEnd, { once: true });
+  setTimeout(onSpinEnd, 4800);
 }
 
 function openModal() {
@@ -513,7 +734,7 @@ function bootstrap() {
 
       if (wins >= 2) showVictory();
       if (loses >= 2) showDefeat();
-    } else if (!state.timerInitial) {
+    } else if (state.timerInitial <= 0) {
       setTimerForCurrentChallenge();
     } else {
       renderTimer();
