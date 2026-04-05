@@ -513,7 +513,7 @@ const MEDIUM_CONDITIONS = [
   },
   {
     id: 'switch-limit-3',
-    text: 'Maximo 5 cambios de personaje en todo el combate',
+    text: 'Maximo 16 cambios de personaje en todo el combate',
     conflictsWith: []
   },
   {
@@ -581,7 +581,7 @@ const SUPERVISED_MEDIUM_CONDITIONS = [
   },
   {
     id: 'switch-limit-2-supervised',
-    text: 'Maximo 2 cambios de personaje en todo el combate',
+    text: 'Maximo 30 cambios de personaje en todo el combate',
     conflictsWith: []
   }
 ];
