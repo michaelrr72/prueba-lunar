@@ -428,37 +428,37 @@ const MEDIUM_CONDITIONS = [
   },
   {
     id: 'four-elements',
-    text: 'El equipo debe usar 4 elementos distintos',
+    text: 'El equipo debe usar 3 elementos distintos',
     conflictsWith: ['max-two-same-element', 'mono-element', 'mono-damage', 'sword-only', 'claymore-only', 'polearm-only', 'bow-only', 'catalyst-only', 'melee-any', 'ranged-any', 'bow-catalyst', 'sword-claymore', 'sword-polearm', 'claymore-polearm', 'no-catalyst']
   },
   {
     id: 'max-two-same-element',
-    text: 'Maximo 2 personajes del mismo elemento',
+    text: 'No puedes llevar 3 o mas personajes del mismo elemento',
     conflictsWith: ['four-elements', 'mono-element']
   },
   {
     id: 'sword-only',
-    text: 'Solo Espada Ligera en el equipo (todos los personajes)',
+    text: 'Tu personaje principal debe usar Espada Ligera',
     conflictsWith: ['claymore-only', 'polearm-only', 'bow-only', 'catalyst-only', 'melee-any', 'ranged-any', 'bow-catalyst', 'sword-claymore', 'sword-polearm', 'claymore-polearm', 'four-elements', 'mono-element', 'no-catalyst']
   },
   {
     id: 'claymore-only',
-    text: 'Solo Mandoble en el equipo (todos los personajes)',
+    text: 'Tu personaje principal debe usar Mandoble',
     conflictsWith: ['sword-only', 'polearm-only', 'bow-only', 'catalyst-only', 'melee-any', 'ranged-any', 'bow-catalyst', 'sword-claymore', 'sword-polearm', 'claymore-polearm', 'four-elements', 'mono-element', 'no-catalyst']
   },
   {
     id: 'polearm-only',
-    text: 'Solo Lanza en el equipo (todos los personajes)',
+    text: 'Tu personaje principal debe usar Lanza',
     conflictsWith: ['sword-only', 'claymore-only', 'bow-only', 'catalyst-only', 'melee-any', 'ranged-any', 'bow-catalyst', 'sword-claymore', 'sword-polearm', 'claymore-polearm', 'four-elements', 'mono-element', 'no-catalyst']
   },
   {
     id: 'bow-only',
-    text: 'Solo Arco en el equipo (todos los personajes)',
+    text: 'Tu personaje principal debe usar Arco',
     conflictsWith: ['sword-only', 'claymore-only', 'polearm-only', 'catalyst-only', 'melee-any', 'sword-claymore', 'sword-polearm', 'claymore-polearm', 'ranged-any', 'bow-catalyst', 'no-bow', 'four-elements', 'mono-element', 'no-catalyst']
   },
   {
     id: 'catalyst-only',
-    text: 'Solo Catalizador en el equipo (todos los personajes)',
+    text: 'Tu personaje principal debe usar Catalizador',
     conflictsWith: ['sword-only', 'claymore-only', 'polearm-only', 'bow-only', 'melee-any', 'sword-claymore', 'sword-polearm', 'claymore-polearm', 'ranged-any', 'bow-catalyst', 'no-catalyst', 'four-elements', 'mono-element']
   },
   {
@@ -469,7 +469,7 @@ const MEDIUM_CONDITIONS = [
   {
     id: 'sword-polearm',
     text: 'Solo Espada Ligera y Lanza permitidas (sin Mandoble, Arco, Catalizador)',
-    conflictsWith: ['claymore-only', 'bow-only', 'catalyst-only', 'ranged-any', 'bow-catalyst', 'melee-any', 'no-catalyst', 'four-elements', 'mono-element']
+    conflictsWith: ['claymore-only', 'claymore-polearm', 'bow-only', 'catalyst-only', 'ranged-any', 'bow-catalyst', 'melee-any', 'no-catalyst', 'four-elements', 'mono-element']
   },
   {
     id: 'claymore-polearm',
@@ -508,12 +508,12 @@ const MEDIUM_CONDITIONS = [
   },
   {
     id: 'no-bursts',
-    text: 'Maximo 1 Ultimate por personaje durante todo el combate',
+    text: 'Maximo 4 Ultimates por personaje durante todo el combate',
     conflictsWith: ['energy-chain']
   },
   {
     id: 'switch-limit-3',
-    text: 'Maximo 16 cambios de personaje en todo el combate',
+    text: 'Maximo 22 cambios de personaje en todo el combate',
     conflictsWith: []
   },
   {
@@ -556,17 +556,17 @@ const SUPERVISED_MEDIUM_CONDITIONS = [
   },
   {
     id: 'melee-only-supervised',
-    text: 'Los 2 personajes deben ser cuerpo a cuerpo (Espada, Mandoble o Lanza)',
+    text: 'Al menos 1 de tus 2 personajes debe ser cuerpo a cuerpo (Espada, Mandoble o Lanza)',
     conflictsWith: ['ranged-only-supervised', 'bow-catalyst-supervised']
   },
   {
     id: 'ranged-only-supervised',
-    text: 'Los 2 personajes deben ser a distancia (Arco o Catalizador)',
+    text: 'Al menos 1 de tus 2 personajes debe ser cuerpo a cuerpo a distancia (Arco o Catalizador)',
     conflictsWith: ['melee-only-supervised']
   },
   {
     id: 'bow-catalyst-supervised',
-    text: 'Debes llevar exactamente 1 Arco y 1 Catalizador',
+    text: 'Debes llevar exactamente 1 Arco o 1 Catalizador',
     conflictsWith: ['melee-only-supervised', 'no-bow-supervised', 'no-catalyst-supervised']
   },
   {
@@ -581,7 +581,7 @@ const SUPERVISED_MEDIUM_CONDITIONS = [
   },
   {
     id: 'switch-limit-2-supervised',
-    text: 'Maximo 30 cambios de personaje en todo el combate',
+    text: 'Maximo 36 cambios de personaje en todo el combate',
     conflictsWith: []
   }
 ];
@@ -620,7 +620,7 @@ const HARD_CONDITIONS_BY_TYPE = {
     },
     {
       id: 'pressure-low-hp',
-      text: 'Debes terminar el combate con el personaje principal en campo y por debajo del 50% de vida',
+      text: 'Debes terminar el combate con el personaje principal en campo',
       conflictsWith: []
     }
   ],
