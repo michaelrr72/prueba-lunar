@@ -632,7 +632,7 @@ const HARD_CONDITIONS_BY_TYPE = {
     },
     {
       id: 'tech-max-one-hit',
-      text: 'Maximo 1 golpe permitido en todo el combate',
+      text: 'Maximo 7 golpes permitido en todo el combate',
       conflictsWith: ['tech-no-direct-damage']
     },
     {
