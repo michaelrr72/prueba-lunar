@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prueba Lunar v3.0</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap"
     rel="stylesheet">
@@ -14,22 +15,25 @@
 
 <body class="mode-selector-body">
   <div class="page-wrap">
-    <div class="header">
-      <div class="moon-sigil">☾</div>
+    <header class="header">
+      <div class="moon-sigil" aria-hidden="true">☾</div>
       <div class="header-kana">Genshin Impact · Version 3.0</div>
       <h1 class="header-title">Prueba Lunar</h1>
       <p class="header-subtitle">Selecciona el formato adecuado antes de iniciar el reto.</p>
-      <div class="prize-pill"><span>&#10022;</span><span>Selector general de modos</span></div>
-    </div>
+      <div class="prize-pill"><span aria-hidden="true">&#10022;</span><span>Selector general de modos</span></div>
+    </header>
 
-    <div class="warning-box">
-      <span class="warning-symbol">&#9888;</span>
+    <div class="warning-box animate-stagger" style="--stagger: 1">
+      <span class="warning-symbol" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </span>
       <span>La experiencia ahora se divide en dos formatos para adaptarse a cada participante sin perder el sistema
         general ni las reglas base del evento.</span>
     </div>
 
     <section class="mode-selector-grid">
-      <article class="mode-selector-card">
+      <article class="mode-selector-card animate-stagger" style="--stagger: 2">
+        <div class="card-glow" aria-hidden="true"></div>
         <div class="mode-selector-top">
           <span class="mode-selector-label">Modo Solo</span>
           <span class="diff-badge diff-extremo">Pool completo</span>
@@ -42,10 +46,14 @@
           <li>Pool completo y dificultad actual</li>
           <li>Mismas condiciones y flujo de la version anterior</li>
         </ul>
-        <a class="btn btn-gold mode-selector-btn" href="solo.html">Entrar al Modo Solo</a>
+        <a class="btn btn-gold mode-selector-btn" href="solo.html">
+          <span>Entrar al Modo Solo</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
       </article>
 
-      <article class="mode-selector-card mode-selector-card-alt">
+      <article class="mode-selector-card mode-selector-card-alt animate-stagger" style="--stagger: 3">
+        <div class="card-glow" aria-hidden="true"></div>
         <div class="mode-selector-top">
           <span class="mode-selector-label">Modo Supervisado</span>
           <span class="diff-badge diff-dificil">Pool balanceado</span>
@@ -58,12 +66,20 @@
           <li>Supervisor como juez, sin atacar ni usar habilidades</li>
           <li>Pool reducido y tiempos mas razonables</li>
         </ul>
-        <a class="btn btn-gold mode-selector-btn" href="supervisado.html">Entrar al Modo Supervisado</a>
+        <a class="btn btn-gold mode-selector-btn" href="supervisado.html">
+          <span>Entrar al Modo Supervisado</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
       </article>
     </section>
 
+    <div class="divider-ornament animate-stagger" style="--stagger: 4">◆</div>
+
     <section class="selector-support-grid">
-      <div class="panel-card">
+      <div class="panel-card animate-stagger" style="--stagger: 5">
+        <div class="panel-icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        </div>
         <div class="panel-title">Criterio rápido</div>
         <ul class="global-rules-list selector-rules-list">
           <li>Usa Modo Solo si la partida puede verse con claridad en directo.</li>
@@ -73,15 +89,23 @@
         </ul>
       </div>
 
-      <div class="panel-card selector-actions-card">
-        <div class="panel-title">Herramientas del evento</div>
-        <p class="mode-selector-copy">El bracket competitivo sigue disponible aparte para cuando necesites organizar
-          cruces entre participantes.</p>
-        <a class="btn btn-ghost selector-secondary-btn" href="torneo.html">Abrir Torneo Lunar</a>
+      <div class="panel-card selector-actions-card animate-stagger" style="--stagger: 6">
+        <div>
+          <div class="panel-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <div class="panel-title">Herramientas del evento</div>
+          <p class="mode-selector-copy">El bracket competitivo sigue disponible aparte para cuando necesites organizar
+            cruces entre participantes.</p>
+        </div>
+        <a class="btn btn-ghost selector-secondary-btn" href="torneo.html">
+          <span>Abrir Torneo Lunar</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
       </div>
     </section>
 
-    <div class="footer">Prueba Lunar v3.0 · Selector General</div>
+    <footer class="footer">Prueba Lunar v3.0 · Selector General</footer>
   </div>
 </body>
 
