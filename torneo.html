@@ -4,51 +4,93 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prueba Lunar · Torneo</title>
+  <title>Prueba Lunar | Torneo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/modern.css">
 </head>
 
 <body>
-  <div class="page-wrap">
-    <div class="header">
-      <div class="moon-sigil">☾</div>
-      <div class="header-kana">Genshin Impact · Modo Competitivo</div>
-      <h1 class="header-title">Torneo Lunar</h1>
-      <p class="header-subtitle">Solo uno puede alzarse como campeon.</p>
-      <div class="prize-pill"><span>&#10022;</span><span>Eliminacion directa</span></div>
-    </div>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">☾</span>
+        <span>Prueba Lunar</span>
+      </a>
+      <div class="topbar-actions">
+        <a class="btn btn-ghost btn-sm" href="index.html">Volver al selector</a>
+      </div>
+    </header>
 
-    <div class="tournament-layout">
-      <div class="panel-card">
-        <div class="panel-title">Participantes</div>
-
-        <div class="participant-form">
-          <textarea id="player-name" class="form-input" placeholder="Nombres de participantes (uno por linea)" rows="3"></textarea>
-          <button class="btn btn-gold" id="btn-add-player">Agregar Participantes</button>
+    <main class="page-wrap">
+      <section class="hero hero-landing">
+        <div class="hero-copy">
+          <div class="eyebrow">Bracket · Eliminación directa</div>
+          <h1 class="hero-title">Torneo Lunar</h1>
+          <p class="hero-text">
+            Organiza enfrentamientos, registra resultados manualmente y define un campeón con una vista más clara,
+            consistente y preparada para eventos.
+          </p>
+          <div class="hero-actions">
+            <div class="prize-pill"><span aria-hidden="true">♛</span><span>Eliminación directa</span></div>
+            <a class="btn btn-secondary" href="index.html">Volver al inicio</a>
+          </div>
         </div>
 
-        <div class="participant-actions">
-          <button class="btn btn-ghost" id="btn-clear-players">Limpiar lista</button>
-          <button class="btn btn-gold" id="btn-generate-bracket">Generar torneo</button>
-        </div>
+        <aside class="hero-panel">
+          <div class="panel-kicker">Qué puedes hacer</div>
+          <div class="metric-list">
+            <div class="metric-card">
+              <strong>∞</strong>
+              <span>Agregar participantes por líneas de forma rápida.</span>
+            </div>
+            <div class="metric-card">
+              <strong>1</strong>
+              <span>Generar el bracket y avanzar ganadores ronda a ronda.</span>
+            </div>
+            <div class="metric-card">
+              <strong>✓</strong>
+              <span>Persistencia local para seguir el torneo después.</span>
+            </div>
+          </div>
+        </aside>
+      </section>
 
-        <ul id="players-list" class="players-list"></ul>
+      <div class="warning-box">
+        <span class="warning-symbol" aria-hidden="true">⚑</span>
+        <span>Usa esta vista cuando necesites administrar cruces entre participantes de forma manual y visual.</span>
       </div>
 
-      <div class="panel-card">
-        <div class="panel-title">Bracket</div>
-        <div id="bracket-container" class="bracket-container">
-          <p class="empty-state">Agrega participantes y genera el torneo.</p>
+      <section class="tournament-layout">
+        <div class="panel-card">
+          <div class="panel-title">Participantes</div>
+
+          <div class="participant-form">
+            <label class="sr-only" for="player-name">Nombres de participantes</label>
+            <textarea id="player-name" class="form-input" placeholder="Escribe un nombre por línea" rows="5"></textarea>
+            <button class="btn btn-gold" id="btn-add-player">Agregar participantes</button>
+          </div>
+
+          <div class="participant-actions">
+            <button class="btn btn-ghost" id="btn-clear-players">Limpiar lista</button>
+            <button class="btn btn-primary" id="btn-generate-bracket">Generar torneo</button>
+          </div>
+
+          <ul id="players-list" class="players-list"></ul>
         </div>
-      </div>
-    </div>
+
+        <div class="panel-card">
+          <div class="panel-title">Bracket</div>
+          <div id="bracket-container" class="bracket-container">
+            <p class="empty-state">Agrega participantes y genera el torneo.</p>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">Prueba Lunar v3.0 · módulo de torneo</footer>
+    </main>
   </div>
-
-  <a href="index.html" class="floating-nav-btn" title="Volver al selector">☾</a>
 
   <script src="assets/js/torneo.js"></script>
 </body>
