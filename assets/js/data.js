@@ -182,7 +182,7 @@ const BASE_BOSS_POOL = [
   {
     id: 13,
     name: 'Sappho Amidst the Waves',
-    enemyIcon: '\ud83c\udf0a',
+    enemyIcon: '🧊',
     region: 'Fontaine - Leyenda Local',
     type: 'technical',
     difficulty: 'hard',
@@ -379,6 +379,88 @@ const BASE_BOSS_POOL = [
         {
           id: 'hiljetta-no-judge-setup',
           text: 'Debes castigar al menos una apertura de punto debil con el personaje principal',
+          conflictsWith: []
+        }
+      ]
+    }
+  },
+  {
+    id: 18,
+    name: 'Churldric',
+    enemyIcon: '🍲',
+    region: 'Mondstadt - Leyenda Local',
+    type: 'gimmick',
+    difficulty: 'hard',
+    diffClass: 'diff-dificil',
+    diffLabel: 'DIFICIL',
+    tag: 'Mecánica',
+    tagClass: 'tag-speedrun',
+    baseDesc: 'Derrota a Churldric controlando su Geo pot y leyendo bien sus saltos en cadena.',
+    baseTip: 'Su Delicious Hot Pot cuenta como Geo construct. Lleva Geo fuerte o Overload para romperla rapido. Cuando salte, caera tres veces seguidas sobre tu posicion: desplaza en diagonal desde la primera marca y no te quedes encerrado.',
+    defaultTimeLimit: 6,
+    specificConditions: {
+      solo: [
+        {
+          id: 'churldric-pot-break',
+          text: 'Debes destruir la Delicious Hot Pot antes de que cierre su primer gran ciclo de cocina',
+          conflictsWith: []
+        },
+        {
+          id: 'churldric-no-triple-plunge',
+          text: 'Debes esquivar la secuencia completa de tres plunging attacks sin recibir impacto directo',
+          conflictsWith: []
+        }
+      ],
+      supervisado: [
+        {
+          id: 'churldric-clean-pot-window',
+          text: 'El participante debe romper la Geo pot o castigar una ventana de cocina sin ayuda del juez',
+          conflictsWith: []
+        },
+        {
+          id: 'churldric-no-double-drop',
+          text: 'No recibir dos impactos seguidos durante su patron de salto en cadena',
+          conflictsWith: []
+        }
+      ]
+    }
+  },
+  {
+    id: 19,
+    name: 'Maha Vasudevayaputra',
+    enemyIcon: '🌱',
+    region: 'Temple of Space - Leyenda Local',
+    type: 'gimmick',
+    difficulty: 'extreme',
+    diffClass: 'diff-extremo',
+    diffLabel: 'EXTREMO',
+    tag: 'Mecánica',
+    tagClass: 'tag-restriction',
+    baseDesc: 'Derrota a Maha Vasudevayaputra manteniendo su barra Dendro controlada y evitando que regrese a Scorched State.',
+    baseTip: 'Solo Dendro/Hydro para Bloom o Lunar-Bloom. Cualquier reaccion PHEC lo devuelve a Scorched State. Mantener la barra Dendro activa es la prioridad absoluta; si pierdes el ritmo, la pelea se alarga y se complica.',
+    defaultTimeLimit: 7,
+    specificConditions: {
+      solo: [
+        {
+          id: 'maha-dendro-hydro-only',
+          text: 'Solo Dendro e Hydro permitidos para mantener Bloom o Lunar-Bloom durante el reto',
+          conflictsWith: ['four-elements', 'mono-element']
+        },
+        {
+          id: 'maha-no-scorched-return',
+          text: 'No permitir que Maha regrese a Scorched State despues de estabilizar su barra Dendro',
+          conflictsWith: []
+        }
+      ],
+      supervisado: [
+        {
+          id: 'maha-first-cycle-bloom',
+          text: 'Debes llenar correctamente la barra Dendro del jefe en su primer ciclo principal',
+          conflictsWith: []
+        },
+        {
+          id: 'maha-no-phec-reset',
+          text: 'No activar reacciones PHEC que reinicien la pelea hacia Scorched State',
           conflictsWith: []
         }
       ]
@@ -817,7 +899,7 @@ const MODE_CONFIGS = {
     ],
     mediumConditions: SUPERVISED_MEDIUM_CONDITIONS,
     hardConditionsByType: SUPERVISED_HARD_CONDITIONS_BY_TYPE,
-    bossIds: [3, 4, 5, 6, 8, 9, 10, 12, 13, 14, 15, 16, 17],
+    bossIds: [3, 4, 5, 6, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19],
     timeModifier: 1
   }
 };
