@@ -8,7 +8,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/modern.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/modes.css">
 </head>
 
 <body>
@@ -23,14 +26,15 @@
       </div>
     </header>
 
+    <div id="tournament-live-region" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
     <main class="page-wrap">
       <section class="hero hero-landing">
         <div class="hero-copy">
           <div class="eyebrow">Bracket · Eliminación directa</div>
           <h1 class="hero-title">Torneo Lunar</h1>
           <p class="hero-text">
-            Organiza enfrentamientos, registra resultados manualmente y define un campeón con una vista más clara,
-            consistente y preparada para eventos.
+            Organiza cruces, marca ganadores ronda a ronda y sigue el avance del campeonato con un flujo más claro para directo.
           </p>
           <div class="hero-actions">
             <div class="prize-pill"><span aria-hidden="true">♛</span><span>Eliminación directa</span></div>
@@ -39,19 +43,19 @@
         </div>
 
         <aside class="hero-panel">
-          <div class="panel-kicker">Qué puedes hacer</div>
+          <div class="panel-kicker">Control rápido</div>
           <div class="metric-list">
             <div class="metric-card">
-              <strong>∞</strong>
-              <span>Agregar participantes por líneas de forma rápida.</span>
+              <strong>Ctrl</strong>
+              <span>Usa <strong>Ctrl + Enter</strong> para agregar participantes más rápido.</span>
             </div>
             <div class="metric-card">
-              <strong>1</strong>
-              <span>Generar el bracket y avanzar ganadores ronda a ronda.</span>
+              <strong>G</strong>
+              <span>Genera el bracket con el teclado cuando estés fuera del formulario.</span>
             </div>
             <div class="metric-card">
               <strong>✓</strong>
-              <span>Persistencia local para seguir el torneo después.</span>
+              <span>Los participantes impares se pueden calificar rápido para mantener el control en vivo.</span>
             </div>
           </div>
         </aside>
@@ -59,22 +63,26 @@
 
       <div class="warning-box">
         <span class="warning-symbol" aria-hidden="true">⚑</span>
-        <span>Usa esta vista cuando necesites administrar cruces entre participantes de forma manual y visual.</span>
+        <span>Usa este módulo para administrar cruces manuales y coronar a un único campeón del evento.</span>
       </div>
 
       <section class="tournament-layout">
         <div class="panel-card">
           <div class="panel-title">Participantes</div>
+          <div class="tournament-meta">
+            <span class="count-pill" id="participant-count">0 participantes</span>
+            <span class="count-pill" id="tournament-status">Agrega participantes y genera el bracket.</span>
+          </div>
 
           <div class="participant-form">
             <label class="sr-only" for="player-name">Nombres de participantes</label>
             <textarea id="player-name" class="form-input" placeholder="Escribe un nombre por línea" rows="5"></textarea>
-            <button class="btn btn-gold" id="btn-add-player">Agregar participantes</button>
+            <button class="btn btn-gold" id="btn-add-player" type="button">Agregar participantes</button>
           </div>
 
           <div class="participant-actions">
-            <button class="btn btn-ghost" id="btn-clear-players">Limpiar lista</button>
-            <button class="btn btn-primary" id="btn-generate-bracket">Generar torneo</button>
+            <button class="btn btn-ghost" id="btn-clear-players" type="button">Limpiar lista</button>
+            <button class="btn btn-primary" id="btn-generate-bracket" type="button">Generar torneo</button>
           </div>
 
           <ul id="players-list" class="players-list"></ul>
@@ -82,17 +90,18 @@
 
         <div class="panel-card">
           <div class="panel-title">Bracket</div>
+          <p class="status-note">Marca “Pasa” o “Falla” en cada cruce para avanzar el torneo.</p>
           <div id="bracket-container" class="bracket-container">
             <p class="empty-state">Agrega participantes y genera el torneo.</p>
           </div>
         </div>
       </section>
 
-      <footer class="footer">Prueba Lunar v3.0 · módulo de torneo</footer>
+      <footer class="footer" id="footer-version">Prueba Lunar v4.1.0 · módulo de torneo</footer>
     </main>
   </div>
 
-  <script src="assets/js/torneo.js"></script>
+  <script src="assets/js/torneo.js" defer></script>
 </body>
 
 </html>

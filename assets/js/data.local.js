@@ -999,15 +999,8 @@ function getBossPoolForMode(modeKey) {
   return BASE_BOSS_POOL.filter(boss => config.bossIds.includes(boss.id));
 }
 
-export {
+window.PruebaLunarData = {
   BASE_BOSS_POOL,
-  SOLO_RULES,
-  SUPERVISADO_RULES,
-  MEDIUM_CONDITIONS,
-  SUPERVISED_MEDIUM_CONDITIONS,
-  HARD_CONDITIONS_BY_TYPE,
-  SUPERVISED_HARD_CONDITIONS_BY_TYPE,
-  TITLE_BY_TYPE,
   MODE_CONFIGS,
   pickRandom,
   shuffleArray,

@@ -1,238 +1,175 @@
-# 🌙 Prueba Lunar
+# 🌙 Prueba Lunar v4.1.0
 
-**Prueba Lunar** es una aplicación web temática inspirada en **Genshin Impact**, diseñada para generar retos aleatorios en directo contra **Leyendas Locales** y otros jefes seleccionados.
-
-El sistema construye desafíos con una combinación de:
-- **1 jefe aleatorio**
-- **2 condiciones medias**
-- **1 condición dura**
-- **1 tiempo límite adaptado**
-
-Además, incluye un **cronómetro integrado**, reglas globales visibles dentro de la interfaz y una ambientación visual inspirada en un estilo elegante, nocturno y fantástico.
+**Prueba Lunar** es una aplicación web temática inspirada en **Genshin Impact** para organizar retos en vivo, validar intentos y administrar un torneo rápido desde una interfaz clara, visual y pensada para eventos.
 
 ---
 
-## ✨ Características principales
+## ✨ Modos disponibles
 
-- Generación aleatoria de retos
-- Jefes inspirados en contenidos de Genshin Impact
-- Condiciones separadas por nivel de dificultad
-- Tiempo límite adaptado al jefe o reto
-- Cronómetro visual integrado
-- Registro de victoria o derrota por ronda
-- Sistema de progreso por 3 retos
-- Reglas globales del modo visibles en la interfaz
-- Personalización manual del reto actual
-- Persistencia local mediante `localStorage`
-- Diseño temático con estética lunar y fondo animado
-- modo torneo con bracket de eliminación directa
-- navegación entre Prueba Lunar y Torneo Lunar
-- bracket visual con avance manual de ganadores
-- definición de un campeón final
+### Modo Solo
+- 3 rondas por intento
+- se necesitan **2 victorias** para completar la prueba
+- el reto **empieza vacío** y el primer jefe se define con la ruleta
+- al terminar una ronda, debes volver a **sortear manualmente** el siguiente reto
+- incluye cronómetro, condiciones y edición manual del reto actual
 
----
+### Modo Supervisado
+- formato adaptado para participante + juez
+- reglas ajustadas para validación acompañada y mejor seguimiento
+- mantiene el mismo flujo manual de sorteo por ronda
+- incluye avisos, progreso y persistencia local por modo
 
-## 🎯 Objetivo del proyecto
-
-Este proyecto fue pensado para usarse en:
-- directos o streams
-- dinámicas con espectadores
-- retos entre amigos
-- eventos temáticos inspirados en Genshin Impact
-
-La idea central es crear una experiencia visualmente atractiva y fácil de seguir, donde cada participante deba superar una serie de pruebas bajo condiciones específicas.
+### Modo Torneo
+- registro rápido de participantes
+- bracket de eliminación directa
+- calificación manual con botones **Pasa / Falla**
+- el participante impar también se resuelve desde el mismo flujo visual
+- persistencia local para continuar el evento más tarde
 
 ---
 
-## 🧩 Estructura general del reto
+## 🚀 Ejecución
 
-Cada partida sigue esta lógica:
+Este proyecto está preparado para funcionar de dos formas:
 
-- Se generan **3 retos**
-- El participante debe superar al menos **2 de 3**
-- Cada reto incluye:
-  - un jefe
-  - dos condiciones medias
-  - una condición dura
-  - un tiempo límite
+### 1. Local, sin servidor
+Puedes abrir directamente:
 
-Si el cronómetro llega a cero, el sistema permite registrar si el reto fue cumplido o fallado antes del límite.
-
----
-
-## 📜 Reglas globales del modo
-
-Estas reglas aplican de forma permanente a todos los retos:
-
-- El equipo debe definirse antes de entrar
-- Sin cambiar el equipo después de iniciar
-- Sin pausar el juego durante el intento
-- Sin bajar el nivel de mundo
-
-Estas reglas no se sortean: forman parte fija del modo de juego.
-
----
-
-## 🕒 Cronómetro integrado
-
-La aplicación incluye un temporizador visual para cada reto.
-
-Funciones principales:
-- iniciar el tiempo manualmente
-- reiniciar el tiempo del reto actual
-- adaptar el límite según el reto generado
-- registrar el resultado al finalizar el tiempo
-
-Esto permite mantener el ritmo de la dinámica sin depender de herramientas externas.
-
----
-
-## 🧠 Lógica de generación
-
-El sistema separa el contenido en varias capas:
-
-- **BOSS_POOL**: jefes disponibles
-- **MEDIUM_CONDITIONS**: condiciones medias
-- **HARD_CONDITIONS_BY_TYPE**: condiciones duras por tipo de jefe
-- **GLOBAL_RULES**: reglas permanentes del modo
-
-También se aplican validaciones para evitar combinaciones redundantes o conflictivas entre condiciones.
-
----
-
-## 🎨 Diseño visual
-
-La interfaz busca transmitir una sensación:
-- elegante
-- nocturna
-- mágica
-- temática de fantasía
-
-Incluye:
-- paleta oscura con acentos dorados
-- tipografías decorativas
-- fondo con estrellas animadas
-- elementos visuales inspirados en una estética lunar
-
----
-
-## 🏆 Modo Torneo
-
-Además del modo principal de retos, el proyecto incluye una página alternativa de torneo pensada para dinámicas competitivas entre varios participantes.
-
-Características del modo torneo:
-- registro manual de participantes
-- generación automática de bracket
-- eliminación directa hasta obtener un campeón
-- avance manual de ganadores por ronda
-- soporte visual para enfrentamientos y final
-- persistencia local mediante `localStorage`
-
----
-
-## 🧱 Estructura ampliada del proyecto
-
-```
-prueba-lunar/
-├── index.html
-├── torneo.html
-├── README.md
-└── assets/
-    ├── css/
-    │   └── styles.css
-    └── js/
-        ├── data.js
-        ├── app.js
-        └── torneo.js
+```text
+index.html
 ```
 
+en tu navegador y usar la aplicación desde archivos locales.
+
+### 2. Publicado en GitHub Pages
+También funciona correctamente en un despliegue estático como:
+
+```text
+https://michaelrr72.github.io/prueba-lunar/
+```
+
+> No requiere backend, framework ni proceso de build para ejecutarse.
+
 ---
 
-## 🎮 Modos disponibles
-**Prueba Lunar**
+## ⌨️ Atajos útiles
 
-Modo principal de retos individuales contra jefes seleccionados, con condiciones aleatorias, tiempo límite y progreso por rondas.
+### Solo / Supervisado
+- `S` → sortear reto
+- `Espacio` → iniciar o pausar tiempo
+- `R` → reiniciar intento
+- `W` → marcar victoria
+- `L` → marcar derrota
+- `E` → editar reto actual
 
-**Torneo Lunar**
-
-Modo competitivo de eliminación directa, pensado para organizar enfrentamientos entre participantes hasta definir un único campeón.
+### Torneo
+- `Ctrl + Enter` → agregar participantes más rápido
+- `G` → generar torneo
 
 ---
 
-## 🛠️ Tecnologías utilizadas
+## 🧠 Flujo actual del reto
+
+Cada ronda sigue esta lógica:
+
+1. el intento arranca **sin jefe asignado**
+2. el organizador pulsa **Sortear reto**
+3. la ruleta elige el jefe y las condiciones del reto actual
+4. se juega la ronda con cronómetro
+5. al marcar **victoria** o **derrota**, la siguiente ronda queda nuevamente **pendiente de sorteo**
+
+Esto evita cambios automáticos de jefe y mantiene el control manual del evento.
+
+---
+
+## 🧱 Estructura del proyecto
+
+```text
+assets/
+  css/
+    base.css
+    layout.css
+    components.css
+    modes.css
+  js/
+    app.js
+    torneo.js
+    data.js
+    data.local.js
+    core/
+      state.js
+      storage.js
+      utils.js
+    features/
+      challenge-generator.js
+      live-mode.js
+      roulette.js
+      timer.js
+      tournament.js
+    data/
+      bosses.js
+      conditions.js
+      modes.js
+```
+
+### Resumen por carpeta
+
+| Ruta | Uso |
+|---|---|
+| `assets/css/` | estilos base, layout, componentes y variantes por modo |
+| `assets/js/app.js` | entrada usada por `solo.html` y `supervisado.html` |
+| `assets/js/torneo.js` | entrada usada por `torneo.html` |
+| `assets/js/data.local.js` | compatibilidad para apertura local sin servidor |
+| `assets/js/core/` | utilidades, estado y persistencia |
+| `assets/js/features/` | lógica de ruleta, timer, flujo en vivo y torneo |
+| `assets/js/data/` | configuración de modos, jefes y condiciones |
+
+---
+
+## 📄 Páginas principales
+
+- `index.html` → selector general
+- `solo.html` → modo solo
+- `supervisado.html` → modo supervisado
+- `torneo.html` → módulo de torneo
+
+---
+
+## ♿ Accesibilidad y uso en vivo
+
+La versión actual incluye:
+- mejor contraste y lectura general
+- interfaz más consistente entre pantallas
+- regiones `aria-live` para avisos relevantes
+- cronómetro más claro para seguimiento en directo
+- navegación pensada para organizador + participante + juez
+
+---
+
+## 🛠️ Tecnologías
+
 - HTML5
-- CSS3
-- JavaScript Vanilla
-
-No utiliza frameworks externos para la lógica principal.
-
----
-
-## ❓ Instalación y Uso
-
-### Requisitos previos
-- Un navegador web moderno (Chrome, Firefox, Edge, etc.)
-- Conexión a internet (opcional, para fuentes externas)
-
-### Instalación
-1. Clona el repositorio:
-   ```bash
-   git clone https://github.com/tu-usuario/prueba-lunar.git
-   ```
-2. Navega al directorio del proyecto:
-   ```bash
-   cd prueba-lunar
-   ```
-3. Abre `index.html` en tu navegador web.
-
-### Uso
-- **Modo Prueba Lunar**: Abre `index.html` para generar retos aleatorios.
-- **Modo Torneo Lunar**: Abre `torneo.html` para organizar torneos.
-- Los datos se guardan automáticamente en el navegador usando `localStorage`.
-
-### Demo en línea
-[Demo](https://michaelrr72.github.io/prueba-lunar/)
+- CSS3 modular
+- JavaScript vanilla
+- `localStorage` para persistencia local
 
 ---
 
-## 🤝 Contribución
+## 📌 Notas de mantenimiento
 
-¡Las contribuciones son bienvenidas! Para contribuir:
-
-1. Haz un fork del proyecto.
-2. Crea una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`).
-3. Realiza tus cambios y haz commit (`git commit -am 'Agrega nueva funcionalidad'`).
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`).
-5. Abre un Pull Request.
-
-### Ideas para contribuir
-- Agregar más jefes o condiciones.
-- Mejorar la accesibilidad (ARIA, navegación por teclado).
-- Traducir a otros idiomas.
-- Optimizar el rendimiento.
+- El estado local está versionado para evitar conflictos entre cambios mayores.
+- `solo.html` y `supervisado.html` comparten la misma base funcional.
+- El proyecto está orientado a **sitio estático**, así que cualquier cambio debe mantener compatibilidad con apertura local y con GitHub Pages.
 
 ---
 
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia MIT. Ver el archivo [LICENSE](LICENSE) para más detalles.
-
----
-
-## 📝 Changelog
-
-### v2.0
-- Agregado modo torneo con bracket de eliminación directa.
-- Mejoras en la interfaz y persistencia de datos.
-- Soporte para personalización manual de retos.
-
-### v1.0
-- Versión inicial con generación de retos aleatorios.
-- Cronómetro integrado y reglas globales.
+Este proyecto está bajo la licencia MIT. Consulta [`LICENSE`](LICENSE) para más detalles.
 
 ---
 
 ## ⚠️ Aviso
 
-Este proyecto es una creación de fans inspirada en la experiencia de juego de Genshin Impact.
+Este proyecto es una creación fan inspirada en la experiencia de juego de **Genshin Impact**.
 No está afiliado oficialmente a HoYoverse.

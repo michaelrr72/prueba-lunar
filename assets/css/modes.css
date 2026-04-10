@@ -1,0 +1,57 @@
+body[data-mode="supervisado"] {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(157, 123, 255, 0.18), transparent 0 24%),
+    radial-gradient(circle at 85% 2%, rgba(244, 197, 107, 0.12), transparent 0 26%),
+    radial-gradient(circle at 50% 0%, rgba(109, 211, 255, 0.1), transparent 0 30%),
+    linear-gradient(180deg, #071120 0%, #10162d 42%, #0d1527 100%);
+}
+
+body[data-mode="supervisado"] .prize-pill {
+  background: linear-gradient(135deg, rgba(157, 123, 255, 0.18), rgba(109, 211, 255, 0.12));
+}
+
+body[data-mode="supervisado"] .mode-badge {
+  background: rgba(109, 40, 217, 0.28);
+  border-color: rgba(157, 123, 255, 0.3);
+  color: #f6efff;
+}
+
+body[data-mode="supervisado"] .panel-icon {
+  background: rgba(157, 123, 255, 0.14);
+  color: #dac7ff;
+}
+
+body[data-mode="solo"] .hero-title,
+body[data-mode="supervisado"] .hero-title {
+  text-wrap: balance;
+}
+
+.landing-body .hero-landing .hero-panel {
+  align-self: stretch;
+}
+
+.live-flow-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.live-shortcuts-title {
+  margin: 0;
+}
+
+.tournament-meta {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.status-note {
+  margin: 0;
+}
+
+.announce-only {
+  position: absolute;
+  left: -9999px;
+}

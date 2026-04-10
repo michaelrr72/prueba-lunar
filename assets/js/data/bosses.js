@@ -1,0 +1,1 @@
+export { BASE_BOSS_POOL as BOSS_POOL } from '../data.js';

@@ -1,84 +1,6 @@
-(() => {
-  'use strict';
-
-  const APP_VERSION = 'v4.1.0';
-  const APP_VERSION_LABEL = `Prueba Lunar ${APP_VERSION}`;
-  const TOURNAMENT_STORAGE_KEY = `prueba-lunar-torneo-${APP_VERSION}`;
-
-function pickRandom(items) {
-  if (!Array.isArray(items) || !items.length) return null;
-  return items[Math.floor(Math.random() * items.length)];
-}
-function shuffleArray(items) {
-  const copy = Array.isArray(items) ? [...items] : [];
-
-  for (let index = copy.length - 1; index > 0; index -= 1) {
-    const target = Math.floor(Math.random() * (index + 1));
-    [copy[index], copy[target]] = [copy[target], copy[index]];
-  }
-
-  return copy;
-}
-function formatTimerMarkup(totalTenths) {
-  const safeTime = Math.max(Number(totalTenths) || 0, 0);
-  const minutes = Math.floor(safeTime / 600);
-  const seconds = Math.floor((safeTime % 600) / 10);
-  const tenths = safeTime % 10;
-  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}<small>.${tenths}</small>`;
-}
-function formatMinutesLabel(minutes) {
-  return `${minutes} minuto${minutes === 1 ? '' : 's'}`;
-}
-function isTypingTarget(target) {
-  if (!target) return false;
-  const tagName = target.tagName?.toLowerCase();
-  return ['input', 'textarea', 'select', 'button'].includes(tagName) || target.isContentEditable;
-}
-function normalizeName(value) {
-  return String(value || '').trim().replaceAll(/\s+/g, ' ');
-}
-function createLiveAnnouncer(element) {
-  if (!element) {
-    return () => {};
-  }
-
-  return message => {
-    element.textContent = '';
-    globalThis.requestAnimationFrame(() => {
-      element.textContent = message;
-    });
-  };
-}
-
-function createStorage(storageKey) {
-  return {
-    load(fallbackValue) {
-      try {
-        const raw = globalThis.localStorage?.getItem(storageKey);
-        if (!raw) return fallbackValue;
-        return JSON.parse(raw);
-      } catch {
-        return fallbackValue;
-      }
-    },
-
-    save(value) {
-      try {
-        globalThis.localStorage?.setItem(storageKey, JSON.stringify(value));
-      } catch {
-        // Ignorar errores de persistencia para no romper la experiencia en vivo.
-      }
-    },
-
-    clear() {
-      try {
-        globalThis.localStorage?.removeItem(storageKey);
-      } catch {
-        // Sin acción adicional.
-      }
-    }
-  };
-}
+import { createStorage } from '../core/storage.js';
+import { createLiveAnnouncer, isTypingTarget, normalizeName, shuffleArray } from '../core/utils.js';
+import { APP_VERSION_LABEL, TOURNAMENT_STORAGE_KEY } from '../data/modes.js';
 
 function createInitialState() {
   return {
@@ -116,7 +38,8 @@ function getRoundName(index, total) {
   if (index === total - 3) return 'Cuartos';
   return `Ronda ${index + 1}`;
 }
-function createTournamentApp() {
+
+export function createTournamentApp() {
   const elements = {
     playerName: document.getElementById('player-name'),
     btnAddPlayer: document.getElementById('btn-add-player'),
@@ -493,10 +416,3 @@ function createTournamentApp() {
   renderPlayers();
   renderBracket();
 }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => createTournamentApp(), { once: true });
-  } else {
-    createTournamentApp();
-  }
-})();
