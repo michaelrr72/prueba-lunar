@@ -675,7 +675,7 @@ function buildModeShell(modeConfig) {
             </div>
 
             <div class="card-body">
-              <div class="enemy-banner">
+              <div class="enemy-banner" id="enemy-info-block">
                 <div class="enemy-icon" id="enemy-icon">👁</div>
                 <div>
                   <div class="enemy-name" id="enemy-name">Leyenda Local</div>
@@ -690,6 +690,18 @@ function buildModeShell(modeConfig) {
                 <span class="tip-symbol" aria-hidden="true">💡</span>
                 <span id="c-tip-text"></span>
               </div>
+
+              <section class="round-intro-banner" id="round-intro-banner" hidden aria-live="polite">
+                <div class="round-intro-top">
+                  <p class="round-intro-kicker">Antes del cronómetro</p>
+                  <span class="diff-badge" id="intro-diff-badge">-</span>
+                </div>
+                <h3 class="round-intro-title" id="intro-enemy-name">Leyenda Local</h3>
+                <p class="round-intro-meta" id="intro-enemy-meta">Región · Tipo</p>
+                <button class="btn btn-ghost btn-sm" id="btn-toggle-intro-tip" type="button" aria-expanded="false">Mostrar tip de mecánica</button>
+                <p class="round-intro-tip" id="intro-tip" hidden></p>
+                <button class="btn btn-gold" id="btn-start-round" type="button">Comenzar ronda</button>
+              </section>
 
               <div class="time-section">
                 <div class="time-limit-box">
@@ -791,6 +803,14 @@ function initializeModeApp() {
     challengeTip: document.getElementById('c-tip'),
     challengeTipText: document.getElementById('c-tip-text'),
     challengeConditions: document.getElementById('c-conditions'),
+    roundIntroBanner: document.getElementById('round-intro-banner'),
+    introDiffBadge: document.getElementById('intro-diff-badge'),
+    introEnemyName: document.getElementById('intro-enemy-name'),
+    introEnemyMeta: document.getElementById('intro-enemy-meta'),
+    introTip: document.getElementById('intro-tip'),
+    btnToggleIntroTip: document.getElementById('btn-toggle-intro-tip'),
+    btnStartRound: document.getElementById('btn-start-round'),
+    enemyInfoBlock: document.getElementById('enemy-info-block'),
     btnShuffle: document.getElementById('btn-shuffle'),
     btnReset: document.getElementById('btn-reset'),
     btnEdit: document.getElementById('btn-edit'),
@@ -811,6 +831,8 @@ function initializeModeApp() {
   const announce = createLiveAnnouncer(elements.liveRegion);
   const state = hydrateGameState(storage.load(createDefaultGameState()));
   let lastFocusedElement = null;
+  let roundHasStarted = false;
+  let introTipExpanded = false;
 
   const roulette = createRouletteController({
     wheel: elements.rouletteWheel,
@@ -881,6 +903,40 @@ function initializeModeApp() {
 
     const hasProgress = state.timerRemaining > 0 && state.timerRemaining < state.timerInitial;
     elements.btnStartTimer.textContent = hasProgress ? 'Reanudar tiempo' : 'Iniciar tiempo';
+  }
+
+  function renderRoundIntroBanner(currentChallenge = state.assigned[state.currentRound]) {
+    if (!elements.roundIntroBanner) return;
+
+    const hasChallenge = Boolean(currentChallenge);
+    const shouldShow = hasChallenge && !state.gameOver && !roundHasStarted;
+
+    elements.roundIntroBanner.hidden = !shouldShow;
+
+    // Ocultar el bloque original de nombre/región/tip mientras el banner está visible.
+    // Se restaura cuando shouldShow es false (ronda iniciada o sin reto).
+    if (elements.enemyInfoBlock) {
+      elements.enemyInfoBlock.hidden = shouldShow;
+    }
+    if (elements.challengeTip) {
+      elements.challengeTip.style.visibility = shouldShow ? 'hidden' : '';
+      elements.challengeTip.style.pointerEvents = shouldShow ? 'none' : '';
+    }
+
+    if (!shouldShow) return;
+
+    elements.introEnemyName.textContent = currentChallenge.enemy;
+    elements.introEnemyMeta.textContent = `${currentChallenge.region} · ${currentChallenge.tag}`;
+    elements.introDiffBadge.textContent = currentChallenge.diffLabel;
+    elements.introDiffBadge.className = `diff-badge ${currentChallenge.diffClass}`;
+
+    const introTipText = currentChallenge.tip || 'No hay tip adicional para esta leyenda.';
+    elements.introTip.textContent = introTipText;
+    elements.introTip.hidden = !introTipExpanded;
+    elements.btnToggleIntroTip.setAttribute('aria-expanded', String(introTipExpanded));
+    elements.btnToggleIntroTip.textContent = introTipExpanded
+      ? 'Ocultar tip de mecánica'
+      : 'Mostrar tip de mecánica';
   }
 
   function renderTimer() {
@@ -960,6 +1016,8 @@ function initializeModeApp() {
     elements.btnResetTimer.disabled = !hasChallenge;
 
     if (!hasChallenge) {
+      roundHasStarted = false;
+      introTipExpanded = false;
       elements.typeTag.textContent = 'Pendiente';
       elements.typeTag.className = 'type-tag';
       elements.diffTag.textContent = 'Sin sorteo';
@@ -977,6 +1035,7 @@ function initializeModeApp() {
       if (!roulette.isSpinning()) {
         roulette.render(getCurrentPool());
       }
+      renderRoundIntroBanner(null);
       return;
     }
 
@@ -1000,6 +1059,7 @@ function initializeModeApp() {
     }
 
     renderConditions(current.conditions || []);
+    renderRoundIntroBanner(current);
 
     if (!roulette.isSpinning()) {
       roulette.render(getCurrentPool(), current.bossId);
@@ -1018,7 +1078,43 @@ function initializeModeApp() {
   function resetTimerForCurrentChallenge() {
     const current = state.assigned[state.currentRound];
     const minutes = current?.timeLimit ?? 6;
+    roundHasStarted = false;
+    introTipExpanded = false;
     timer.resetForMinutes(minutes);
+    renderRoundIntroBanner(current || null);
+  }
+
+  function startRoundTimer() {
+    if (timer.isRunning()) return;
+
+    const current = state.assigned[state.currentRound];
+    if (!current) return;
+
+    roundHasStarted = true;
+    renderRoundIntroBanner(current);
+    timer.start();
+    updateTimerButton();
+    setStatus(`Ronda ${state.currentRound + 1} en curso`, 'var(--primary-2)');
+    announce(`Ronda ${state.currentRound + 1} iniciada. Cronómetro en marcha.`);
+    saveState();
+  }
+
+  function toggleTimerFromControls() {
+    const current = state.assigned[state.currentRound];
+    if (!current) return;
+
+    if (timer.isRunning()) {
+      timer.pause();
+      return;
+    }
+
+    const hasProgress = state.timerRemaining > 0 && state.timerRemaining < state.timerInitial;
+    if (!hasProgress) {
+      startRoundTimer();
+      return;
+    }
+
+    timer.start();
   }
 
   function initNewGame() {
@@ -1089,6 +1185,8 @@ function initializeModeApp() {
     }
 
     state.currentRound += 1;
+    roundHasStarted = false;
+    introTipExpanded = false;
     clearBanner();
     timer.restore({ remainingTenths: 0, initialTenths: 0 });
     renderAll();
@@ -1101,6 +1199,8 @@ function initializeModeApp() {
     if (!boss) return;
 
     state.assigned[state.currentRound] = buildChallengeFromBoss(boss, modeConfig);
+    roundHasStarted = false;
+    introTipExpanded = false;
     renderChallenge();
     resetTimerForCurrentChallenge();
     saveState();
@@ -1209,7 +1309,7 @@ function initializeModeApp() {
 
     if (shortcut === ' ') {
       event.preventDefault();
-      timer.toggle();
+      toggleTimerFromControls();
       return;
     }
 
@@ -1255,7 +1355,12 @@ function initializeModeApp() {
     elements.btnEdit.addEventListener('click', openModal);
     elements.btnWin.addEventListener('click', () => recordResult('win'));
     elements.btnLose.addEventListener('click', () => recordResult('lose'));
-    elements.btnStartTimer.addEventListener('click', () => timer.toggle());
+    elements.btnStartTimer.addEventListener('click', toggleTimerFromControls);
+    elements.btnStartRound.addEventListener('click', startRoundTimer);
+    elements.btnToggleIntroTip.addEventListener('click', () => {
+      introTipExpanded = !introTipExpanded;
+      renderRoundIntroBanner(state.assigned[state.currentRound] || null);
+    });
     elements.btnResetTimer.addEventListener('click', resetTimerForCurrentChallenge);
     elements.btnSaveModal.addEventListener('click', saveModal);
     elements.btnCloseModal.addEventListener('click', closeModal);
@@ -1280,6 +1385,7 @@ function initializeModeApp() {
   attachEvents();
 
   if (state.assigned.length) {
+    roundHasStarted = state.timerInitial > 0 && state.timerRemaining < state.timerInitial;
     renderAll();
 
     if (state.assigned[state.currentRound]) {

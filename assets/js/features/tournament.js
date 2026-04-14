@@ -1,11 +1,13 @@
 import { createStorage } from '../core/storage.js';
-import { createLiveAnnouncer, isTypingTarget, normalizeName, shuffleArray } from '../core/utils.js';
+import { createLiveAnnouncer, isTypingTarget, normalizeName, pickRandom, shuffleArray } from '../core/utils.js';
 import { APP_VERSION_LABEL, TOURNAMENT_STORAGE_KEY } from '../data/modes.js';
+import { BOSS_POOL } from '../data/bosses.js';
 
 function createInitialState() {
   return {
     players: [],
-    rounds: []
+    rounds: [],
+    wonChallenges: {}
   };
 }
 
@@ -15,7 +17,8 @@ function createMatch(player1, player2 = null) {
     player2,
     player1Result: null,
     player2Result: null,
-    completed: false
+    completed: false,
+    currentBoss: null
   };
 }
 
@@ -37,6 +40,15 @@ function getRoundName(index, total) {
   if (index === total - 2) return 'Semifinal';
   if (index === total - 3) return 'Cuartos';
   return `Ronda ${index + 1}`;
+}
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
 }
 
 export function createTournamentApp() {
@@ -70,6 +82,124 @@ export function createTournamentApp() {
 
     const survivors = finalRound.flatMap(getMatchSurvivors);
     return survivors.length === 1 ? survivors[0] : null;
+  }
+
+  function getVictoriesByPlayer() {
+    const victories = Object.fromEntries(state.players.map(player => [player, 0]));
+
+    state.rounds.forEach(round => {
+      round.forEach(match => {
+        if (match.player1 && match.player1Result === 'pass') {
+          victories[match.player1] = (victories[match.player1] || 0) + 1;
+        }
+
+        if (match.player2 && match.player2Result === 'pass') {
+          victories[match.player2] = (victories[match.player2] || 0) + 1;
+        }
+      });
+    });
+
+    return Object.entries(victories)
+      .map(([player, wins]) => ({ player, wins }))
+      .sort((left, right) => right.wins - left.wins || left.player.localeCompare(right.player, 'es'));
+  }
+
+  function getWinnerChallenges(champion) {
+    if (!champion) return [];
+    return state.wonChallenges?.[champion] ?? [];
+  }
+
+  function assignBossToMatch(roundIndex, matchIndex) {
+    const match = state.rounds[roundIndex]?.[matchIndex];
+    if (!match || match.completed) return;
+    match.currentBoss = pickRandom(BOSS_POOL);
+    saveState();
+    renderBracket();
+    announce(`Jefe asignado: ${match.currentBoss.name}`);
+  }
+
+  function restartTournament() {
+    if (state.players.length < 2) {
+      state.rounds = [];
+      state.wonChallenges = {};
+      saveState();
+      renderBracket();
+      announce('No hay participantes suficientes para reiniciar el torneo.');
+      return;
+    }
+
+    state.wonChallenges = {};
+    console.log('[torneo] Estado tras reset de wonChallenges:', JSON.parse(JSON.stringify(state)));
+    generateBracket();
+    announce('El torneo se reinició con los mismos participantes.');
+  }
+
+  function exportWinnerCard(champion) {
+    if (!champion) return;
+
+    const payload = {
+      winner: champion,
+      victories: getVictoriesByPlayer(),
+      completedChallenges: getWinnerChallenges(champion),
+      exportedAt: new Date().toISOString()
+    };
+
+    globalThis.dispatchEvent(new CustomEvent('prueba-lunar:export-winner-card', {
+      detail: payload
+    }));
+
+    globalThis.alert('La exportación de ficha se habilita en el Punto 6.');
+  }
+
+  function createFinalSummaryPanel(champion, finalRoundComplete) {
+    if (!finalRoundComplete) return null;
+
+    const summary = document.createElement('section');
+    summary.className = 'tournament-summary-box';
+
+    const safeChampion = champion ? escapeHtml(champion) : 'Sin campeón';
+    const winnerChallenges = getWinnerChallenges(champion);
+    const diffMap = { extremo: 'diff-extremo', dificil: 'diff-dificil', medio: 'diff-medio' };
+    const challengeItems = winnerChallenges.length
+      ? winnerChallenges.map(boss => {
+          if (!boss) return '<li>Enfrentamiento sin jefe registrado</li>';
+          const diffClass = boss.difficulty ? (diffMap[boss.difficulty] ?? '') : '';
+          const diffBadge = boss.difficulty ? ` <span class="diff-badge ${diffClass}">${escapeHtml(boss.difficulty)}</span>` : '';
+          return `<li><span class="match-boss-icon">${escapeHtml(String(boss.icon ?? '\u2694\ufe0f'))}</span> ${escapeHtml(boss.name)}${diffBadge}</li>`;
+        }).join('')
+      : '<li>No hay retos registrados para el ganador.</li>';
+
+    const victoryRows = getVictoriesByPlayer()
+      .map(item => `<li><span>${escapeHtml(item.player)}</span><strong>${item.wins} victoria${item.wins === 1 ? '' : 's'}</strong></li>`)
+      .join('');
+
+    summary.innerHTML = `
+      <div class="tournament-summary-head">
+        <p class="panel-kicker">Resumen final</p>
+        <h3 class="champion-title">Resultado del torneo</h3>
+        <div class="champion-name">${safeChampion}</div>
+      </div>
+
+      <div class="tournament-summary-grid">
+        <div class="tournament-summary-card">
+          <p class="round-title">Victorias totales</p>
+          <ul class="tournament-summary-list">${victoryRows}</ul>
+        </div>
+        <div class="tournament-summary-card">
+          <p class="round-title">Retos superados por el ganador</p>
+          <ul class="tournament-summary-list">${challengeItems}</ul>
+        </div>
+      </div>
+
+      <div class="tournament-summary-actions">
+        <button class="btn btn-ghost" type="button" id="btn-restart-tournament">Reiniciar torneo</button>
+        <button class="btn btn-gold" type="button" id="btn-export-winner-card" ${champion ? '' : 'disabled'}>Exportar ficha del ganador</button>
+      </div>
+    `;
+
+    summary.querySelector('#btn-restart-tournament')?.addEventListener('click', restartTournament);
+    summary.querySelector('#btn-export-winner-card')?.addEventListener('click', () => exportWinnerCard(champion));
+    return summary;
   }
 
   function renderMeta() {
@@ -179,18 +309,38 @@ export function createTournamentApp() {
           card.appendChild(createPlayerRow(match.player2, roundIndex, matchIndex, 2, false, match.player2Result));
         }
 
-        if (match.player1 && match.player2 && !match.completed) {
-          const wrapper = document.createElement('div');
-          wrapper.className = 'match-actions match-actions-all';
+        if (match.player1 && match.player2) {
+          const bossSection = document.createElement('div');
+          bossSection.className = 'match-boss-section';
 
-          const bothBtn = document.createElement('button');
-          bothBtn.className = 'match-btn match-btn-dq';
-          bothBtn.type = 'button';
-          bothBtn.textContent = 'Ambos fallan';
-          bothBtn.addEventListener('click', () => disqualifyBoth(roundIndex, matchIndex));
+          if (match.currentBoss) {
+            const diffMap = { extremo: 'diff-extremo', dificil: 'diff-dificil', medio: 'diff-medio' };
+            const diffClass = diffMap[match.currentBoss.difficulty] ?? '';
+            bossSection.innerHTML = `<span class="match-boss-icon">${escapeHtml(String(match.currentBoss.icon ?? '\u2694\ufe0f'))}</span> <span class="match-boss-name">${escapeHtml(match.currentBoss.name)}</span> <span class="diff-badge ${diffClass}">${escapeHtml(match.currentBoss.difficulty)}</span>`;
+          } else if (!match.completed) {
+            const rollBtn = document.createElement('button');
+            rollBtn.className = 'match-btn';
+            rollBtn.type = 'button';
+            rollBtn.textContent = 'Sortear jefe';
+            rollBtn.addEventListener('click', () => assignBossToMatch(roundIndex, matchIndex));
+            bossSection.appendChild(rollBtn);
+          }
 
-          wrapper.appendChild(bothBtn);
-          card.appendChild(wrapper);
+          card.appendChild(bossSection);
+
+          if (!match.completed) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'match-actions match-actions-all';
+
+            const bothBtn = document.createElement('button');
+            bothBtn.className = 'match-btn match-btn-dq';
+            bothBtn.type = 'button';
+            bothBtn.textContent = 'Ambos fallan';
+            bothBtn.addEventListener('click', () => disqualifyBoth(roundIndex, matchIndex));
+
+            wrapper.appendChild(bothBtn);
+            card.appendChild(wrapper);
+          }
         }
 
         column.appendChild(card);
@@ -221,6 +371,11 @@ export function createTournamentApp() {
         <div class="champion-name">Nadie avanzó</div>
       `;
       elements.bracketContainer.appendChild(championBox);
+    }
+
+    const summaryPanel = createFinalSummaryPanel(champion, finalRoundComplete);
+    if (summaryPanel) {
+      elements.bracketContainer.appendChild(summaryPanel);
     }
 
     renderMeta();
@@ -297,10 +452,22 @@ export function createTournamentApp() {
     const match = state.rounds[roundIndex]?.[matchIndex];
     if (!match || match.completed) return;
 
+    const winnerName = slot === 1 ? match.player1 : match.player2;
+
     if (slot === 1) {
       match.player1Result = passed ? 'pass' : 'fail';
     } else {
       match.player2Result = passed ? 'pass' : 'fail';
+    }
+
+    if (passed && winnerName) {
+      if (!state.wonChallenges) state.wonChallenges = {};
+      if (!Array.isArray(state.wonChallenges[winnerName])) {
+        state.wonChallenges[winnerName] = [];
+      }
+      state.wonChallenges[winnerName].push(
+        match.currentBoss ?? { name: 'Sin reto asignado', difficulty: null, icon: '—' }
+      );
     }
 
     if (isMatchComplete(match)) {

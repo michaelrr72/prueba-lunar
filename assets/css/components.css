@@ -791,6 +791,53 @@ select {
   color: var(--text-soft);
 }
 
+.round-intro-banner {
+  margin: 0 0 16px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(244, 197, 107, 0.22);
+  background:
+    radial-gradient(circle at 95% 5%, rgba(244, 197, 107, 0.16), transparent 0 35%),
+    rgba(251, 191, 36, 0.08);
+}
+
+.round-intro-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.round-intro-kicker {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.round-intro-title {
+  margin: 0;
+  color: #fff1cf;
+  font-size: 1.22rem;
+}
+
+.round-intro-meta {
+  margin: 6px 0 12px;
+  color: var(--text-soft);
+}
+
+.round-intro-tip {
+  margin: 10px 0 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(109, 211, 255, 0.2);
+  background: rgba(109, 211, 255, 0.08);
+  color: var(--text-soft);
+}
+
 .time-limit-box,
 .timer-box {
   border-radius: 18px;
@@ -1049,6 +1096,52 @@ dialog.modal-overlay {
   color: var(--text-soft);
 }
 
+.match-boss-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  flex-wrap: wrap;
+}
+
+.match-boss-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.match-boss-name {
+  font-size: 0.87rem;
+  color: var(--text-soft);
+  font-weight: 600;
+}
+
+.diff-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-soft);
+}
+
+.diff-badge.diff-extremo {
+  background: rgba(159, 18, 57, 0.28);
+  color: #fda4af;
+}
+
+.diff-badge.diff-dificil {
+  background: rgba(124, 58, 237, 0.22);
+  color: #c4b5fd;
+}
+
+.diff-badge.diff-medio {
+  background: rgba(16, 97, 89, 0.3);
+  color: #6ee7b7;
+}
+
 .champion-box {
   min-width: 240px;
   padding: 18px;
@@ -1063,6 +1156,70 @@ dialog.modal-overlay {
   margin-bottom: 8px;
 }
 
+.tournament-summary-box {
+  min-width: 320px;
+  width: min(680px, 100%);
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(244, 197, 107, 0.26);
+  background: linear-gradient(180deg, rgba(34, 24, 8, 0.72), rgba(14, 10, 3, 0.82));
+  display: grid;
+  gap: 14px;
+}
+
+.tournament-summary-head {
+  display: grid;
+  gap: 6px;
+}
+
+.tournament-summary-head .champion-name {
+  font-size: clamp(1.2rem, 2.2vw, 1.8rem);
+  color: #f8d48f;
+}
+
+.tournament-summary-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.tournament-summary-card {
+  border: 1px solid rgba(244, 197, 107, 0.18);
+  border-radius: 14px;
+  padding: 12px;
+  background: rgba(10, 14, 24, 0.48);
+}
+
+.tournament-summary-list {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.tournament-summary-list li {
+  color: var(--text-soft);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tournament-summary-list li span:last-child,
+.tournament-summary-list li strong {
+  margin-left: auto;
+}
+
+.tournament-summary-list strong {
+  color: #f6e7c6;
+}
+
+.tournament-summary-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 kbd {
   display: inline-flex;
   align-items: center;
@@ -1075,6 +1232,160 @@ kbd {
   color: #fff4da;
   font-size: 0.78rem;
   font-weight: 700;
+}
+
+/* ── Modo Cooperativo ──────────────────────────────────────────────────── */
+
+.coop-setup-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.coop-setup-card {
+  max-width: 520px;
+  padding: 28px;
+  display: grid;
+  gap: 20px;
+}
+
+.coop-setup-fields {
+  display: grid;
+  gap: 14px;
+}
+
+.coop-setup-field {
+  display: grid;
+  gap: 6px;
+}
+
+.coop-setup-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 1rem;
+}
+
+.coop-hero-sep {
+  opacity: 0.5;
+}
+
+.coop-individual-section {
+  margin-top: 16px;
+}
+
+.coop-individual-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.coop-player-slot {
+  border: 1px solid rgba(124, 156, 255, 0.22);
+  border-radius: 14px;
+  padding: 14px;
+  background: rgba(12, 18, 36, 0.52);
+  display: grid;
+  gap: 8px;
+}
+
+.coop-player-slot-alt {
+  border-color: rgba(244, 197, 107, 0.22);
+}
+
+.coop-player-slot-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.coop-player-slot-text {
+  font-size: 0.9rem;
+  color: var(--text-soft);
+  line-height: 1.45;
+}
+
+.coop-empty-state {
+  padding: 28px 0;
+  text-align: center;
+  color: var(--text-muted);
+  display: grid;
+  gap: 8px;
+}
+
+.coop-empty-hint {
+  font-size: 0.88rem;
+}
+
+.coop-result-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.coop-result-player {
+  display: grid;
+  gap: 10px;
+}
+
+.coop-result-player-name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.coop-result-btns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.coop-result-btns .btn-win,
+.coop-result-btns .btn-lose {
+  flex: 1;
+  min-width: 0;
+}
+
+.coop-result-status {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  min-height: 1.2em;
+}
+
+.coop-result-pass {
+  color: #34d399;
+  font-weight: 600;
+}
+
+.coop-result-fail {
+  color: #f87171;
+  font-weight: 600;
+}
+
+.btn-win.active-win {
+  background: linear-gradient(135deg, #065f46, #047857);
+  box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.45);
+  color: #d1fae5;
+}
+
+.btn-lose.active-lose {
+  background: linear-gradient(135deg, #7f1d1d, #991b1b);
+  box-shadow: 0 0 0 2px rgba(248, 113, 113, 0.45);
+  color: #fecaca;
+}
+
+@media (max-width: 560px) {
+  .coop-individual-grid,
+  .coop-result-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 560px) {
@@ -1096,5 +1407,9 @@ kbd {
 
   .roulette-wheel-shell {
     width: min(320px, 84vw);
+  }
+
+  .tournament-summary-grid {
+    grid-template-columns: 1fr;
   }
 }
