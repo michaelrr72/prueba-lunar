@@ -19,6 +19,13 @@
 - mantiene el mismo flujo manual de sorteo por ronda
 - incluye avisos, progreso y persistencia local por modo
 
+### Modo Cooperativo
+- formato para **2 jugadores** enfrentando el mismo jefe
+- cada jugador recibe una **condición individual** además de las **condiciones compartidas**
+- los dos deben cumplir su condición para ganar la ronda
+- la dificultad escala: los jefes difíciles se tratan como **extremos** y los extremos suman una condición extra compartida
+- mismo sistema de 3 rondas y 2 victorias necesarias, con persistencia local independiente
+
 ### Modo Torneo
 - registro rápido de participantes
 - bracket de eliminación directa
@@ -62,6 +69,13 @@ https://michaelrr72.github.io/prueba-lunar/
 - `L` → marcar derrota
 - `E` → editar reto actual
 
+### Cooperativo
+- `S` → sortear reto
+- `Espacio` → iniciar o pausar tiempo
+- `R` → reiniciar ronda (o reiniciar la prueba completa si ya terminó)
+- `1` → ciclar resultado del Jugador 1 (pendiente → cumplió → falló)
+- `2` → ciclar resultado del Jugador 2
+
 ### Torneo
 - `Ctrl + Enter` → agregar participantes más rápido
 - `G` → generar torneo
@@ -102,6 +116,7 @@ assets/
       utils.js
     features/
       challenge-generator.js
+      coop-mode.js
       live-mode.js
       roulette.js
       timer.js
@@ -131,6 +146,7 @@ assets/
 - `index.html` → selector general
 - `solo.html` → modo solo
 - `supervisado.html` → modo supervisado
+- `cooperativo.html` → modo cooperativo (2 jugadores)
 - `torneo.html` → módulo de torneo
 
 ---
@@ -158,7 +174,8 @@ La versión actual incluye:
 ## 📌 Notas de mantenimiento
 
 - El estado local está versionado para evitar conflictos entre cambios mayores.
-- `solo.html` y `supervisado.html` comparten la misma base funcional.
+- `solo.html` y `supervisado.html` comparten la misma base funcional (`assets/js/app.js`).
+- `cooperativo.html` usa su propia entrada (`assets/js/features/coop-mode.js`) con persistencia local independiente.
 - El proyecto está orientado a **sitio estático**, así que cualquier cambio debe mantener compatibilidad con apertura local y con GitHub Pages.
 
 ---

@@ -38,7 +38,7 @@
     }
 
     if (rouletteAudioContext.state === 'suspended') {
-      rouletteAudioContext.resume().catch(() => {});
+      rouletteAudioContext.resume().catch(() => { });
     }
 
     return rouletteAudioContext;
@@ -326,27 +326,27 @@
 
   // ── Referencias DOM ───────────────────────────────────────────────────
 
-  const setupScreen  = document.getElementById('coop-setup');
-  const gameScreen   = document.getElementById('coop-game');
-  const liveRegion   = document.getElementById('coop-live-region');
+  const setupScreen = document.getElementById('coop-setup');
+  const gameScreen = document.getElementById('coop-game');
+  const liveRegion = document.getElementById('coop-live-region');
 
   // Setup
-  const inputP1      = document.getElementById('input-player1');
-  const inputP2      = document.getElementById('input-player2');
-  const btnStart     = document.getElementById('btn-coop-start');
+  const inputP1 = document.getElementById('input-player1');
+  const inputP2 = document.getElementById('input-player2');
+  const btnStart = document.getElementById('btn-coop-start');
 
   // Controles de juego
-  const btnShuffle        = document.getElementById('coop-btn-shuffle');
-  const btnResetRound     = document.getElementById('coop-btn-reset-round');
-  const btnChangePlayers  = document.getElementById('coop-btn-change-players');
-  const rouletteWheelEl   = document.getElementById('coop-roulette-wheel');
-  const rouletteStatusEl  = document.getElementById('coop-roulette-status');
+  const btnShuffle = document.getElementById('coop-btn-shuffle');
+  const btnResetRound = document.getElementById('coop-btn-reset-round');
+  const btnChangePlayers = document.getElementById('coop-btn-change-players');
+  const rouletteWheelEl = document.getElementById('coop-roulette-wheel');
+  const rouletteStatusEl = document.getElementById('coop-roulette-status');
 
   // Marcador
-  const scoreNums  = document.getElementById('coop-score-nums');
-  const statusEl   = document.getElementById('coop-status');
+  const scoreNums = document.getElementById('coop-score-nums');
+  const statusEl = document.getElementById('coop-status');
   const roundBadge = document.getElementById('coop-round-badge');
-  const orbIcons   = [
+  const orbIcons = [
     document.getElementById('coop-orb1-icon'),
     document.getElementById('coop-orb2-icon'),
     document.getElementById('coop-orb3-icon')
@@ -363,44 +363,44 @@
   ];
 
   // Tarjeta de reto
-  const emptyStateEl   = document.getElementById('coop-empty-state');
-  const bossInfoEl     = document.getElementById('coop-boss-info');
-  const typeTagEl      = document.getElementById('coop-type-tag');
-  const diffTagEl      = document.getElementById('coop-diff-tag');
-  const scaleBadgeEl   = document.getElementById('coop-scale-badge');
-  const enemyIconEl    = document.getElementById('coop-enemy-icon');
-  const enemyNameEl    = document.getElementById('coop-enemy-name');
-  const enemyRegionEl  = document.getElementById('coop-enemy-region');
+  const emptyStateEl = document.getElementById('coop-empty-state');
+  const bossInfoEl = document.getElementById('coop-boss-info');
+  const typeTagEl = document.getElementById('coop-type-tag');
+  const diffTagEl = document.getElementById('coop-diff-tag');
+  const scaleBadgeEl = document.getElementById('coop-scale-badge');
+  const enemyIconEl = document.getElementById('coop-enemy-icon');
+  const enemyNameEl = document.getElementById('coop-enemy-name');
+  const enemyRegionEl = document.getElementById('coop-enemy-region');
   const challengeTitleEl = document.getElementById('coop-challenge-title');
-  const challengeDescEl  = document.getElementById('coop-challenge-desc');
-  const tipTextEl        = document.getElementById('coop-tip-text');
-  const generalCondsEl   = document.getElementById('coop-general-conditions');
-  const p1LabelEl        = document.getElementById('coop-p1-label');
-  const p2LabelEl        = document.getElementById('coop-p2-label');
-  const p1CondEl         = document.getElementById('coop-p1-condition');
-  const p2CondEl         = document.getElementById('coop-p2-condition');
+  const challengeDescEl = document.getElementById('coop-challenge-desc');
+  const tipTextEl = document.getElementById('coop-tip-text');
+  const generalCondsEl = document.getElementById('coop-general-conditions');
+  const p1LabelEl = document.getElementById('coop-p1-label');
+  const p2LabelEl = document.getElementById('coop-p2-label');
+  const p1CondEl = document.getElementById('coop-p1-condition');
+  const p2CondEl = document.getElementById('coop-p2-condition');
 
   // Cronómetro
-  const timeLimitEl    = document.getElementById('coop-time-limit-value');
+  const timeLimitEl = document.getElementById('coop-time-limit-value');
   const timerDisplayEl = document.getElementById('coop-timer-display');
-  const btnStartTimer  = document.getElementById('coop-btn-start-timer');
-  const btnResetTimer  = document.getElementById('coop-btn-reset-timer');
+  const btnStartTimer = document.getElementById('coop-btn-start-timer');
+  const btnResetTimer = document.getElementById('coop-btn-reset-timer');
 
   // Resultados por jugador
-  const resultP1NameEl   = document.getElementById('coop-result-p1-name');
-  const resultP2NameEl   = document.getElementById('coop-result-p2-name');
-  const btnP1Win  = document.getElementById('coop-btn-p1-win');
+  const resultP1NameEl = document.getElementById('coop-result-p1-name');
+  const resultP2NameEl = document.getElementById('coop-result-p2-name');
+  const btnP1Win = document.getElementById('coop-btn-p1-win');
   const btnP1Lose = document.getElementById('coop-btn-p1-lose');
-  const btnP2Win  = document.getElementById('coop-btn-p2-win');
+  const btnP2Win = document.getElementById('coop-btn-p2-win');
   const btnP2Lose = document.getElementById('coop-btn-p2-lose');
   const resultP1StatusEl = document.getElementById('coop-result-p1-status');
   const resultP2StatusEl = document.getElementById('coop-result-p2-status');
 
   // Banner
   const resultBannerEl = document.getElementById('coop-result-banner');
-  const bannerIconEl   = document.getElementById('coop-banner-icon');
-  const bannerTitleEl  = document.getElementById('coop-banner-title');
-  const bannerSubEl    = document.getElementById('coop-banner-sub');
+  const bannerIconEl = document.getElementById('coop-banner-icon');
+  const bannerTitleEl = document.getElementById('coop-banner-title');
+  const bannerSubEl = document.getElementById('coop-banner-sub');
 
   // Nombres en Hero
   const heroP1NameEl = document.getElementById('coop-hero-p1-name');
@@ -486,7 +486,7 @@
   // ── Puntuación ────────────────────────────────────────────────────────
 
   function getScore() {
-    const wins   = state.results.filter(r => r === 'win').length;
+    const wins = state.results.filter(r => r === 'win').length;
     const losses = state.results.filter(r => r === 'lose').length;
     return { wins, losses };
   }
@@ -502,8 +502,11 @@
 
   function pickTwoDifferentConditions() {
     const shuffled = shuffleArray(INDIVIDUAL_CONDITIONS);
-    const first  = shuffled[0] ?? null;
-    const second = shuffled.find(c => c.id !== first?.id) ?? null;
+    if (!shuffled.length) return { p1: null, p2: null };
+    const first = shuffled[0];
+    // Si por algún motivo sólo hubiese una condición, devolvemos la misma para
+    // ambos jugadores en lugar de un null silencioso.
+    const second = shuffled.find(c => c.id !== first.id) ?? first;
     return { p1: first, p2: second };
   }
 
@@ -524,35 +527,36 @@
     if (state.gameOver) return;
 
     const challenge = dataApi.buildChallengeFromBoss(boss, COOP_CHALLENGE_CONFIG);
-    const scaled    = scaledDiffInfo(boss);
+    const scaled = scaledDiffInfo(boss);
     const { p1, p2 } = pickTwoDifferentConditions();
 
     // Condición extra para jefes extremo en co-op.
     let generalConds = [...challenge.conditions];
     if (scaled.isExtraCondition) {
       const medPool = COOP_CHALLENGE_CONFIG.mediumConditions ?? [];
-      const extra   = shuffleArray(medPool).find(c => !challenge.conditions.includes(c.text));
+      const extra = shuffleArray(medPool).find(c => !challenge.conditions.includes(c.text));
       if (extra) generalConds = [...generalConds, extra.text];
     }
 
     stopTimer();
 
-    state.currentBoss         = { ...boss, diffClass: scaled.diffClass, diffLabel: scaled.diffLabel };
-    state.generalConditions   = generalConds;
-    state.player1Condition    = p1?.text ?? null;
-    state.player2Condition    = p2?.text ?? null;
-    state.player1RoundResult  = null;
-    state.player2RoundResult  = null;
-    state.roundStarted        = false;
-    state.timerInitial        = challenge.timeLimit * 600;
-    state.timerRemaining      = state.timerInitial;
-    state.challengeTitle      = challenge.title;
-    state.challengeDesc       = challenge.desc;
-    state.challengeTip        = challenge.tip;
-    state.challengeTag        = challenge.tag;
-    state.challengeTagClass   = challenge.tagClass;
-    state.rouletteRotation    = roulette?.getRotation?.() || 0;
+    state.currentBoss = { ...boss, diffClass: scaled.diffClass, diffLabel: scaled.diffLabel };
+    state.generalConditions = generalConds;
+    state.player1Condition = p1?.text ?? null;
+    state.player2Condition = p2?.text ?? null;
+    state.player1RoundResult = null;
+    state.player2RoundResult = null;
+    state.roundStarted = false;
+    state.timerInitial = challenge.timeLimit * 600;
+    state.timerRemaining = state.timerInitial;
+    state.challengeTitle = challenge.title;
+    state.challengeDesc = challenge.desc;
+    state.challengeTip = challenge.tip;
+    state.challengeTag = challenge.tag;
+    state.challengeTagClass = challenge.tagClass;
+    state.rouletteRotation = roulette?.getRotation?.() || 0;
 
+    clearBanner();
     saveState();
     renderAll();
     announce(`Reto sorteado: ${boss.name}.`);
@@ -643,9 +647,9 @@
   function cyclePlayerResult(player) {
     const current = player === 1 ? state.player1RoundResult : state.player2RoundResult;
     let next;
-    if (current === null)    next = 'pass';
+    if (current === null) next = 'pass';
     else if (current === 'pass') next = 'fail';
-    else                         next = null;
+    else next = null;
     setPlayerResult(player, next);
   }
 
@@ -694,16 +698,21 @@
     }
 
     if (!roundOver) {
-      state.currentRound       = Math.min(state.currentRound + 1, ROUND_COUNT - 1);
-      state.currentBoss        = null;
-      state.generalConditions  = [];
-      state.player1Condition   = null;
-      state.player2Condition   = null;
+      state.currentRound = Math.min(state.currentRound + 1, ROUND_COUNT - 1);
+      state.currentBoss = null;
+      state.generalConditions = [];
+      state.player1Condition = null;
+      state.player2Condition = null;
       state.player1RoundResult = null;
       state.player2RoundResult = null;
-      state.timerRemaining     = 0;
-      state.timerInitial       = 0;
-      state.roundStarted       = false;
+      state.timerRemaining = 0;
+      state.timerInitial = 0;
+      state.roundStarted = false;
+    } else {
+      // Aunque la prueba termine, limpiamos los marcadores intermedios para
+      // que la UI no muestre "Cumplió/Falló" residual si se vuelve a renderizar.
+      state.player1RoundResult = null;
+      state.player2RoundResult = null;
     }
 
     saveState();
@@ -713,19 +722,31 @@
   function resetRound() {
     if (roulette?.isSpinning?.()) return;
     stopTimer();
-    state.currentBoss        = null;
-    state.generalConditions  = [];
-    state.player1Condition   = null;
-    state.player2Condition   = null;
+
+    // Si la prueba ya terminó, reiniciamos todo (resultados + ronda + flag),
+    // conservando los nombres de los jugadores.
+    const wasGameOver = state.gameOver;
+    if (wasGameOver) {
+      state.results = [null, null, null];
+      state.currentRound = 0;
+      state.gameOver = false;
+    }
+
+    state.currentBoss = null;
+    state.generalConditions = [];
+    state.player1Condition = null;
+    state.player2Condition = null;
     state.player1RoundResult = null;
     state.player2RoundResult = null;
-    state.timerRemaining     = 0;
-    state.timerInitial       = 0;
-    state.roundStarted       = false;
+    state.timerRemaining = 0;
+    state.timerInitial = 0;
+    state.roundStarted = false;
     clearBanner();
     saveState();
     renderAll();
-    announce('Ronda reiniciada. Sortea un nuevo reto.');
+    announce(wasGameOver
+      ? 'Prueba reiniciada. Sortea el primer reto.'
+      : 'Ronda reiniciada. Sortea un nuevo reto.');
   }
 
   // ── Render ────────────────────────────────────────────────────────────
@@ -738,7 +759,7 @@
 
   function renderScoreboard() {
     const { wins, losses } = getScore();
-    if (scoreNums)  scoreNums.textContent  = `${wins} · ${losses}`;
+    if (scoreNums) scoreNums.textContent = `${wins} · ${losses}`;
     if (roundBadge) roundBadge.textContent = String(state.currentRound + 1);
 
     const labels = ['I', 'II', 'III'];
@@ -761,8 +782,8 @@
     dotEls.forEach((dot, i) => {
       if (!dot) return;
       dot.className = 'dot';
-      if (state.results[i] === 'win')        dot.classList.add('won');
-      else if (state.results[i] === 'lose')  dot.classList.add('lost');
+      if (state.results[i] === 'win') dot.classList.add('won');
+      else if (state.results[i] === 'lose') dot.classList.add('lost');
       else if (i === state.currentRound && !state.gameOver) dot.classList.add('active');
     });
   }
@@ -770,26 +791,31 @@
   function renderChallenge() {
     const hasBoss = Boolean(state.currentBoss);
     if (emptyStateEl) emptyStateEl.hidden = hasBoss;
-    if (bossInfoEl)   bossInfoEl.hidden   = !hasBoss;
-    if (!hasBoss) return;
+    if (bossInfoEl) bossInfoEl.hidden = !hasBoss;
+    if (!hasBoss) {
+      // Restablecer los indicadores aria-live aunque el contenedor esté oculto
+      // para evitar que reaparezcan con el resultado de la ronda anterior.
+      renderPlayerResults();
+      return;
+    }
 
     const boss = state.currentBoss;
 
     if (typeTagEl) {
       typeTagEl.textContent = state.challengeTag ?? boss.tag ?? '-';
-      typeTagEl.className   = `type-tag ${state.challengeTagClass ?? boss.tagClass ?? ''}`;
+      typeTagEl.className = `type-tag ${state.challengeTagClass ?? boss.tagClass ?? ''}`;
     }
     if (diffTagEl) {
       diffTagEl.textContent = boss.diffLabel;
-      diffTagEl.className   = `diff-badge ${boss.diffClass}`;
+      diffTagEl.className = `diff-badge ${boss.diffClass}`;
     }
     if (scaleBadgeEl) scaleBadgeEl.hidden = false;
-    if (enemyIconEl)   enemyIconEl.textContent  = boss.enemyIcon  ?? '👁';
-    if (enemyNameEl)   enemyNameEl.textContent   = boss.name;
+    if (enemyIconEl) enemyIconEl.textContent = boss.enemyIcon ?? '👁';
+    if (enemyNameEl) enemyNameEl.textContent = boss.name;
     if (enemyRegionEl) enemyRegionEl.textContent = boss.region;
     if (challengeTitleEl) challengeTitleEl.textContent = state.challengeTitle ?? boss.name;
-    if (challengeDescEl)  challengeDescEl.textContent  = state.challengeDesc  ?? '';
-    if (tipTextEl)        tipTextEl.textContent         = state.challengeTip   ?? boss.baseTip ?? '';
+    if (challengeDescEl) challengeDescEl.textContent = state.challengeDesc ?? '';
+    if (tipTextEl) tipTextEl.textContent = state.challengeTip ?? boss.baseTip ?? '';
 
     if (generalCondsEl) {
       generalCondsEl.innerHTML = '';
@@ -802,8 +828,8 @@
 
     if (p1LabelEl) p1LabelEl.textContent = state.player1Name;
     if (p2LabelEl) p2LabelEl.textContent = state.player2Name;
-    if (p1CondEl)  p1CondEl.textContent  = state.player1Condition ?? '—';
-    if (p2CondEl)  p2CondEl.textContent  = state.player2Condition ?? '—';
+    if (p1CondEl) p1CondEl.textContent = state.player1Condition ?? '—';
+    if (p2CondEl) p2CondEl.textContent = state.player2Condition ?? '—';
 
     if (timeLimitEl) {
       const mins = Math.round((state.timerInitial ?? 0) / 600);
@@ -823,17 +849,17 @@
 
   function renderOnePlayerResult(result, winBtn, loseBtn, statusEl2) {
     if (!winBtn || !loseBtn || !statusEl2) return;
-    winBtn.classList.toggle('active-win',   result === 'pass');
+    winBtn.classList.toggle('active-win', result === 'pass');
     loseBtn.classList.toggle('active-lose', result === 'fail');
     if (result === 'pass') {
       statusEl2.textContent = 'Cumplió ✓';
-      statusEl2.className   = 'coop-result-status coop-result-pass';
+      statusEl2.className = 'coop-result-status coop-result-pass';
     } else if (result === 'fail') {
       statusEl2.textContent = 'Falló ✕';
-      statusEl2.className   = 'coop-result-status coop-result-fail';
+      statusEl2.className = 'coop-result-status coop-result-fail';
     } else {
       statusEl2.textContent = 'Pendiente';
-      statusEl2.className   = 'coop-result-status';
+      statusEl2.className = 'coop-result-status';
     }
   }
 
@@ -845,16 +871,16 @@
   function showBanner({ cls = '', icon = '☾', title = '', sub = '' } = {}) {
     if (!resultBannerEl) return;
     resultBannerEl.className = `result-banner ${cls}`;
-    if (bannerIconEl)  bannerIconEl.textContent  = icon;
+    if (bannerIconEl) bannerIconEl.textContent = icon;
     if (bannerTitleEl) bannerTitleEl.textContent = title;
-    if (bannerSubEl)   bannerSubEl.textContent   = sub;
+    if (bannerSubEl) bannerSubEl.textContent = sub;
   }
 
   function clearBanner() {
     if (!resultBannerEl) return;
     resultBannerEl.className = 'result-banner';
     if (bannerTitleEl) bannerTitleEl.textContent = '';
-    if (bannerSubEl)   bannerSubEl.textContent   = '';
+    if (bannerSubEl) bannerSubEl.textContent = '';
   }
 
   function renderAll() {
@@ -872,12 +898,12 @@
 
   function showSetupScreen() {
     if (setupScreen) setupScreen.hidden = false;
-    if (gameScreen)  gameScreen.hidden  = true;
+    if (gameScreen) gameScreen.hidden = true;
   }
 
   function showGameScreen() {
     if (setupScreen) setupScreen.hidden = true;
-    if (gameScreen)  gameScreen.hidden  = false;
+    if (gameScreen) gameScreen.hidden = false;
     renderAll();
   }
 
@@ -981,9 +1007,9 @@
     });
     btnResetTimer?.addEventListener('click', resetTimer);
 
-    btnP1Win?.addEventListener('click',  () => handleResultButton(1, 'pass'));
+    btnP1Win?.addEventListener('click', () => handleResultButton(1, 'pass'));
     btnP1Lose?.addEventListener('click', () => handleResultButton(1, 'fail'));
-    btnP2Win?.addEventListener('click',  () => handleResultButton(2, 'pass'));
+    btnP2Win?.addEventListener('click', () => handleResultButton(2, 'pass'));
     btnP2Lose?.addEventListener('click', () => handleResultButton(2, 'fail'));
 
     document.addEventListener('keydown', handleKeyboardShortcuts);
