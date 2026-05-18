@@ -324,87 +324,400 @@
     }
   }
 
+  // ── Plantilla del shell ───────────────────────────────────────────────
+  //
+  // Toda la estructura HTML del modo cooperativo se monta dinámicamente,
+  // igual que `app.js` hace con `buildModeShell()` para solo/supervisado.
+  // De este modo `cooperativo.html` queda como un shell mínimo de ~24 líneas.
+
+  function buildCoopShell() {
+    return `
+      <header class="topbar">
+        <a class="brand" href="index.html">
+          <span class="brand-mark" aria-hidden="true">☾</span>
+          <span>Prueba Lunar</span>
+        </a>
+        <div class="topbar-actions">
+          <span class="status-chip status-chip-live">Co-op</span>
+          <a class="btn btn-ghost btn-sm" href="index.html">Inicio</a>
+          <a class="btn btn-ghost btn-sm" href="torneo.html">Torneo</a>
+        </div>
+      </header>
+
+      <div id="coop-live-region" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+      <!-- ── Pantalla de configuración ─────────────────────────────────── -->
+      <main id="coop-setup" class="page-wrap coop-setup-wrap">
+        <section class="hero hero-landing">
+          <div class="hero-copy">
+            <div class="eyebrow">Co-op · 2 jugadores · mismo jefe</div>
+            <h1 class="hero-title">Modo Cooperativo</h1>
+            <p class="hero-text">
+              Dos jugadores, un mismo reto. Cada jugador enfrenta el jefe con su condición individual
+              además de la condición compartida. Los dos deben cumplir para ganar la ronda.
+            </p>
+            <p class="hero-note">Tres retos · dos victorias necesarias · un solo equipo</p>
+          </div>
+
+          <aside class="hero-panel" aria-label="Reglas del modo cooperativo">
+            <div class="panel-kicker">Reglas del modo</div>
+            <ul class="live-shortcuts-list">
+              <li>El HP del jefe escala en co-op — la dificultad sube un nivel.</li>
+              <li>Condición general: igual para ambos jugadores.</li>
+              <li>Condición individual: distinta para cada jugador.</li>
+              <li>Si uno falla su condición, la ronda se pierde aunque el jefe caiga.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <div class="panel-card coop-setup-card">
+          <div class="panel-title">Registrar jugadores</div>
+          <p class="mode-selector-copy">Introduce los nombres antes de comenzar. Se guardarán en el dispositivo.</p>
+
+          <div class="coop-setup-fields">
+            <div class="coop-setup-field">
+              <label class="form-label" for="input-player1">Jugador 1</label>
+              <input class="form-input" id="input-player1" type="text" placeholder="Nombre del Jugador 1" autocomplete="off" maxlength="40">
+            </div>
+            <div class="coop-setup-field">
+              <label class="form-label" for="input-player2">Jugador 2</label>
+              <input class="form-input" id="input-player2" type="text" placeholder="Nombre del Jugador 2" autocomplete="off" maxlength="40">
+            </div>
+          </div>
+
+          <button class="btn btn-gold coop-setup-btn" id="btn-coop-start" type="button">Comenzar modo co-op</button>
+        </div>
+      </main>
+
+      <!-- ── Pantalla de juego ─────────────────────────────────────────── -->
+      <main id="coop-game" class="page-wrap page-dashboard" hidden>
+
+        <section class="hero hero-dashboard">
+          <div class="hero-copy">
+            <div class="eyebrow">Modo Cooperativo · Prueba Lunar v4.1.0</div>
+            <h1 class="hero-title">Prueba Lunar</h1>
+            <p class="hero-text">
+              <span id="coop-hero-p1-name">Jugador 1</span>
+              <span class="coop-hero-sep" aria-hidden="true"> &amp; </span>
+              <span id="coop-hero-p2-name">Jugador 2</span>
+            </p>
+            <div class="hero-actions">
+              <div class="prize-pill"><span aria-hidden="true">☾</span><span>Premio: Bendición Lunar</span></div>
+              <div class="mode-badge">Co-op · dificultad escalada</div>
+            </div>
+            <p class="hero-note">Tres retos · dos victorias necesarias · persistencia local</p>
+          </div>
+
+          <aside class="hero-panel live-flow-card" aria-label="Atajos de teclado cooperativo">
+            <div>
+              <p class="panel-kicker">Atajos de teclado</p>
+              <ul class="live-shortcuts-list">
+                <li><kbd>S</kbd> sortear reto</li>
+                <li><kbd>Espacio</kbd> iniciar o pausar tiempo</li>
+                <li><kbd>R</kbd> reiniciar ronda</li>
+                <li><kbd>1</kbd> ciclar resultado de Jugador 1</li>
+                <li><kbd>2</kbd> ciclar resultado de Jugador 2</li>
+              </ul>
+            </div>
+          </aside>
+        </section>
+
+        <div class="warning-box">
+          <span class="warning-symbol" aria-hidden="true">⚠</span>
+          <span>El HP de los jefes escala en co-op · dificultad difícil se trata como extremo · extremo añade condición extra.</span>
+        </div>
+
+        <!-- Marcador -->
+        <section class="scoreboard">
+          <div class="rounds-row">
+            <div class="round-orb" id="coop-orb1">
+              <span class="orb-icon" id="coop-orb1-icon">I</span>
+              <span class="orb-label">RETO</span>
+            </div>
+            <div class="round-orb" id="coop-orb2">
+              <span class="orb-icon" id="coop-orb2-icon">II</span>
+              <span class="orb-label">RETO</span>
+            </div>
+            <div class="round-orb" id="coop-orb3">
+              <span class="orb-icon" id="coop-orb3-icon">III</span>
+              <span class="orb-label">RETO</span>
+            </div>
+          </div>
+
+          <div class="score-center">
+            <div class="score-nums" id="coop-score-nums">0 · 0</div>
+            <div class="score-caption">victorias · derrotas</div>
+            <div class="score-needed">necesita 2 victorias</div>
+          </div>
+
+          <div class="status-box">
+            <div class="status-title">Estado actual</div>
+            <div id="coop-status" class="status-label">En curso...</div>
+          </div>
+        </section>
+
+        <!-- Banner de resultado -->
+        <div id="coop-result-banner" class="result-banner" aria-live="polite" aria-atomic="true">
+          <div class="banner-icon" id="coop-banner-icon">☾</div>
+          <div class="banner-title" id="coop-banner-title"></div>
+          <div class="banner-sub" id="coop-banner-sub"></div>
+        </div>
+
+        <!-- Controles -->
+        <section class="panel-card controls-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Configuración</p>
+              <h2 class="section-title">Prepara el siguiente reto</h2>
+            </div>
+          </div>
+          <div class="controls">
+            <button class="btn btn-gold" id="coop-btn-shuffle" type="button">Sortear reto</button>
+            <button class="btn btn-ghost" id="coop-btn-reset-round" type="button">Reiniciar ronda</button>
+            <button class="btn btn-ghost" id="coop-btn-change-players" type="button">Cambiar jugadores</button>
+          </div>
+        </section>
+
+        <section class="roulette-panel" aria-label="Ruleta de jefes cooperativa">
+          <div class="roulette-heading">
+            <div>
+              <div class="roulette-title">Ruleta Lunar</div>
+              <div class="roulette-subtitle" id="coop-roulette-status" aria-live="polite">
+                La rueda está lista para elegir la próxima leyenda.
+              </div>
+            </div>
+          </div>
+          <div class="roulette-stage">
+            <div class="roulette-pointer" aria-hidden="true">▼</div>
+            <div class="roulette-wheel-shell">
+              <div class="roulette-wheel" id="coop-roulette-wheel">
+                <div class="roulette-center">☾</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tarjeta del reto -->
+        <section class="experience-grid">
+          <div class="challenge-wrap" style="grid-column: 1 / -1">
+            <div class="challenge-card">
+              <div class="card-header">
+                <div class="round-badge" id="coop-round-badge">1</div>
+                <span class="type-tag" id="coop-type-tag">-</span>
+                <span class="diff-badge" id="coop-diff-tag">-</span>
+                <span class="diff-badge diff-extremo coop-scale-badge" id="coop-scale-badge" hidden aria-label="Dificultad escalada por co-op">Co-op ↑</span>
+              </div>
+
+              <div class="card-body">
+                <!-- Estado vacío -->
+                <div id="coop-empty-state" class="coop-empty-state">
+                  <p>Sortea el reto para comenzar la ronda.</p>
+                  <p class="coop-empty-hint">Pulsa <kbd>S</kbd> o el botón <strong>Sortear reto</strong>.</p>
+                </div>
+
+                <!-- Información del jefe (oculta hasta sortear) -->
+                <div id="coop-boss-info" hidden>
+                  <div class="enemy-banner">
+                    <div class="enemy-icon" id="coop-enemy-icon">👁</div>
+                    <div>
+                      <div class="enemy-name" id="coop-enemy-name">Leyenda Local</div>
+                      <div class="enemy-region" id="coop-enemy-region">Región · Tipo</div>
+                    </div>
+                  </div>
+
+                  <div class="challenge-name" id="coop-challenge-title">-</div>
+                  <div class="challenge-desc" id="coop-challenge-desc">-</div>
+
+                  <div class="mechanic-tip">
+                    <span class="tip-symbol" aria-hidden="true">💡</span>
+                    <span id="coop-tip-text"></span>
+                  </div>
+
+                  <!-- Condiciones generales (ambos jugadores) -->
+                  <div class="conditions">
+                    <div class="conditions-title">Condiciones del reto — ambos jugadores</div>
+                    <ul id="coop-general-conditions"></ul>
+                  </div>
+
+                  <!-- Condiciones individuales -->
+                  <div class="coop-individual-section">
+                    <div class="conditions-title">Condición individual por jugador</div>
+                    <div class="coop-individual-grid">
+                      <div class="coop-player-slot">
+                        <div class="coop-player-slot-label" id="coop-p1-label">Jugador 1</div>
+                        <div class="coop-player-slot-text" id="coop-p1-condition">—</div>
+                      </div>
+                      <div class="coop-player-slot coop-player-slot-alt">
+                        <div class="coop-player-slot-label" id="coop-p2-label">Jugador 2</div>
+                        <div class="coop-player-slot-text" id="coop-p2-condition">—</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Cronómetro -->
+                  <div class="time-section">
+                    <div class="time-limit-box">
+                      <div class="time-limit-title">Tiempo límite</div>
+                      <div class="time-limit-value" id="coop-time-limit-value">—</div>
+                    </div>
+
+                    <div class="timer-box">
+                      <div class="timer-label">Tiempo del reto</div>
+                      <div class="timer-display" id="coop-timer-display" role="timer" aria-live="off">06:00<small>.0</small></div>
+                      <div class="timer-actions">
+                        <button class="btn btn-gold" id="coop-btn-start-timer" type="button">Iniciar tiempo</button>
+                        <button class="btn btn-ghost" id="coop-btn-reset-timer" type="button">Reiniciar tiempo</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Botones de resultado por jugador -->
+                  <div class="coop-result-grid" id="coop-result-grid">
+                    <div class="coop-result-player">
+                      <div class="coop-result-player-name" id="coop-result-p1-name">Jugador 1</div>
+                      <div class="coop-result-btns">
+                        <button class="btn-win" id="coop-btn-p1-win" type="button">Cumplió</button>
+                        <button class="btn-lose" id="coop-btn-p1-lose" type="button">Falló</button>
+                      </div>
+                      <div class="coop-result-status" id="coop-result-p1-status" aria-live="polite">Pendiente</div>
+                    </div>
+
+                    <div class="coop-result-player">
+                      <div class="coop-result-player-name" id="coop-result-p2-name">Jugador 2</div>
+                      <div class="coop-result-btns">
+                        <button class="btn-win" id="coop-btn-p2-win" type="button">Cumplió</button>
+                        <button class="btn-lose" id="coop-btn-p2-lose" type="button">Falló</button>
+                      </div>
+                      <div class="coop-result-status" id="coop-result-p2-status" aria-live="polite">Pendiente</div>
+                    </div>
+                  </div>
+
+                </div><!-- /coop-boss-info -->
+              </div><!-- /card-body -->
+            </div><!-- /challenge-card -->
+          </div>
+        </section>
+
+        <div class="progress-dots">
+          <div class="dot" id="coop-dot0"></div>
+          <div class="dot" id="coop-dot1"></div>
+          <div class="dot" id="coop-dot2"></div>
+        </div>
+
+        <div class="divider-ornament">Prueba Lunar v4.1.0</div>
+        <div class="footer">Prueba Lunar v4.1.0 · Modo Cooperativo</div>
+
+      </main><!-- /coop-game -->
+    `;
+  }
+
   // ── Referencias DOM ───────────────────────────────────────────────────
+  //
+  // Se declaran aquí en el closure pero se asignan en captureDomReferences()
+  // después de que initializeCoopApp() inyecte el shell en #app-root.
 
-  const setupScreen = document.getElementById('coop-setup');
-  const gameScreen = document.getElementById('coop-game');
-  const liveRegion = document.getElementById('coop-live-region');
+  let setupScreen, gameScreen, liveRegion;
+  let inputP1, inputP2, btnStart;
+  let btnShuffle, btnResetRound, btnChangePlayers;
+  let rouletteWheelEl, rouletteStatusEl;
+  let scoreNums, statusEl, roundBadge;
+  let orbIcons = [];
+  let orbEls = [];
+  let dotEls = [];
+  let emptyStateEl, bossInfoEl;
+  let typeTagEl, diffTagEl, scaleBadgeEl;
+  let enemyIconEl, enemyNameEl, enemyRegionEl;
+  let challengeTitleEl, challengeDescEl, tipTextEl;
+  let generalCondsEl;
+  let p1LabelEl, p2LabelEl, p1CondEl, p2CondEl;
+  let timeLimitEl, timerDisplayEl, btnStartTimer, btnResetTimer;
+  let resultP1NameEl, resultP2NameEl;
+  let btnP1Win, btnP1Lose, btnP2Win, btnP2Lose;
+  let resultP1StatusEl, resultP2StatusEl;
+  let resultBannerEl, bannerIconEl, bannerTitleEl, bannerSubEl;
+  let heroP1NameEl, heroP2NameEl;
 
-  // Setup
-  const inputP1 = document.getElementById('input-player1');
-  const inputP2 = document.getElementById('input-player2');
-  const btnStart = document.getElementById('btn-coop-start');
+  function captureDomReferences() {
+    setupScreen = document.getElementById('coop-setup');
+    gameScreen = document.getElementById('coop-game');
+    liveRegion = document.getElementById('coop-live-region');
 
-  // Controles de juego
-  const btnShuffle = document.getElementById('coop-btn-shuffle');
-  const btnResetRound = document.getElementById('coop-btn-reset-round');
-  const btnChangePlayers = document.getElementById('coop-btn-change-players');
-  const rouletteWheelEl = document.getElementById('coop-roulette-wheel');
-  const rouletteStatusEl = document.getElementById('coop-roulette-status');
+    // Setup
+    inputP1 = document.getElementById('input-player1');
+    inputP2 = document.getElementById('input-player2');
+    btnStart = document.getElementById('btn-coop-start');
 
-  // Marcador
-  const scoreNums = document.getElementById('coop-score-nums');
-  const statusEl = document.getElementById('coop-status');
-  const roundBadge = document.getElementById('coop-round-badge');
-  const orbIcons = [
-    document.getElementById('coop-orb1-icon'),
-    document.getElementById('coop-orb2-icon'),
-    document.getElementById('coop-orb3-icon')
-  ];
-  const orbEls = [
-    document.getElementById('coop-orb1'),
-    document.getElementById('coop-orb2'),
-    document.getElementById('coop-orb3')
-  ];
-  const dotEls = [
-    document.getElementById('coop-dot0'),
-    document.getElementById('coop-dot1'),
-    document.getElementById('coop-dot2')
-  ];
+    // Controles de juego
+    btnShuffle = document.getElementById('coop-btn-shuffle');
+    btnResetRound = document.getElementById('coop-btn-reset-round');
+    btnChangePlayers = document.getElementById('coop-btn-change-players');
+    rouletteWheelEl = document.getElementById('coop-roulette-wheel');
+    rouletteStatusEl = document.getElementById('coop-roulette-status');
 
-  // Tarjeta de reto
-  const emptyStateEl = document.getElementById('coop-empty-state');
-  const bossInfoEl = document.getElementById('coop-boss-info');
-  const typeTagEl = document.getElementById('coop-type-tag');
-  const diffTagEl = document.getElementById('coop-diff-tag');
-  const scaleBadgeEl = document.getElementById('coop-scale-badge');
-  const enemyIconEl = document.getElementById('coop-enemy-icon');
-  const enemyNameEl = document.getElementById('coop-enemy-name');
-  const enemyRegionEl = document.getElementById('coop-enemy-region');
-  const challengeTitleEl = document.getElementById('coop-challenge-title');
-  const challengeDescEl = document.getElementById('coop-challenge-desc');
-  const tipTextEl = document.getElementById('coop-tip-text');
-  const generalCondsEl = document.getElementById('coop-general-conditions');
-  const p1LabelEl = document.getElementById('coop-p1-label');
-  const p2LabelEl = document.getElementById('coop-p2-label');
-  const p1CondEl = document.getElementById('coop-p1-condition');
-  const p2CondEl = document.getElementById('coop-p2-condition');
+    // Marcador
+    scoreNums = document.getElementById('coop-score-nums');
+    statusEl = document.getElementById('coop-status');
+    roundBadge = document.getElementById('coop-round-badge');
+    orbIcons = [
+      document.getElementById('coop-orb1-icon'),
+      document.getElementById('coop-orb2-icon'),
+      document.getElementById('coop-orb3-icon')
+    ];
+    orbEls = [
+      document.getElementById('coop-orb1'),
+      document.getElementById('coop-orb2'),
+      document.getElementById('coop-orb3')
+    ];
+    dotEls = [
+      document.getElementById('coop-dot0'),
+      document.getElementById('coop-dot1'),
+      document.getElementById('coop-dot2')
+    ];
 
-  // Cronómetro
-  const timeLimitEl = document.getElementById('coop-time-limit-value');
-  const timerDisplayEl = document.getElementById('coop-timer-display');
-  const btnStartTimer = document.getElementById('coop-btn-start-timer');
-  const btnResetTimer = document.getElementById('coop-btn-reset-timer');
+    // Tarjeta de reto
+    emptyStateEl = document.getElementById('coop-empty-state');
+    bossInfoEl = document.getElementById('coop-boss-info');
+    typeTagEl = document.getElementById('coop-type-tag');
+    diffTagEl = document.getElementById('coop-diff-tag');
+    scaleBadgeEl = document.getElementById('coop-scale-badge');
+    enemyIconEl = document.getElementById('coop-enemy-icon');
+    enemyNameEl = document.getElementById('coop-enemy-name');
+    enemyRegionEl = document.getElementById('coop-enemy-region');
+    challengeTitleEl = document.getElementById('coop-challenge-title');
+    challengeDescEl = document.getElementById('coop-challenge-desc');
+    tipTextEl = document.getElementById('coop-tip-text');
+    generalCondsEl = document.getElementById('coop-general-conditions');
+    p1LabelEl = document.getElementById('coop-p1-label');
+    p2LabelEl = document.getElementById('coop-p2-label');
+    p1CondEl = document.getElementById('coop-p1-condition');
+    p2CondEl = document.getElementById('coop-p2-condition');
 
-  // Resultados por jugador
-  const resultP1NameEl = document.getElementById('coop-result-p1-name');
-  const resultP2NameEl = document.getElementById('coop-result-p2-name');
-  const btnP1Win = document.getElementById('coop-btn-p1-win');
-  const btnP1Lose = document.getElementById('coop-btn-p1-lose');
-  const btnP2Win = document.getElementById('coop-btn-p2-win');
-  const btnP2Lose = document.getElementById('coop-btn-p2-lose');
-  const resultP1StatusEl = document.getElementById('coop-result-p1-status');
-  const resultP2StatusEl = document.getElementById('coop-result-p2-status');
+    // Cronómetro
+    timeLimitEl = document.getElementById('coop-time-limit-value');
+    timerDisplayEl = document.getElementById('coop-timer-display');
+    btnStartTimer = document.getElementById('coop-btn-start-timer');
+    btnResetTimer = document.getElementById('coop-btn-reset-timer');
 
-  // Banner
-  const resultBannerEl = document.getElementById('coop-result-banner');
-  const bannerIconEl = document.getElementById('coop-banner-icon');
-  const bannerTitleEl = document.getElementById('coop-banner-title');
-  const bannerSubEl = document.getElementById('coop-banner-sub');
+    // Resultados por jugador
+    resultP1NameEl = document.getElementById('coop-result-p1-name');
+    resultP2NameEl = document.getElementById('coop-result-p2-name');
+    btnP1Win = document.getElementById('coop-btn-p1-win');
+    btnP1Lose = document.getElementById('coop-btn-p1-lose');
+    btnP2Win = document.getElementById('coop-btn-p2-win');
+    btnP2Lose = document.getElementById('coop-btn-p2-lose');
+    resultP1StatusEl = document.getElementById('coop-result-p1-status');
+    resultP2StatusEl = document.getElementById('coop-result-p2-status');
 
-  // Nombres en Hero
-  const heroP1NameEl = document.getElementById('coop-hero-p1-name');
-  const heroP2NameEl = document.getElementById('coop-hero-p2-name');
+    // Banner
+    resultBannerEl = document.getElementById('coop-result-banner');
+    bannerIconEl = document.getElementById('coop-banner-icon');
+    bannerTitleEl = document.getElementById('coop-banner-title');
+    bannerSubEl = document.getElementById('coop-banner-sub');
+
+    // Nombres en Hero
+    heroP1NameEl = document.getElementById('coop-hero-p1-name');
+    heroP2NameEl = document.getElementById('coop-hero-p2-name');
+  }
 
   // ── Estado activo ─────────────────────────────────────────────────────
 
@@ -1015,7 +1328,19 @@
     document.addEventListener('keydown', handleKeyboardShortcuts);
   }
 
+  function initializeCoopApp() {
+    const root = document.getElementById('app-root');
+    if (!root) {
+      console.error('Prueba Lunar: no se encontró #app-root en cooperativo.html');
+      return false;
+    }
+    root.innerHTML = buildCoopShell();
+    captureDomReferences();
+    return true;
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
+    if (!initializeCoopApp()) return;
     init();
     attachEvents();
   });
