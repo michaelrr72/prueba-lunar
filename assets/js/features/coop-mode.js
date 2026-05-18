@@ -324,12 +324,6 @@
     }
   }
 
-  // ── Plantilla del shell ───────────────────────────────────────────────
-  //
-  // Toda la estructura HTML del modo cooperativo se monta dinámicamente,
-  // igual que `app.js` hace con `buildModeShell()` para solo/supervisado.
-  // De este modo `cooperativo.html` queda como un shell mínimo de ~24 líneas.
-
   function buildCoopShell() {
     return `
       <header class="topbar">
