@@ -12,6 +12,13 @@
   <link rel="stylesheet" href="assets/css/layout.css">
   <link rel="stylesheet" href="assets/css/components.css">
   <link rel="stylesheet" href="assets/css/modes.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0a0e15">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Prueba Lunar">
+  <link rel="apple-touch-icon" href="assets/icons/icon.svg">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/icon.svg">
 </head>
 
 <body data-mode="supervisado">
@@ -19,6 +26,16 @@
   <noscript>Necesitas habilitar JavaScript para usar la Prueba Lunar.</noscript>
   <script src="assets/js/data.local.js" defer></script>
   <script src="assets/js/app.js" defer></script>
+  <script>
+    // Registro del Service Worker · activa funcionamiento offline e instalación PWA.
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => {
+          console.warn('[PWA] Service Worker no registrado:', err);
+        });
+      });
+    }
+  </script>
 </body>
 
 </html>

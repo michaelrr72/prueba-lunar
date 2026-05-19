@@ -691,6 +691,9 @@ function buildModeShell(modeConfig) {
                 <span id="c-tip-text"></span>
               </div>
 
+              <!-- Info expandida del jefe (elementos, drops) — sólo si el boss la declara -->
+              <div id="c-extended-info" class="boss-extended-info-slot" hidden></div>
+
               <section class="round-intro-banner" id="round-intro-banner" hidden aria-live="polite">
                 <div class="round-intro-top">
                   <p class="round-intro-kicker">Antes del cronómetro</p>
@@ -802,6 +805,7 @@ function initializeModeApp() {
     challengeDesc: document.getElementById('c-desc'),
     challengeTip: document.getElementById('c-tip'),
     challengeTipText: document.getElementById('c-tip-text'),
+    challengeExtendedInfo: document.getElementById('c-extended-info'),
     challengeConditions: document.getElementById('c-conditions'),
     roundIntroBanner: document.getElementById('round-intro-banner'),
     introDiffBadge: document.getElementById('intro-diff-badge'),
@@ -1056,6 +1060,15 @@ function initializeModeApp() {
     } else {
       elements.challengeTip.style.display = 'none';
       elements.challengeTipText.textContent = '';
+    }
+
+    // Info expandida del jefe: elementos eficaces, resistencias, drops.
+    // Sólo se muestra si el boss declara `extendedInfo` en data.local.js.
+    if (elements.challengeExtendedInfo) {
+      const bossData = getBossPoolForMode(activeMode).find(b => b.id === current.bossId);
+      const markup = window.PruebaLunarData?.buildExtendedInfoMarkup?.(bossData) ?? '';
+      elements.challengeExtendedInfo.innerHTML = markup;
+      elements.challengeExtendedInfo.hidden = !markup;
     }
 
     renderConditions(current.conditions || []);

@@ -1,3 +1,19 @@
+// ─────────────────────────────────────────────────────────────────────
+// Schema de cada boss:
+//   id, name, enemyIcon, region, type, difficulty, diffClass, diffLabel,
+//   tag, tagClass, baseDesc, baseTip, defaultTimeLimit
+//
+// Campo OPCIONAL (info expandida del jefe — se muestra si está presente):
+//   extendedInfo: {
+//     effectiveElements: ['pyro', 'dendro'],   // elementos recomendados
+//     resistantElements: ['hydro'],            // elementos a evitar
+//     drops: 'Mora · Materiales de Leyenda · Cofre'  // string corto
+//   }
+//
+// Para activar la info expandida en el resto de jefes, añade el campo
+// `extendedInfo` con los datos que verifiques de la wiki. Si está ausente,
+// la UI muestra sólo el `baseTip` como hasta ahora — nada rompe.
+// ─────────────────────────────────────────────────────────────────────
 const BASE_BOSS_POOL = [
   {
     id: 1,
@@ -12,7 +28,12 @@ const BASE_BOSS_POOL = [
     tagClass: 'tag-combat',
     baseDesc: 'Derrota a Vivianne del Lago. Sus ataques tienen altísimo daño y castigan mucho los errores de posición.',
     baseTip: 'Prioriza Dendro/Pyro para romper su barra de estasis rápido. Sus ataques castigan errores de posición; evita acercamientos directos. Mantén escudo activo durante oleadas iniciales.',
-    defaultTimeLimit: 8
+    defaultTimeLimit: 8,
+    extendedInfo: {
+      effectiveElements: ['dendro', 'pyro'],
+      resistantElements: [],
+      drops: 'Mora · Materiales de Leyenda Local · Cofre de Tesoro'
+    }
   },
   {
     id: 2,
@@ -1014,16 +1035,67 @@ const INDIVIDUAL_CONDITIONS = [
   { id: 'ind-no-dash', text: 'Sin usar esquiva durante los primeros 30 segundos de combate' }
 ];
 
+// ── Info expandida del jefe ───────────────────────────────────────────
+//
+// Cataloga elementos en español + emoji para el rendering. Si el jefe no
+// declara `extendedInfo`, los helpers devuelven cadenas vacías y la UI no
+// muestra la sección.
+
+const ELEMENT_DISPLAY = {
+  pyro:    { label: 'Pyro',    icon: '\ud83d\udd25' },   // 🔥
+  hydro:   { label: 'Hydro',   icon: '\ud83d\udca7' },   // 💧
+  electro: { label: 'Electro', icon: '\u26a1' },          // ⚡
+  cryo:    { label: 'Cryo',    icon: '\u2744\ufe0f' },    // ❄️
+  anemo:   { label: 'Anemo',   icon: '\ud83c\udf2c\ufe0f' }, // 🌬️
+  geo:     { label: 'Geo',     icon: '\ud83d\udfe4' },   // 🟤
+  dendro:  { label: 'Dendro',  icon: '\ud83c\udf3f' }    // 🌿
+};
+
+function formatElementList(elements) {
+  if (!Array.isArray(elements) || !elements.length) return '';
+  return elements
+    .map(key => ELEMENT_DISPLAY[key])
+    .filter(Boolean)
+    .map(el => `<span class="element-chip">${el.icon} ${el.label}</span>`)
+    .join('');
+}
+
+function buildExtendedInfoMarkup(boss) {
+  const info = boss?.extendedInfo;
+  if (!info) return '';
+
+  const effective = formatElementList(info.effectiveElements);
+  const resistant = formatElementList(info.resistantElements);
+  const drops = (info.drops || '').trim();
+
+  if (!effective && !resistant && !drops) return '';
+
+  let html = '<div class="boss-extended-info">';
+  if (effective) {
+    html += `<div class="boss-extended-row"><span class="boss-extended-label">\u2728 Eficaz</span><span class="boss-extended-chips">${effective}</span></div>`;
+  }
+  if (resistant) {
+    html += `<div class="boss-extended-row"><span class="boss-extended-label">\u26d4 Resiste</span><span class="boss-extended-chips">${resistant}</span></div>`;
+  }
+  if (drops) {
+    html += `<div class="boss-extended-row"><span class="boss-extended-label">\ud83d\udc8e Drops</span><span class="boss-extended-drops">${drops}</span></div>`;
+  }
+  html += '</div>';
+  return html;
+}
+
 window.PruebaLunarData = {
   BASE_BOSS_POOL,
   MODE_CONFIGS,
   INDIVIDUAL_CONDITIONS,
+  ELEMENT_DISPLAY,
   pickRandom,
   shuffleArray,
   areConditionsCompatible,
   pickCompatibleConditions,
   getBossSpecificConditions,
   buildChallengeFromBoss,
+  buildExtendedInfoMarkup,
   getModeConfig,
   getBossPoolForMode
 };

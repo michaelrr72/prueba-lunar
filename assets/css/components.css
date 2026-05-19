@@ -791,6 +791,62 @@ select {
   color: var(--text-soft);
 }
 
+/* ── Info expandida del jefe (elementos, drops) ───────────────────── */
+.boss-extended-info-slot {
+  margin-bottom: 16px;
+}
+
+.boss-extended-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(244, 197, 107, 0.06);
+  border: 1px solid rgba(244, 197, 107, 0.18);
+}
+
+.boss-extended-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  font-size: 0.92rem;
+  color: var(--text-soft);
+}
+
+.boss-extended-label {
+  font-weight: 700;
+  color: var(--text-strong, #f4f4f5);
+  min-width: 72px;
+  letter-spacing: 0.02em;
+}
+
+.boss-extended-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.element-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-strong, #f4f4f5);
+}
+
+.boss-extended-drops {
+  font-style: italic;
+  opacity: 0.95;
+}
+
+
 .round-intro-banner {
   margin: 0 0 16px;
   padding: 16px;

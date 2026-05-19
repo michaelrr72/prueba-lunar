@@ -527,6 +527,9 @@
                     <span id="coop-tip-text"></span>
                   </div>
 
+                  <!-- Info expandida del jefe (elementos, drops) — sólo si el boss la declara -->
+                  <div id="coop-extended-info" class="boss-extended-info-slot" hidden></div>
+
                   <!-- Condiciones generales (ambos jugadores) -->
                   <div class="conditions">
                     <div class="conditions-title">Condiciones del reto — ambos jugadores</div>
@@ -622,6 +625,7 @@
   let typeTagEl, diffTagEl, scaleBadgeEl;
   let enemyIconEl, enemyNameEl, enemyRegionEl;
   let challengeTitleEl, challengeDescEl, tipTextEl;
+  let extendedInfoEl;
   let generalCondsEl;
   let p1LabelEl, p2LabelEl, p1CondEl, p2CondEl;
   let timeLimitEl, timerDisplayEl, btnStartTimer, btnResetTimer;
@@ -680,6 +684,7 @@
     challengeTitleEl = document.getElementById('coop-challenge-title');
     challengeDescEl = document.getElementById('coop-challenge-desc');
     tipTextEl = document.getElementById('coop-tip-text');
+    extendedInfoEl = document.getElementById('coop-extended-info');
     generalCondsEl = document.getElementById('coop-general-conditions');
     p1LabelEl = document.getElementById('coop-p1-label');
     p2LabelEl = document.getElementById('coop-p2-label');
@@ -1123,6 +1128,14 @@
     if (challengeTitleEl) challengeTitleEl.textContent = state.challengeTitle ?? boss.name;
     if (challengeDescEl) challengeDescEl.textContent = state.challengeDesc ?? '';
     if (tipTextEl) tipTextEl.textContent = state.challengeTip ?? boss.baseTip ?? '';
+
+    // Info expandida del jefe (elementos eficaces, resistencias, drops).
+    // Sólo se muestra si el boss declara `extendedInfo` en data.local.js.
+    if (extendedInfoEl) {
+      const markup = dataApi.buildExtendedInfoMarkup?.(boss) ?? '';
+      extendedInfoEl.innerHTML = markup;
+      extendedInfoEl.hidden = !markup;
+    }
 
     if (generalCondsEl) {
       generalCondsEl.innerHTML = '';

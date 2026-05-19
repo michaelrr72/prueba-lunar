@@ -168,6 +168,37 @@ La versión actual incluye:
 - CSS3 modular
 - JavaScript vanilla
 - `localStorage` para persistencia local
+- **PWA**: `manifest.json` + Service Worker (`sw.js`) para funcionar offline e instalarse en el dispositivo
+
+---
+
+## 📱 Progressive Web App (PWA)
+
+La app es instalable y funciona sin conexión:
+
+- En **móvil**: abre la app en el navegador y pulsa "Añadir a pantalla de inicio". Aparecerá un ícono lunar igual que cualquier app nativa.
+- En **escritorio** (Chrome/Edge): aparecerá un botón "Instalar" en la barra de direcciones.
+- Tras instalar, la app **funciona sin internet** — útil en eventos con WiFi inestable.
+- Para forzar actualización tras un cambio importante, abre DevTools → Application → Service Workers → "Update on reload" y recarga.
+
+## ☄️ Info expandida del jefe
+
+Cada jefe puede declarar opcionalmente un campo `extendedInfo` con elementos eficaces, resistencias y drops. La UI lo muestra como chips de colores debajo del tip de mecánica. Si un jefe no tiene `extendedInfo`, la sección simplemente no aparece — todo es retrocompatible.
+
+Para añadirlo a un jefe en `assets/js/data.local.js`:
+
+```js
+{
+  // ... resto del jefe ...
+  extendedInfo: {
+    effectiveElements: ['dendro', 'pyro'],   // elementos que pegan bien
+    resistantElements: ['hydro'],            // elementos a evitar
+    drops: 'Mora · Materiales · Cofre de Tesoro'
+  }
+}
+```
+
+Elementos válidos: `pyro`, `hydro`, `electro`, `cryo`, `anemo`, `geo`, `dendro`.
 
 ---
 
@@ -177,6 +208,7 @@ La versión actual incluye:
 - `solo.html` y `supervisado.html` comparten la misma base funcional (`assets/js/app.js`).
 - `cooperativo.html` usa su propia entrada (`assets/js/features/coop-mode.js`) con persistencia local independiente.
 - El proyecto está orientado a **sitio estático**, así que cualquier cambio debe mantener compatibilidad con apertura local y con GitHub Pages.
+- **Importante para PWA**: si modificas `sw.js` o los assets precacheados, cambia también `CACHE_VERSION` dentro de `sw.js` para que los clientes existentes refresquen la caché.
 
 ---
 

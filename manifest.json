@@ -1,0 +1,50 @@
+{
+  "name": "Prueba Lunar",
+  "short_name": "Prueba Lunar",
+  "description": "App para organizar retos en vivo inspirada en Genshin Impact.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "lang": "es",
+  "dir": "ltr",
+  "background_color": "#06080d",
+  "theme_color": "#0a0e15",
+  "categories": ["games", "entertainment", "utilities"],
+  "icons": [
+    {
+      "src": "assets/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Modo Solo",
+      "short_name": "Solo",
+      "url": "./solo.html"
+    },
+    {
+      "name": "Modo Supervisado",
+      "short_name": "Supervisado",
+      "url": "./supervisado.html"
+    },
+    {
+      "name": "Modo Cooperativo",
+      "short_name": "Co-op",
+      "url": "./cooperativo.html"
+    },
+    {
+      "name": "Torneo",
+      "short_name": "Torneo",
+      "url": "./torneo.html"
+    }
+  ]
+}
