@@ -31,7 +31,7 @@ const BASE_BOSS_POOL = [
     defaultTimeLimit: 8,
     extendedInfo: {
       effectiveElements: ['dendro', 'pyro'],
-      resistantElements: [],
+      resistantElements: ['hydro'],
       drops: 'Mora · Materiales de Leyenda Local · Cofre de Tesoro'
     }
   },
@@ -48,7 +48,12 @@ const BASE_BOSS_POOL = [
     tagClass: 'tag-combat',
     baseDesc: 'Derrota a Rocky Avildsen. Su fase de furia aumenta mucho la presión y castiga errores de lectura.',
     baseTip: 'En Rage Mode (rojo), sus combos son predecibles: 3 golpes + pausa de 2-3 seg. Concentra daño SOLO en esas pausas. Si no tienes 60% HP, espera sin atacar.',
-    defaultTimeLimit: 7
+    defaultTimeLimit: 7,
+    extendedInfo: {
+      effectiveElements: ['pyro', 'electro', 'cryo'],
+      resistantElements: [],
+      drops: 'Logro · Mora · Cofre/Tesoro asociado'
+    }
   },
   {
     id: 3,
@@ -63,7 +68,12 @@ const BASE_BOSS_POOL = [
     tagClass: 'tag-combat',
     baseDesc: 'Derrota a Liam mientras controlas sus zonas peligrosas y su movilidad constante.',
     baseTip: 'Genera zonas peligrosas cada 8-10 seg en patrón predecible. Mantén máxima movilidad. Sus saltos son lentos; responde con burst durante su ascenso para resetear su posición.',
-    defaultTimeLimit: 6
+    defaultTimeLimit: 6,
+    extendedInfo: {
+      effectiveElements: ['hydro', 'cryo', 'electro'],
+      resistantElements: ['pyro'],
+      drops: 'Logro · Mora · Cofre/Tesoro asociado'
+    }
   },
   {
     id: 4,
@@ -78,7 +88,12 @@ const BASE_BOSS_POOL = [
     tagClass: 'tag-combat',
     baseDesc: 'Derrota a Ninianne del Lago. Menos opresiva que Vivianne, pero igual exige control y constancia.',
     baseTip: 'Su barra energética crece lentamente; dispara ataque especial cada 15-18 seg. Después de disparar hay 5-7 seg de ventana segura. Acumula burst para esas ventanas ofensivas.',
-    defaultTimeLimit: 6
+    defaultTimeLimit: 6,
+    extendedInfo: {
+      effectiveElements: ['dendro', 'pyro', 'electro'],
+      resistantElements: ['hydro'],
+      drops: 'Logro · Mora · Materiales de criatura Hydro'
+    }
   },
   {
     id: 5,
@@ -93,7 +108,12 @@ const BASE_BOSS_POOL = [
     tagClass: 'tag-nohit',
     baseDesc: 'Derrota a Yseut controlando bien los errores, porque castiga mucho las fallas de ejecución.',
     baseTip: 'Ciclo fijo: Salto > Barrido > Explosión Congelante. Los dos primeros ataques te advierten del tercero. Esquiva en secuencia o recibe todo el daño. Un error = reset total.',
-    defaultTimeLimit: 5
+    defaultTimeLimit: 5,
+    extendedInfo: {
+      effectiveElements: ['pyro', 'electro'],
+      resistantElements: ['cryo'],
+      drops: 'Logro · Mora · Materiales de Fatui Operative'
+    }
   },
   {
     id: 6,
@@ -108,7 +128,12 @@ const BASE_BOSS_POOL = [
     tagClass: 'tag-nohit',
     baseDesc: 'Derrota a Deianeira manteniendo control del combate y evitando errores acumulativos.',
     baseTip: 'Sus ciclos de ataque escalan en velocidad: primeros 30 seg son lentos (70% HP), últimos son caóticos (30% final). Aprende patrones en el primer minuto. Muy indulgente al inicio, brutal al final.',
-    defaultTimeLimit: 5
+    defaultTimeLimit: 5,
+    extendedInfo: {
+      effectiveElements: ['pyro', 'electro', 'cryo'],
+      resistantElements: ['anemo'],
+      drops: 'Logro · Mora · Materiales de Fatui Operative'
+    }
   },
   {
     id: 7,
@@ -123,7 +148,12 @@ const BASE_BOSS_POOL = [
     tagClass: 'tag-nohit',
     baseDesc: 'Derrota a Rilai superando correctamente sus patrones más peligrosos.',
     baseTip: 'Sus ataques de fuego tienen AoE pequeño pero daño alto puntual. Si esquivas el primer ataque, tienes 2-3 seg para aplicar buff o sacar daño. Requiere timing exacto.',
-    defaultTimeLimit: 6
+    defaultTimeLimit: 6,
+    extendedInfo: {
+      effectiveElements: ['pyro', 'electro'],
+      resistantElements: ['cryo', 'pyro'],
+      drops: 'Logros de Duelist · Mora'
+    }
   },
   {
     id: 8,
@@ -138,7 +168,12 @@ const BASE_BOSS_POOL = [
     tagClass: 'tag-speedrun',
     baseDesc: 'Derrota al Field Generator controlando bien su mecánica especial y las ondas del combate.',
     baseTip: 'Patrón de ondas es cíclico: 3 ondas rápidas > pausa > 2 ondas lentas > pausa. Desactiva torres en orden (derecha > izquierda) o falla mecánica = 40% HP. Necesita precisión 99%.',
-    defaultTimeLimit: 6
+    defaultTimeLimit: 6,
+    extendedInfo: {
+      effectiveElements: ['geo', 'pyro', 'electro'],
+      resistantElements: [],
+      drops: 'Logro · Mora · Materiales de Mek'
+    }
   },
   {
     id: 9,
@@ -153,7 +188,12 @@ const BASE_BOSS_POOL = [
     tagClass: 'tag-speedrun',
     baseDesc: 'Derrota a Chassanion gestionando correctamente su gimmick principal.',
     baseTip: 'Cada 20 seg abre 3 portales dimensionales. Solo uno es el real (tiene efecto elemental brillante). Destruye el real o castigo de 30% HP total. Verifica brillo antes de atacar.',
-    defaultTimeLimit: 5
+    defaultTimeLimit: 5,
+    extendedInfo: {
+      effectiveElements: [],
+      resistantElements: ['hydro'],
+      drops: 'Logro · Mora · Materiales de criatura marina'
+    }
   },
   {
     id: 10,
@@ -168,7 +208,12 @@ const BASE_BOSS_POOL = [
     tagClass: 'tag-speedrun',
     baseDesc: 'Derrota a Cineas manejando bien el ritmo del combate y su fase especial.',
     baseTip: 'Fases: 50-75% normal (fácil) > 25-50% transición (creciente caos) > 0-25% especial (rompe si no haces daño). El tempo se acelera exponencialmente. Guarda burst completo para fase final.',
-    defaultTimeLimit: 6
+    defaultTimeLimit: 6,
+    extendedInfo: {
+      effectiveElements: ['dendro', 'pyro', 'electro'],
+      resistantElements: ['hydro'],
+      drops: 'Logro · Mora · Materiales de Vishap'
+    }
   },
   {
     id: 11,
@@ -183,7 +228,12 @@ const BASE_BOSS_POOL = [
     tagClass: 'tag-restriction',
     baseDesc: 'Derrota a Cocijo antes de que el combate se descontrole con su mecánica más peligrosa.',
     baseTip: 'Relámpago cambia polaridad cada 10 seg: atracción ↔ repulsión. Afecta tu movimiento. Calcula posicionamiento según polaridad actual. Ambición de daño temprana en fase 1 = muerte garantizada.',
-    defaultTimeLimit: 5
+    defaultTimeLimit: 5,
+    extendedInfo: {
+      effectiveElements: ['pyro', 'cryo', 'dendro'],
+      resistantElements: ['electro'],
+      drops: 'Logros de Duelist · Mora'
+    }
   },
   {
     id: 12,
@@ -198,7 +248,12 @@ const BASE_BOSS_POOL = [
     tagClass: 'tag-restriction',
     baseDesc: 'Derrota a The Peak controlando bien su fase potenciada.',
     baseTip: 'Cada 15 seg marca territorio de poder que reduce tu ataque 20% (acumulable). Destrúyela en máx 5 seg o castigo se multiplica. Control de ritmo desde el inicio es crítico.',
-    defaultTimeLimit: 6
+    defaultTimeLimit: 6,
+    extendedInfo: {
+      effectiveElements: ['geo', 'pyro', 'electro'],
+      resistantElements: ['geo'],
+      drops: 'Logros de Duelist · Mora'
+    }
   },
   {
     id: 13,
@@ -214,6 +269,11 @@ const BASE_BOSS_POOL = [
     baseDesc: 'Derrota a Sappho Amidst the Waves controlando las rafagas heladas y los espacios estrechos de la pelea.',
     baseTip: 'Shattering Ice cae cada 10-12 seg. Esquiva en diagonal HACIA AFUERA, nunca hacia dentro. Las ráfagas congelan 2 seg; si recibes 2 castigos seguidos = inmovilizado = derrota. Espacios estrechos = trampa visual.',
     defaultTimeLimit: 6,
+    extendedInfo: {
+      effectiveElements: ['pyro', 'electro'],
+      resistantElements: ['hydro', 'cryo'],
+      drops: 'Logros de Duelist · Mora'
+    },
     specificConditions: {
       solo: [
         {
@@ -255,6 +315,11 @@ const BASE_BOSS_POOL = [
     baseDesc: 'Derrota a Balachko identificando el cuerpo real entre copias y sobreviviendo a su secuencia de tajos encadenados.',
     baseTip: 'Shadowblade Tactics = 6 copias + original real. Original tiene brillo Pyro distintivo. Enfoca SOLO al real o vuelves al inicio del ciclo (6 tajos más). Sus combos encadenados tienen iframes específicos; requiere ejecución de fase.',
     defaultTimeLimit: 6,
+    extendedInfo: {
+      effectiveElements: ['hydro', 'cryo', 'electro'],
+      resistantElements: ['pyro'],
+      drops: 'Logros de Duelist · Mora · Materiales de Fatui'
+    },
     specificConditions: {
       solo: [
         {
@@ -296,6 +361,11 @@ const BASE_BOSS_POOL = [
     baseDesc: 'Derrota a Hexadecatonic Mandragora controlando su barra de Fury y resolviendo bien la fase de Sporebloom.',
     baseTip: 'Fury bar crece constantemente. Pyro/Electro/Lunar reducen rápido (10 seg). Sporebloom ocurre cada 20 seg; debes estar listo. Fallar mecánica = extensión 15 seg + caos acumulativo. Control del ritmo = todo.',
     defaultTimeLimit: 6,
+    extendedInfo: {
+      effectiveElements: ['pyro', 'electro', 'anemo'],
+      resistantElements: ['dendro'],
+      drops: 'Logros de Valiant Chronicles · Mora · Recompensas especiales'
+    },
     specificConditions: {
       solo: [
         {
@@ -337,6 +407,11 @@ const BASE_BOSS_POOL = [
     baseDesc: 'Derrota a The Homesick Lone Wolf leyendo bien sus saltos, barridos y respiraciones de Anemo/Cryo.',
     baseTip: 'Plunging Strike cada 12 seg (esquiva saltando rápido). Sweeping Breath parece completo pero solo últimos 2 golpes despliegan área de daño. Aprende a predecir; error = daño severo pero evitable.',
     defaultTimeLimit: 6,
+    extendedInfo: {
+      effectiveElements: ['pyro', 'electro'],
+      resistantElements: ['anemo', 'cryo'],
+      drops: 'Logros de Valiant Chronicles · Mora · Materiales de lobo'
+    },
     specificConditions: {
       solo: [
         {
@@ -378,6 +453,11 @@ const BASE_BOSS_POOL = [
     baseDesc: 'Derrota a Hiljetta manteniendo consistencia frente a una duelista de largo alcance con punto débil y presión constante.',
     baseTip: 'Punto débil cada 15-20 seg, dura exactamente 5 seg. Sus disparos tienen 3 fases (rápido > lento > explosión final). Aprende a interrumpir ANTES de explosión con escudo o inversión de ataque. Timing = todo.',
     defaultTimeLimit: 5,
+    extendedInfo: {
+      effectiveElements: ['pyro', 'electro', 'cryo'],
+      resistantElements: [],
+      drops: 'Logros de Valiant Chronicles · Mora · Materiales de Treasure Hoarder'
+    },
     specificConditions: {
       solo: [
         {
@@ -419,6 +499,11 @@ const BASE_BOSS_POOL = [
     baseDesc: 'Derrota a Churldric controlando su Geo pot y leyendo bien sus saltos en cadena.',
     baseTip: 'Su Delicious Hot Pot cuenta como Geo construct. Lleva Geo fuerte o Overload para romperla rapido. Cuando salte, caera tres veces seguidas sobre tu posicion: desplaza en diagonal desde la primera marca y no te quedes encerrado.',
     defaultTimeLimit: 6,
+    extendedInfo: {
+      effectiveElements: ['geo', 'pyro', 'electro'],
+      resistantElements: ['geo'],
+      drops: 'Logro · Mora · Materiales de Samachurl'
+    },
     specificConditions: {
       solo: [
         {
@@ -460,6 +545,11 @@ const BASE_BOSS_POOL = [
     baseDesc: 'Derrota a Maha Vasudevayaputra manteniendo su barra Dendro controlada y evitando que regrese a Scorched State.',
     baseTip: 'Solo Dendro/Hydro para Bloom o Lunar-Bloom. Cualquier reaccion PHEC lo devuelve a Scorched State. Mantener la barra Dendro activa es la prioridad absoluta; si pierdes el ritmo, la pelea se alarga y se complica.',
     defaultTimeLimit: 7,
+    extendedInfo: {
+      effectiveElements: ['dendro', 'hydro'],
+      resistantElements: ['pyro', 'electro', 'cryo'],
+      drops: 'Logro · Mora · Materiales de Geoshroom'
+    },
     specificConditions: {
       solo: [
         {
