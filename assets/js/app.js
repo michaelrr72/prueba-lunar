@@ -544,6 +544,12 @@ function buildModeShell(modeConfig) {
       </a>
       <div class="topbar-actions">
         <span class="status-chip status-chip-live">${modeConfig.label}</span>
+        <button class="btn btn-ghost btn-sm friendly-mode-toggle" id="btn-friendly-mode" type="button"
+                aria-pressed="false"
+                aria-label="Activar Modo amable: filtra las condiciones más duras del próximo sorteo">
+          <span aria-hidden="true">❤️</span>
+          <span class="friendly-mode-label">Modo amable</span>
+        </button>
         <a class="btn btn-ghost btn-sm" href="index.html">Inicio</a>
         <a class="btn btn-ghost btn-sm" href="torneo.html">Torneo</a>
       </div>
@@ -787,6 +793,7 @@ function initializeModeApp() {
     warningText: document.getElementById('warning-text'),
     rulesList: document.getElementById('rules-list'),
     typeFilter: document.getElementById('type-filter'),
+    btnFriendlyMode: document.getElementById('btn-friendly-mode'),
     rouletteWheel: document.getElementById('roulette-wheel'),
     rouletteStatus: document.getElementById('roulette-status'),
     resultBanner: document.getElementById('result-banner'),
@@ -1356,6 +1363,23 @@ function initializeModeApp() {
     }
   }
 
+  function renderFriendlyToggle() {
+    if (!elements.btnFriendlyMode) return;
+    const active = dataApi.isFriendlyModeEnabled?.() === true;
+    elements.btnFriendlyMode.classList.toggle('is-active', active);
+    elements.btnFriendlyMode.setAttribute('aria-pressed', active ? 'true' : 'false');
+  }
+
+  function toggleFriendlyMode() {
+    if (!dataApi.setFriendlyModeEnabled) return;
+    const next = !dataApi.isFriendlyModeEnabled?.();
+    dataApi.setFriendlyModeEnabled(next);
+    renderFriendlyToggle();
+    announce(next
+      ? 'Modo amable activado. Las condiciones más duras quedan fuera del próximo sorteo.'
+      : 'Modo amable desactivado. Pool completo restaurado.');
+  }
+
   function attachEvents() {
     elements.typeFilter.addEventListener('change', event => {
       state.typeFilter = event.target.value;
@@ -1378,6 +1402,8 @@ function initializeModeApp() {
     elements.btnSaveModal.addEventListener('click', saveModal);
     elements.btnCloseModal.addEventListener('click', closeModal);
 
+    elements.btnFriendlyMode?.addEventListener('click', toggleFriendlyMode);
+
     elements.modalOverlay.addEventListener('click', event => {
       if (event.target === elements.modalOverlay) {
         closeModal();
@@ -1396,6 +1422,7 @@ function initializeModeApp() {
   elements.typeFilter.value = state.typeFilter || 'all';
   roulette.setRotation(state.rouletteRotation || 0);
   attachEvents();
+  renderFriendlyToggle();
 
   if (state.assigned.length) {
     roundHasStarted = state.timerInitial > 0 && state.timerRemaining < state.timerInitial;

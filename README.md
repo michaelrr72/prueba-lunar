@@ -35,6 +35,32 @@
 
 ---
 
+## 🆕 Funciones recientes
+
+### ❤️ Modo amable
+Un interruptor global que **filtra las condiciones marcadas como duras** del próximo sorteo. Útil para sesiones casuales, demos o cuando se quiere bajar el listón sin reescribir reglas.
+
+- **Dónde activarlo**: botón **❤️ Modo amable** en la barra superior de cualquier modo (solo, supervisado y cooperativo).
+- **Qué hace**: cuando está **ON**, retira del pool las condiciones marcadas con `hard: true` (14 en total: individuales, medias y duras por tipo de jefe) antes de cualquier sorteo o re-roll.
+- **Cobertura**: aplica al sorteo principal, al re-roll del reto y al re-roll individual del cooperativo.
+- **Persistencia**: la preferencia se guarda en `localStorage` (`prueba-lunar-friendly-mode`) y es **global**: si lo activas en modo solo, también queda activo en supervisado y coop.
+- **Salvaguarda**: si tras filtrar el pool queda vacío para algún tipo de jefe, se restaura el pool completo de esa categoría para garantizar que siempre haya algo que sortear.
+- **Aplica al próximo sorteo**: los retos ya repartidos no cambian, solo lo que se genere después de activarlo.
+
+Indicador visual: el botón se pinta en rosa/violeta y muestra un badge **ON** cuando está activo.
+
+### 🔄 Re-roll por jugador (cooperativo)
+Cada jugador en el modo cooperativo dispone de **un re-roll individual por intento** para su condición personal, sin afectar la del compañero.
+
+- **Dónde**: botón **🔄 Re-roll** debajo de la condición de cada jugador, una vez sorteado el jefe.
+- **Cuánto**: **1 uso por jugador por intento**. Se reinicia al pulsar **Reiniciar intento**, no entre rondas individuales.
+- **Garantías**: la condición resultante es distinta a la que tenía el jugador antes del re-roll **y** distinta a la del otro jugador.
+- **Respeta el Modo amable**: si está activo, el re-roll también filtra las condiciones duras.
+- **Estado visual**: una vez usado, el botón queda gris, tachado y deshabilitado con texto "Re-roll usado".
+- **Persistencia**: los flags `player1RerollUsed` / `player2RerollUsed` se guardan junto al resto del estado del intento.
+
+---
+
 ## 🚀 Ejecución
 
 Este proyecto está preparado para funcionar de dos formas:
