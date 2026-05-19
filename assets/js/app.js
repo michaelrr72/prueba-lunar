@@ -544,12 +544,6 @@ function buildModeShell(modeConfig) {
       </a>
       <div class="topbar-actions">
         <span class="status-chip status-chip-live">${modeConfig.label}</span>
-        <button class="btn btn-ghost btn-sm friendly-mode-toggle" id="btn-friendly-mode" type="button"
-                aria-pressed="false"
-                aria-label="Activar Modo amable: filtra las condiciones más duras del próximo sorteo">
-          <span aria-hidden="true">❤️</span>
-          <span class="friendly-mode-label">Modo amable</span>
-        </button>
         <a class="btn btn-ghost btn-sm" href="index.html">Inicio</a>
         <a class="btn btn-ghost btn-sm" href="torneo.html">Torneo</a>
       </div>
@@ -648,6 +642,12 @@ function buildModeShell(modeConfig) {
             <select id="type-filter" aria-label="Filtrar tipo de reto"></select>
           </div>
           <button class="btn btn-gold" id="btn-shuffle" type="button">Sortear reto</button>
+          <button class="btn btn-ghost friendly-mode-toggle" id="btn-friendly-mode" type="button"
+                  aria-pressed="false"
+                  aria-label="Activar Modo amable: filtra las condiciones más duras del próximo sorteo">
+            <span aria-hidden="true">❤️</span>
+            <span class="friendly-mode-label">Modo amable</span>
+          </button>
           <button class="btn btn-ghost" id="btn-reset" type="button">Reiniciar todo</button>
         </div>
       </section>
@@ -677,6 +677,9 @@ function buildModeShell(modeConfig) {
               <div class="round-badge" id="round-badge">1</div>
               <span class="type-tag" id="type-tag">-</span>
               <span class="diff-badge" id="diff-tag">-</span>
+              <span class="friendly-active-chip" id="friendly-active-chip" hidden aria-hidden="true">
+                <span aria-hidden="true">❤️</span><span>Modo amable</span>
+              </span>
               <button class="edit-btn" id="btn-edit" type="button">Editar reto</button>
             </div>
 
@@ -794,6 +797,7 @@ function initializeModeApp() {
     rulesList: document.getElementById('rules-list'),
     typeFilter: document.getElementById('type-filter'),
     btnFriendlyMode: document.getElementById('btn-friendly-mode'),
+    friendlyActiveChip: document.getElementById('friendly-active-chip'),
     rouletteWheel: document.getElementById('roulette-wheel'),
     rouletteStatus: document.getElementById('roulette-status'),
     resultBanner: document.getElementById('result-banner'),
@@ -1364,10 +1368,24 @@ function initializeModeApp() {
   }
 
   function renderFriendlyToggle() {
-    if (!elements.btnFriendlyMode) return;
     const active = dataApi.isFriendlyModeEnabled?.() === true;
-    elements.btnFriendlyMode.classList.toggle('is-active', active);
-    elements.btnFriendlyMode.setAttribute('aria-pressed', active ? 'true' : 'false');
+    if (elements.btnFriendlyMode) {
+      elements.btnFriendlyMode.classList.toggle('is-active', active);
+      elements.btnFriendlyMode.setAttribute('aria-pressed', active ? 'true' : 'false');
+    }
+    if (elements.friendlyActiveChip) {
+      elements.friendlyActiveChip.hidden = !active;
+      elements.friendlyActiveChip.setAttribute('aria-hidden', active ? 'false' : 'true');
+    }
+  }
+
+  function regenerateChallengeInPlace() {
+    const current = state.assigned[state.currentRound];
+    if (!current) return false;
+    const boss = getBossPoolForMode(modeConfig.key).find(b => b.id === current.bossId);
+    if (!boss) return false;
+    assignBossToCurrentChallenge(boss);
+    return true;
   }
 
   function toggleFriendlyMode() {
@@ -1375,9 +1393,24 @@ function initializeModeApp() {
     const next = !dataApi.isFriendlyModeEnabled?.();
     dataApi.setFriendlyModeEnabled(next);
     renderFriendlyToggle();
-    announce(next
-      ? 'Modo amable activado. Las condiciones más duras quedan fuera del próximo sorteo.'
-      : 'Modo amable desactivado. Pool completo restaurado.');
+
+    const hasChallenge = !!state.assigned[state.currentRound];
+    const canRegenerate = hasChallenge && !state.gameOver && !roundHasStarted;
+
+    if (canRegenerate) {
+      regenerateChallengeInPlace();
+      announce(next
+        ? 'Modo amable activado. Condiciones del reto actual regeneradas con el filtro.'
+        : 'Modo amable desactivado. Condiciones del reto actual regeneradas con el pool completo.');
+    } else if (hasChallenge && roundHasStarted) {
+      announce(next
+        ? 'Modo amable activado. La ronda ya está en marcha; se aplicará en el próximo sorteo.'
+        : 'Modo amable desactivado. La ronda ya está en marcha; se aplicará en el próximo sorteo.');
+    } else {
+      announce(next
+        ? 'Modo amable activado. Las condiciones más duras quedan fuera del próximo sorteo.'
+        : 'Modo amable desactivado. Pool completo restaurado.');
+    }
   }
 
   function attachEvents() {

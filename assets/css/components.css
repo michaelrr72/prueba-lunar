@@ -1437,7 +1437,7 @@ kbd {
   color: #fecaca;
 }
 
-/* ── Modo amable: toggle en topbar ─────────────────────────────────── */
+/* ── Modo amable: toggle junto a "Sortear reto" ────────────────────── */
 .friendly-mode-toggle {
   display: inline-flex;
   align-items: center;
@@ -1482,6 +1482,34 @@ kbd {
   font-size: 0.7rem;
   font-weight: 800;
   letter-spacing: 0.04em;
+}
+
+/* ── Modo amable: chip indicador en el card-header del reto ────────── */
+.friendly-active-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg,
+    rgba(251, 113, 133, 0.22),
+    rgba(157, 123, 255, 0.22));
+  border: 1px solid rgba(251, 113, 133, 0.5);
+  color: #ffe4ea;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: 0 0 0 1px rgba(251, 113, 133, 0.25);
+  animation: friendly-chip-in 0.28s ease;
+}
+
+.friendly-active-chip[hidden] {
+  display: none;
+}
+
+@keyframes friendly-chip-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ── Co-op: botón de re-roll por jugador ───────────────────────────── */

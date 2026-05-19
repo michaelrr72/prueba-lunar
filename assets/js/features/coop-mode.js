@@ -338,12 +338,6 @@
         </a>
         <div class="topbar-actions">
           <span class="status-chip status-chip-live">Co-op</span>
-          <button class="btn btn-ghost btn-sm friendly-mode-toggle" id="btn-friendly-mode-coop" type="button"
-                  aria-pressed="false"
-                  aria-label="Activar Modo amable: filtra las condiciones más duras del próximo sorteo">
-            <span aria-hidden="true">❤️</span>
-            <span class="friendly-mode-label">Modo amable</span>
-          </button>
           <a class="btn btn-ghost btn-sm" href="index.html">Inicio</a>
           <a class="btn btn-ghost btn-sm" href="torneo.html">Torneo</a>
         </div>
@@ -478,6 +472,12 @@
           </div>
           <div class="controls">
             <button class="btn btn-gold" id="coop-btn-shuffle" type="button">Sortear reto</button>
+            <button class="btn btn-ghost friendly-mode-toggle" id="btn-friendly-mode-coop" type="button"
+                    aria-pressed="false"
+                    aria-label="Activar Modo amable: filtra las condiciones más duras del próximo sorteo">
+              <span aria-hidden="true">❤️</span>
+              <span class="friendly-mode-label">Modo amable</span>
+            </button>
             <button class="btn btn-ghost" id="coop-btn-reset-round" type="button">Reiniciar ronda</button>
             <button class="btn btn-ghost" id="coop-btn-change-players" type="button">Cambiar jugadores</button>
           </div>
@@ -511,6 +511,9 @@
                 <span class="type-tag" id="coop-type-tag">-</span>
                 <span class="diff-badge" id="coop-diff-tag">-</span>
                 <span class="diff-badge diff-extremo coop-scale-badge" id="coop-scale-badge" hidden aria-label="Dificultad escalada por co-op">Co-op ↑</span>
+                <span class="friendly-active-chip" id="coop-friendly-active-chip" hidden aria-hidden="true">
+                  <span aria-hidden="true">❤️</span><span>Modo amable</span>
+                </span>
               </div>
 
               <div class="card-body">
@@ -654,6 +657,7 @@
   let btnP1Win, btnP1Lose, btnP2Win, btnP2Lose;
   let btnP1Reroll, btnP2Reroll;
   let btnFriendlyMode;
+  let friendlyActiveChip;
   let resultP1StatusEl, resultP2StatusEl;
   let resultBannerEl, bannerIconEl, bannerTitleEl, bannerSubEl;
   let heroP1NameEl, heroP2NameEl;
@@ -730,6 +734,7 @@
     btnP1Reroll = document.getElementById('coop-btn-p1-reroll');
     btnP2Reroll = document.getElementById('coop-btn-p2-reroll');
     btnFriendlyMode = document.getElementById('btn-friendly-mode-coop');
+    friendlyActiveChip = document.getElementById('coop-friendly-active-chip');
     resultP1StatusEl = document.getElementById('coop-result-p1-status');
     resultP2StatusEl = document.getElementById('coop-result-p2-status');
 
@@ -1042,23 +1047,47 @@
 
   /**
    * Alterna el Modo amable global. La preferencia es universal (afecta a
-   * solo, supervisado y coop) y se persiste en localStorage. El cambio
-   * aplica a partir del próximo sorteo.
+   * solo, supervisado y coop) y se persiste en localStorage. Si hay un reto
+   * sorteado y la ronda aún no ha comenzado, se regenera en sitio con el
+   * filtro nuevo. Si la ronda ya empezó, el cambio aplica al próximo sorteo.
    */
   function toggleFriendlyMode() {
     const next = !dataApi.isFriendlyModeEnabled?.();
     dataApi.setFriendlyModeEnabled?.(next);
     renderFriendlyToggle();
-    announce(next
-      ? 'Modo amable activado. Las condiciones más duras quedan fuera del próximo sorteo.'
-      : 'Modo amable desactivado. Pool completo restaurado.');
+
+    const hasBoss = !!state?.currentBoss;
+    const canRegenerate = hasBoss && !state.gameOver && state.roundStarted !== true;
+
+    if (canRegenerate) {
+      // Reutiliza el flujo de asignación con el mismo boss para que las
+      // condiciones generales y las individuales se recalculen aplicando
+      // (o quitando) el filtro de Modo amable.
+      assignBossToRound(state.currentBoss);
+      announce(next
+        ? 'Modo amable activado. Condiciones del reto actual regeneradas con el filtro.'
+        : 'Modo amable desactivado. Condiciones del reto actual regeneradas con el pool completo.');
+    } else if (hasBoss) {
+      announce(next
+        ? 'Modo amable activado. La ronda ya está en marcha; se aplicará en el próximo sorteo.'
+        : 'Modo amable desactivado. La ronda ya está en marcha; se aplicará en el próximo sorteo.');
+    } else {
+      announce(next
+        ? 'Modo amable activado. Las condiciones más duras quedan fuera del próximo sorteo.'
+        : 'Modo amable desactivado. Pool completo restaurado.');
+    }
   }
 
   function renderFriendlyToggle() {
-    if (!btnFriendlyMode) return;
     const active = dataApi.isFriendlyModeEnabled?.() === true;
-    btnFriendlyMode.classList.toggle('is-active', active);
-    btnFriendlyMode.setAttribute('aria-pressed', active ? 'true' : 'false');
+    if (btnFriendlyMode) {
+      btnFriendlyMode.classList.toggle('is-active', active);
+      btnFriendlyMode.setAttribute('aria-pressed', active ? 'true' : 'false');
+    }
+    if (friendlyActiveChip) {
+      friendlyActiveChip.hidden = !active;
+      friendlyActiveChip.setAttribute('aria-hidden', active ? 'false' : 'true');
+    }
   }
 
   function renderRerollButtons() {

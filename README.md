@@ -40,14 +40,14 @@
 ### ❤️ Modo amable
 Un interruptor global que **filtra las condiciones marcadas como duras** del próximo sorteo. Útil para sesiones casuales, demos o cuando se quiere bajar el listón sin reescribir reglas.
 
-- **Dónde activarlo**: botón **❤️ Modo amable** en la barra superior de cualquier modo (solo, supervisado y cooperativo).
+- **Dónde activarlo**: botón **❤️ Modo amable** junto al botón **Sortear reto** (panel de configuración), disponible en solo, supervisado y cooperativo.
 - **Qué hace**: cuando está **ON**, retira del pool las condiciones marcadas con `hard: true` (14 en total: individuales, medias y duras por tipo de jefe) antes de cualquier sorteo o re-roll.
+- **Aplicación inmediata**: si pulsas el toggle **con un reto ya sorteado y la ronda aún no iniciada**, el reto en pantalla se regenera al vuelo con el filtro nuevo (mismo jefe, condiciones recalculadas).
+- **Aplicación diferida**: si la ronda ya empezó (timer corriendo o resultados marcados), el cambio se reserva para el próximo sorteo y se anuncia por `aria-live`.
+- **Indicador visual**: cuando está activo, aparece un chip rosa **❤️ Modo amable** en la cabecera de la tarjeta del reto para que el filtro sea visible de un vistazo.
 - **Cobertura**: aplica al sorteo principal, al re-roll del reto y al re-roll individual del cooperativo.
 - **Persistencia**: la preferencia se guarda en `localStorage` (`prueba-lunar-friendly-mode`) y es **global**: si lo activas en modo solo, también queda activo en supervisado y coop.
 - **Salvaguarda**: si tras filtrar el pool queda vacío para algún tipo de jefe, se restaura el pool completo de esa categoría para garantizar que siempre haya algo que sortear.
-- **Aplica al próximo sorteo**: los retos ya repartidos no cambian, solo lo que se genere después de activarlo.
-
-Indicador visual: el botón se pinta en rosa/violeta y muestra un badge **ON** cuando está activo.
 
 ### 🔄 Re-roll por jugador (cooperativo)
 Cada jugador en el modo cooperativo dispone de **un re-roll individual por intento** para su condición personal, sin afectar la del compañero.
