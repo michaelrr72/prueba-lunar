@@ -181,25 +181,6 @@ La app es instalable y funciona sin conexión:
 - Tras instalar, la app **funciona sin internet** — útil en eventos con WiFi inestable.
 - Para forzar actualización tras un cambio importante, abre DevTools → Application → Service Workers → "Update on reload" y recarga.
 
-## ☄️ Info expandida del jefe
-
-Cada jefe puede declarar opcionalmente un campo `extendedInfo` con elementos eficaces, resistencias y drops. La UI lo muestra como chips de colores debajo del tip de mecánica. Si un jefe no tiene `extendedInfo`, la sección simplemente no aparece — todo es retrocompatible.
-
-Para añadirlo a un jefe en `assets/js/data.local.js`:
-
-```js
-{
-  // ... resto del jefe ...
-  extendedInfo: {
-    effectiveElements: ['dendro', 'pyro'],   // elementos que pegan bien
-    resistantElements: ['hydro'],            // elementos a evitar
-    drops: 'Mora · Materiales · Cofre de Tesoro'
-  }
-}
-```
-
-Elementos válidos: `pyro`, `hydro`, `electro`, `cryo`, `anemo`, `geo`, `dendro`.
-
 ---
 
 ## 📌 Notas de mantenimiento
