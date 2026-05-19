@@ -295,6 +295,11 @@
       player2Condition: null,
       player1RoundResult: null,
       player2RoundResult: null,
+      // Re-roll de condición individual: 1 uso por intento (sesión completa
+      // hasta game over). Se persiste para sobrevivir a recargas y solo se
+      // reinicia cuando se reinicia la prueba o se cambian los jugadores.
+      player1RerollUsed: false,
+      player2RerollUsed: false,
       timerRemaining: 0,
       timerInitial: 0,
       roundStarted: false,
@@ -333,6 +338,12 @@
         </a>
         <div class="topbar-actions">
           <span class="status-chip status-chip-live">Co-op</span>
+          <button class="btn btn-ghost btn-sm friendly-mode-toggle" id="btn-friendly-mode-coop" type="button"
+                  aria-pressed="false"
+                  aria-label="Activar Modo amable: filtra las condiciones más duras del próximo sorteo">
+            <span aria-hidden="true">❤️</span>
+            <span class="friendly-mode-label">Modo amable</span>
+          </button>
           <a class="btn btn-ghost btn-sm" href="index.html">Inicio</a>
           <a class="btn btn-ghost btn-sm" href="torneo.html">Torneo</a>
         </div>
@@ -543,10 +554,20 @@
                       <div class="coop-player-slot">
                         <div class="coop-player-slot-label" id="coop-p1-label">Jugador 1</div>
                         <div class="coop-player-slot-text" id="coop-p1-condition">—</div>
+                        <button class="coop-reroll-btn" id="coop-btn-p1-reroll" type="button"
+                                aria-label="Re-rollear condición del Jugador 1 (1 uso por intento)">
+                          <span class="coop-reroll-icon" aria-hidden="true">🔄</span>
+                          <span class="coop-reroll-text">Re-roll disponible</span>
+                        </button>
                       </div>
                       <div class="coop-player-slot coop-player-slot-alt">
                         <div class="coop-player-slot-label" id="coop-p2-label">Jugador 2</div>
                         <div class="coop-player-slot-text" id="coop-p2-condition">—</div>
+                        <button class="coop-reroll-btn" id="coop-btn-p2-reroll" type="button"
+                                aria-label="Re-rollear condición del Jugador 2 (1 uso por intento)">
+                          <span class="coop-reroll-icon" aria-hidden="true">🔄</span>
+                          <span class="coop-reroll-text">Re-roll disponible</span>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -631,6 +652,8 @@
   let timeLimitEl, timerDisplayEl, btnStartTimer, btnResetTimer;
   let resultP1NameEl, resultP2NameEl;
   let btnP1Win, btnP1Lose, btnP2Win, btnP2Lose;
+  let btnP1Reroll, btnP2Reroll;
+  let btnFriendlyMode;
   let resultP1StatusEl, resultP2StatusEl;
   let resultBannerEl, bannerIconEl, bannerTitleEl, bannerSubEl;
   let heroP1NameEl, heroP2NameEl;
@@ -704,6 +727,9 @@
     btnP1Lose = document.getElementById('coop-btn-p1-lose');
     btnP2Win = document.getElementById('coop-btn-p2-win');
     btnP2Lose = document.getElementById('coop-btn-p2-lose');
+    btnP1Reroll = document.getElementById('coop-btn-p1-reroll');
+    btnP2Reroll = document.getElementById('coop-btn-p2-reroll');
+    btnFriendlyMode = document.getElementById('btn-friendly-mode-coop');
     resultP1StatusEl = document.getElementById('coop-result-p1-status');
     resultP2StatusEl = document.getElementById('coop-result-p2-status');
 
@@ -813,13 +839,38 @@
   // ── Condiciones individuales ──────────────────────────────────────────
 
   function pickTwoDifferentConditions() {
-    const shuffled = shuffleArray(INDIVIDUAL_CONDITIONS);
+    const pool = dataApi.applyFriendlyFilter
+      ? dataApi.applyFriendlyFilter(INDIVIDUAL_CONDITIONS)
+      : INDIVIDUAL_CONDITIONS;
+    const shuffled = shuffleArray(pool);
     if (!shuffled.length) return { p1: null, p2: null };
     const first = shuffled[0];
     // Si por algún motivo sólo hubiese una condición, devolvemos la misma para
     // ambos jugadores en lugar de un null silencioso.
     const second = shuffled.find(c => c.id !== first.id) ?? first;
     return { p1: first, p2: second };
+  }
+
+  /**
+   * Re-rolea la condición individual de un jugador específico.
+   * Garantiza una condición DISTINTA a la actual y a la del otro jugador,
+   * respetando el Modo amable. Devuelve el texto nuevo o null si imposible.
+   */
+  function rerollConditionForPlayer(playerKey) {
+    const pool = dataApi.applyFriendlyFilter
+      ? dataApi.applyFriendlyFilter(INDIVIDUAL_CONDITIONS)
+      : INDIVIDUAL_CONDITIONS;
+    const myCurrent = playerKey === 'p1' ? state.player1Condition : state.player2Condition;
+    const otherCurrent = playerKey === 'p1' ? state.player2Condition : state.player1Condition;
+
+    const candidates = shuffleArray(pool)
+      .filter(c => c && c.text !== myCurrent && c.text !== otherCurrent);
+    if (candidates.length) return candidates[0].text;
+
+    // Fallback: si el pool filtrado dejó cero opciones distintas, aceptamos
+    // repetir la del otro jugador con tal de cambiar la propia.
+    const fallback = shuffleArray(pool).find(c => c && c.text !== myCurrent);
+    return fallback?.text ?? null;
   }
 
   // ── Escalado de dificultad en co-op ──────────────────────────────────
@@ -956,6 +1007,77 @@
     setPlayerResult(player, current === outcome ? null : outcome);
   }
 
+  /**
+   * Maneja el re-roll de condición individual.
+   * Cada jugador tiene 1 uso por intento (sesión hasta game over).
+   * El uso se persiste en localStorage para sobrevivir a recargas.
+   */
+  function handleReroll(playerKey) {
+    if (!state?.currentBoss) {
+      announce('Sortea un reto antes de re-rollear.');
+      return;
+    }
+    const used = playerKey === 'p1' ? state.player1RerollUsed : state.player2RerollUsed;
+    if (used) {
+      announce('Re-roll ya utilizado en este intento.');
+      return;
+    }
+    const newText = rerollConditionForPlayer(playerKey);
+    if (!newText) {
+      announce('No hay condiciones alternativas disponibles.');
+      return;
+    }
+    if (playerKey === 'p1') {
+      state.player1Condition = newText;
+      state.player1RerollUsed = true;
+      announce(`${state.player1Name} re-rolleó su condición.`);
+    } else {
+      state.player2Condition = newText;
+      state.player2RerollUsed = true;
+      announce(`${state.player2Name} re-rolleó su condición.`);
+    }
+    saveState();
+    renderAll();
+  }
+
+  /**
+   * Alterna el Modo amable global. La preferencia es universal (afecta a
+   * solo, supervisado y coop) y se persiste en localStorage. El cambio
+   * aplica a partir del próximo sorteo.
+   */
+  function toggleFriendlyMode() {
+    const next = !dataApi.isFriendlyModeEnabled?.();
+    dataApi.setFriendlyModeEnabled?.(next);
+    renderFriendlyToggle();
+    announce(next
+      ? 'Modo amable activado. Las condiciones más duras quedan fuera del próximo sorteo.'
+      : 'Modo amable desactivado. Pool completo restaurado.');
+  }
+
+  function renderFriendlyToggle() {
+    if (!btnFriendlyMode) return;
+    const active = dataApi.isFriendlyModeEnabled?.() === true;
+    btnFriendlyMode.classList.toggle('is-active', active);
+    btnFriendlyMode.setAttribute('aria-pressed', active ? 'true' : 'false');
+  }
+
+  function renderRerollButtons() {
+    renderOneRerollButton(btnP1Reroll, state?.player1RerollUsed === true, !!state?.currentBoss);
+    renderOneRerollButton(btnP2Reroll, state?.player2RerollUsed === true, !!state?.currentBoss);
+  }
+
+  function renderOneRerollButton(btn, used, hasBoss) {
+    if (!btn) return;
+    btn.classList.toggle('is-used', used);
+    btn.disabled = used || !hasBoss;
+    const textEl = btn.querySelector('.coop-reroll-text');
+    if (textEl) {
+      if (used) textEl.textContent = 'Re-roll usado';
+      else if (!hasBoss) textEl.textContent = 'Re-roll (sortea primero)';
+      else textEl.textContent = 'Re-roll disponible';
+    }
+  }
+
   function cyclePlayerResult(player) {
     const current = player === 1 ? state.player1RoundResult : state.player2RoundResult;
     let next;
@@ -1042,6 +1164,10 @@
       state.results = [null, null, null];
       state.currentRound = 0;
       state.gameOver = false;
+      // El re-roll se restablece sólo cuando la prueba se reinicia entera,
+      // no entre rondas individuales. Cada intento da 1 uso por jugador.
+      state.player1RerollUsed = false;
+      state.player2RerollUsed = false;
     }
 
     state.currentBoss = null;
@@ -1204,9 +1330,11 @@
   }
 
   function renderAll() {
+    renderFriendlyToggle();
     renderHeroNames();
     renderScoreboard();
     renderChallenge();
+    renderRerollButtons();
     renderTimer();
     updateTimerButton();
     if (!state.gameOver) {
@@ -1247,6 +1375,10 @@
   // ── Inicialización ────────────────────────────────────────────────────
 
   function init() {
+    // Pinta el toggle de Modo amable desde el primer momento (visible
+    // tanto en la pantalla de configuración como en el juego).
+    renderFriendlyToggle();
+
     const saved = loadPersistedState();
     if (saved?.player1Name) {
       state = { ...createInitialState(saved.player1Name, saved.player2Name), ...saved };
@@ -1331,6 +1463,11 @@
     btnP1Lose?.addEventListener('click', () => handleResultButton(1, 'fail'));
     btnP2Win?.addEventListener('click', () => handleResultButton(2, 'pass'));
     btnP2Lose?.addEventListener('click', () => handleResultButton(2, 'fail'));
+
+    btnP1Reroll?.addEventListener('click', () => handleReroll('p1'));
+    btnP2Reroll?.addEventListener('click', () => handleReroll('p2'));
+
+    btnFriendlyMode?.addEventListener('click', toggleFriendlyMode);
 
     document.addEventListener('keydown', handleKeyboardShortcuts);
   }

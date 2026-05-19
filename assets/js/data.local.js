@@ -527,7 +527,8 @@ const MEDIUM_CONDITIONS = [
   {
     id: 'main-dps-survive',
     text: 'Si cae tu personaje principal, el reto se considera fallido',
-    conflictsWith: []
+    conflictsWith: [],
+    hard: true
   },
   {
     id: 'four-elements',
@@ -622,12 +623,14 @@ const MEDIUM_CONDITIONS = [
   {
     id: 'mono-element',
     text: 'Todo el equipo debe usar el mismo elemento',
-    conflictsWith: ['four-elements', 'max-two-same-element', 'mono-damage', 'no-catalyst']
+    conflictsWith: ['four-elements', 'max-two-same-element', 'mono-damage', 'no-catalyst'],
+    hard: true
   },
   {
     id: 'mono-damage',
     text: 'El daño principal debe recaer en un solo personaje; el resto del equipo entra solo a apoyar',
-    conflictsWith: ['four-elements', 'mono-element']
+    conflictsWith: ['four-elements', 'mono-element'],
+    hard: true
   },
   {
     id: 'no-reactions',
@@ -694,12 +697,14 @@ const HARD_CONDITIONS_BY_TYPE = {
     {
       id: 'pressure-no-heal',
       text: 'Sin curarse durante el combate',
-      conflictsWith: []
+      conflictsWith: [],
+      hard: true
     },
     {
       id: 'pressure-no-shield',
       text: 'Sin usar escudos',
-      conflictsWith: []
+      conflictsWith: [],
+      hard: true
     },
     {
       id: 'pressure-open-clean',
@@ -719,7 +724,8 @@ const HARD_CONDITIONS_BY_TYPE = {
     {
       id: 'pressure-no-burst',
       text: 'Sin usar Ultimates durante el combate (solo ataques e habilidades E)',
-      conflictsWith: ['energy-chain', 'no-bursts']
+      conflictsWith: ['energy-chain', 'no-bursts'],
+      hard: true
     },
     {
       id: 'pressure-low-hp',
@@ -731,7 +737,8 @@ const HARD_CONDITIONS_BY_TYPE = {
     {
       id: 'tech-no-direct-damage',
       text: 'Sin recibir daño directo',
-      conflictsWith: ['tech-max-one-hit']
+      conflictsWith: ['tech-max-one-hit'],
+      hard: true
     },
     {
       id: 'tech-max-one-hit',
@@ -751,12 +758,14 @@ const HARD_CONDITIONS_BY_TYPE = {
     {
       id: 'tech-clean-phase',
       text: 'Debes superar la fase mas peligrosa sin recibir golpes',
-      conflictsWith: []
+      conflictsWith: [],
+      hard: true
     },
     {
       id: 'tech-perfect-dodge',
       text: 'Debes esquivar perfectamente 3 ataques seguidos del jefe sin escudos ni bursts',
-      conflictsWith: ['tech-no-shield']
+      conflictsWith: ['tech-no-shield'],
+      hard: true
     },
     {
       id: 'tech-no-burst',
@@ -973,9 +982,55 @@ function getBossSpecificConditions(boss, modeKey) {
   return boss.specificConditions[modeKey] || [];
 }
 
+// ── Modo amable ───────────────────────────────────────────────────────
+//
+// Preferencia global persistida en localStorage. Cuando está activa,
+// filtra de los pools cualquier condición marcada con `hard: true`
+// antes del sorteo, para que jugadores casuales/F2P no reciban
+// restricciones especialmente brutales (sin curas, sin Ultimates, etc.).
+//
+// El filtro se aplica universalmente: solo, supervisado y coop.
+// Si por alguna combinación el pool filtrado queda vacío, se cae al pool
+// original sin filtrar para no bloquear el sorteo.
+
+const FRIENDLY_MODE_STORAGE_KEY = 'prueba-lunar-friendly-mode';
+
+function isFriendlyModeEnabled() {
+  try {
+    return window.localStorage?.getItem(FRIENDLY_MODE_STORAGE_KEY) === '1';
+  } catch (err) {
+    return false;
+  }
+}
+
+function setFriendlyModeEnabled(enabled) {
+  try {
+    if (enabled) {
+      window.localStorage?.setItem(FRIENDLY_MODE_STORAGE_KEY, '1');
+    } else {
+      window.localStorage?.removeItem(FRIENDLY_MODE_STORAGE_KEY);
+    }
+  } catch (err) {
+    // localStorage podría estar deshabilitado; el toggle solo no persiste.
+  }
+}
+
+/**
+ * Filtra un pool de condiciones según el estado del Modo amable.
+ * Si el filtro deja el pool vacío, devuelve el pool original (fallback).
+ * Si el Modo amable está inactivo, devuelve el pool tal cual.
+ */
+function applyFriendlyFilter(pool) {
+  if (!Array.isArray(pool) || !pool.length) return pool;
+  if (!isFriendlyModeEnabled()) return pool;
+  const filtered = pool.filter(c => c && c.hard !== true);
+  return filtered.length ? filtered : pool;
+}
+
 function buildChallengeFromBoss(boss, modeConfig) {
-  const mediumConditions = pickCompatibleConditions(modeConfig.mediumConditions, 2);
-  const hardPool = modeConfig.hardConditionsByType[boss.type] || [];
+  const mediumPool = applyFriendlyFilter(modeConfig.mediumConditions);
+  const mediumConditions = pickCompatibleConditions(mediumPool, 2);
+  const hardPool = applyFriendlyFilter(modeConfig.hardConditionsByType[boss.type] || []);
   const bossSpecificPool = getBossSpecificConditions(boss, modeConfig.key);
   const compatibleHardPool = hardPool.filter(candidate => areConditionsCompatible(mediumConditions, candidate));
   const compatibleBossPool = bossSpecificPool.filter(candidate => areConditionsCompatible(mediumConditions, candidate));
@@ -1021,14 +1076,14 @@ function getBossPoolForMode(modeKey) {
 }
 
 const INDIVIDUAL_CONDITIONS = [
-  { id: 'ind-no-skill', text: 'Solo puedes usar ataques normales (sin habilidades E ni Ultimates)' },
-  { id: 'ind-no-burst', text: 'No puedes usar tu Ultimate durante el combate' },
+  { id: 'ind-no-skill', text: 'Solo puedes usar ataques normales (sin habilidades E ni Ultimates)', hard: true },
+  { id: 'ind-no-burst', text: 'No puedes usar tu Ultimate durante el combate', hard: true },
   { id: 'ind-one-char', text: 'Solo puedes usar un personaje durante toda la ronda' },
-  { id: 'ind-no-heal', text: 'Tus personajes no pueden curar durante el combate' },
-  { id: 'ind-no-shield', text: 'Tus personajes no pueden usar escudos' },
+  { id: 'ind-no-heal', text: 'Tus personajes no pueden curar durante el combate', hard: true },
+  { id: 'ind-no-shield', text: 'Tus personajes no pueden usar escudos', hard: true },
   { id: 'ind-no-food', text: 'Sin consumibles de curacion o buff durante el combate' },
   { id: 'ind-no-swap', text: 'No puedes cambiar de personaje una vez iniciado el combate' },
-  { id: 'ind-survive-first', text: 'Debes sobrevivir la primera fase del jefe sin perder ningun personaje' },
+  { id: 'ind-survive-first', text: 'Debes sobrevivir la primera fase del jefe sin perder ningun personaje', hard: true },
   { id: 'ind-max-switches', text: 'Maximo 10 cambios de personaje en toda la ronda' },
   { id: 'ind-no-same-element', text: 'Tus personajes del equipo no pueden repetir elemento' },
   { id: 'ind-finish-starter', text: 'Debes terminar el combate con el mismo personaje con el que entraste' },
@@ -1042,13 +1097,13 @@ const INDIVIDUAL_CONDITIONS = [
 // muestra la sección.
 
 const ELEMENT_DISPLAY = {
-  pyro:    { label: 'Pyro',    icon: '\ud83d\udd25' },   // 🔥
-  hydro:   { label: 'Hydro',   icon: '\ud83d\udca7' },   // 💧
+  pyro: { label: 'Pyro', icon: '\ud83d\udd25' },   // 🔥
+  hydro: { label: 'Hydro', icon: '\ud83d\udca7' },   // 💧
   electro: { label: 'Electro', icon: '\u26a1' },          // ⚡
-  cryo:    { label: 'Cryo',    icon: '\u2744\ufe0f' },    // ❄️
-  anemo:   { label: 'Anemo',   icon: '\ud83c\udf2c\ufe0f' }, // 🌬️
-  geo:     { label: 'Geo',     icon: '\ud83d\udfe4' },   // 🟤
-  dendro:  { label: 'Dendro',  icon: '\ud83c\udf3f' }    // 🌿
+  cryo: { label: 'Cryo', icon: '\u2744\ufe0f' },    // ❄️
+  anemo: { label: 'Anemo', icon: '\ud83c\udf2c\ufe0f' }, // 🌬️
+  geo: { label: 'Geo', icon: '\ud83d\udfe4' },   // 🟤
+  dendro: { label: 'Dendro', icon: '\ud83c\udf3f' }    // 🌿
 };
 
 function formatElementList(elements) {
@@ -1089,6 +1144,7 @@ window.PruebaLunarData = {
   MODE_CONFIGS,
   INDIVIDUAL_CONDITIONS,
   ELEMENT_DISPLAY,
+  FRIENDLY_MODE_STORAGE_KEY,
   pickRandom,
   shuffleArray,
   areConditionsCompatible,
@@ -1097,5 +1153,8 @@ window.PruebaLunarData = {
   buildChallengeFromBoss,
   buildExtendedInfoMarkup,
   getModeConfig,
-  getBossPoolForMode
+  getBossPoolForMode,
+  isFriendlyModeEnabled,
+  setFriendlyModeEnabled,
+  applyFriendlyFilter
 };
