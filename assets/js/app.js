@@ -645,7 +645,7 @@ function buildModeShell(modeConfig) {
           <button class="btn btn-ghost friendly-mode-toggle" id="btn-friendly-mode" type="button"
                   aria-pressed="false"
                   aria-label="Activar Modo amable: filtra las condiciones más duras del próximo sorteo">
-            <span aria-hidden="true">❤️</span>
+            <span aria-hidden="true">🤍</span>
             <span class="friendly-mode-label">Modo amable</span>
           </button>
           <button class="btn btn-ghost" id="btn-reset" type="button">Reiniciar todo</button>
@@ -678,7 +678,7 @@ function buildModeShell(modeConfig) {
               <span class="type-tag" id="type-tag">-</span>
               <span class="diff-badge" id="diff-tag">-</span>
               <span class="friendly-active-chip" id="friendly-active-chip" hidden aria-hidden="true">
-                <span aria-hidden="true">❤️</span><span>Modo amable</span>
+                <span aria-hidden="true">🤍</span><span>Modo amable</span>
               </span>
               <button class="edit-btn" id="btn-edit" type="button">Editar reto</button>
             </div>

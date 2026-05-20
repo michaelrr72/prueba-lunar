@@ -475,7 +475,7 @@
             <button class="btn btn-ghost friendly-mode-toggle" id="btn-friendly-mode-coop" type="button"
                     aria-pressed="false"
                     aria-label="Activar Modo amable: filtra las condiciones más duras del próximo sorteo">
-              <span aria-hidden="true">❤️</span>
+              <span aria-hidden="true">🤍</span>
               <span class="friendly-mode-label">Modo amable</span>
             </button>
             <button class="btn btn-ghost" id="coop-btn-reset-round" type="button">Reiniciar ronda</button>
@@ -512,7 +512,7 @@
                 <span class="diff-badge" id="coop-diff-tag">-</span>
                 <span class="diff-badge diff-extremo coop-scale-badge" id="coop-scale-badge" hidden aria-label="Dificultad escalada por co-op">Co-op ↑</span>
                 <span class="friendly-active-chip" id="coop-friendly-active-chip" hidden aria-hidden="true">
-                  <span aria-hidden="true">❤️</span><span>Modo amable</span>
+                  <span aria-hidden="true">🤍</span><span>Modo amable</span>
                 </span>
               </div>
 
