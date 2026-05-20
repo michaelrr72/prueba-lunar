@@ -391,40 +391,21 @@
       <!-- ── Pantalla de juego ─────────────────────────────────────────── -->
       <main id="coop-game" class="page-wrap page-dashboard" hidden>
 
-        <section class="hero hero-dashboard">
-          <div class="hero-copy">
+        <section class="hero hero-compact">
+          <div class="hero-compact-titles">
             <div class="eyebrow">Modo Cooperativo · Prueba Lunar v4.1.0</div>
             <h1 class="hero-title">Prueba Lunar</h1>
-            <p class="hero-text">
+            <p class="hero-compact-subtitle">
               <span id="coop-hero-p1-name">Jugador 1</span>
               <span class="coop-hero-sep" aria-hidden="true"> &amp; </span>
               <span id="coop-hero-p2-name">Jugador 2</span>
             </p>
-            <div class="hero-actions">
-              <div class="prize-pill"><span aria-hidden="true">☾</span><span>Premio: Bendición Lunar</span></div>
-              <div class="mode-badge">Co-op · dificultad escalada</div>
-            </div>
-            <p class="hero-note">Tres retos · dos victorias necesarias · persistencia local</p>
           </div>
-
-          <aside class="hero-panel live-flow-card" aria-label="Atajos de teclado cooperativo">
-            <div>
-              <p class="panel-kicker">Atajos de teclado</p>
-              <ul class="live-shortcuts-list">
-                <li><kbd>S</kbd> sortear reto</li>
-                <li><kbd>Espacio</kbd> iniciar o pausar tiempo</li>
-                <li><kbd>R</kbd> reiniciar ronda</li>
-                <li><kbd>1</kbd> ciclar resultado de Jugador 1</li>
-                <li><kbd>2</kbd> ciclar resultado de Jugador 2</li>
-              </ul>
-            </div>
-          </aside>
+          <div class="hero-compact-tags">
+            <div class="prize-pill"><span aria-hidden="true">☾</span><span>Bendición Lunar</span></div>
+            <div class="mode-badge">Co-op · dificultad escalada</div>
+          </div>
         </section>
-
-        <div class="warning-box">
-          <span class="warning-symbol" aria-hidden="true">⚠</span>
-          <span>El HP de los jefes escala en co-op · dificultad difícil se trata como extremo · extremo añade condición extra.</span>
-        </div>
 
         <!-- Marcador -->
         <section class="scoreboard">
@@ -618,6 +599,44 @@
             </div><!-- /challenge-card -->
           </div>
         </section>
+
+        <details class="info-accordion">
+          <summary class="info-accordion-summary">
+            <span class="info-accordion-icon" aria-hidden="true">📜</span>
+            <span class="info-accordion-title">Reglas del modo, aviso y atajos</span>
+            <span class="info-accordion-chevron" aria-hidden="true">▾</span>
+          </summary>
+          <div class="info-accordion-body">
+            <div class="warning-box">
+              <span class="warning-symbol" aria-hidden="true">⚠</span>
+              <span>El HP de los jefes escala en co-op · dificultad difícil se trata como extremo · extremo añade condición extra.</span>
+            </div>
+
+            <div class="info-accordion-grid">
+              <div class="panel-card">
+                <div class="panel-title">Reglas del modo cooperativo</div>
+                <ul class="global-rules-list">
+                  <li>Dos jugadores enfrentan el mismo jefe en cada ronda.</li>
+                  <li>Cada jugador recibe una condición individual además de las condiciones compartidas.</li>
+                  <li>Ambos deben cumplir su condición para ganar la ronda.</li>
+                  <li>Cada jugador tiene un re-roll individual por intento.</li>
+                  <li>El intento se completa con dos victorias.</li>
+                </ul>
+              </div>
+
+              <div class="panel-card">
+                <div class="panel-title">Atajos útiles</div>
+                <ul class="live-shortcuts-list">
+                  <li><kbd>S</kbd> sortear reto</li>
+                  <li><kbd>Espacio</kbd> iniciar o pausar tiempo</li>
+                  <li><kbd>R</kbd> reiniciar ronda</li>
+                  <li><kbd>1</kbd> ciclar resultado de Jugador 1</li>
+                  <li><kbd>2</kbd> ciclar resultado de Jugador 2</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </details>
 
         <div class="progress-dots">
           <div class="dot" id="coop-dot0"></div>

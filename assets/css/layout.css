@@ -46,6 +46,34 @@
   grid-template-columns: 1.45fr 0.85fr;
 }
 
+.hero-compact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 22px;
+  margin: 10px 0 14px;
+}
+
+.hero-compact-titles {
+  flex: 1 1 280px;
+  min-width: 0;
+}
+
+.hero-compact-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+@media (max-width: 560px) {
+  .hero-compact {
+    padding: 14px 16px;
+  }
+}
+
 .hero-copy {
   padding: 32px;
 }

@@ -552,54 +552,14 @@ function buildModeShell(modeConfig) {
     <div id="live-region" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
     <main class="page-wrap page-dashboard">
-      <section class="hero hero-dashboard">
-        <div class="hero-copy">
+      <section class="hero hero-compact">
+        <div class="hero-compact-titles">
           <div class="eyebrow">${modeConfig.label} · ${APP_VERSION_LABEL}</div>
           <h1 class="hero-title">Prueba Lunar</h1>
-          <p class="hero-text" id="header-subtitle">${modeConfig.challengeSubtitle}</p>
-          <div class="hero-actions">
-            <div class="prize-pill"><span aria-hidden="true">☾</span><span id="prize-label">${modeConfig.prizeLabel}</span></div>
-            <div class="mode-badge" id="mode-badge">${modeConfig.modeBadge}</div>
-          </div>
-          <p class="hero-note">Tres retos · dos victorias necesarias · persistencia local por modo</p>
         </div>
-
-        <aside class="hero-panel live-flow-card">
-          <div>
-            <p class="panel-kicker">${livePanelTitle}</p>
-            <ul class="live-shortcuts-list">
-              ${buildListMarkup(buildLivePanelCopy(modeConfig.key))}
-            </ul>
-          </div>
-          <div>
-            <p class="live-shortcuts-title">Atajos útiles</p>
-            <ul class="live-shortcuts-list">
-              ${buildShortcutMarkup()}
-            </ul>
-          </div>
-        </aside>
-      </section>
-
-      <div class="warning-box">
-        <span class="warning-symbol" aria-hidden="true">⚠</span>
-        <span id="warning-text">${modeConfig.warningText}</span>
-      </div>
-
-      <section class="dashboard-grid">
-        <div class="panel-card global-rules-box">
-          <div class="global-rules-title" id="rules-title">${modeConfig.modeRuleTitle}</div>
-          <ul class="global-rules-list" id="rules-list">
-            ${buildListMarkup(modeConfig.rules)}
-          </ul>
-        </div>
-
-        <div class="panel-card">
-          <div class="panel-title">Resumen del formato</div>
-          <ul class="selector-rules-list">
-            <li>${modeConfig.typeFilterOptions[0]?.label || 'Reto dinámico'}</li>
-            <li>La ruleta y el tiempo se adaptan al modo activo.</li>
-            <li>Los avisos se anuncian de forma más clara durante el directo.</li>
-          </ul>
+        <div class="hero-compact-tags">
+          <div class="prize-pill"><span aria-hidden="true">☾</span><span id="prize-label">${modeConfig.prizeLabel}</span></div>
+          <div class="mode-badge" id="mode-badge">${modeConfig.modeBadge}</div>
         </div>
       </section>
 
@@ -744,6 +704,43 @@ function buildModeShell(modeConfig) {
           </div>
         </div>
       </section>
+
+      <details class="info-accordion">
+        <summary class="info-accordion-summary">
+          <span class="info-accordion-icon" aria-hidden="true">📜</span>
+          <span class="info-accordion-title">Reglas del modo, aviso y atajos</span>
+          <span class="info-accordion-chevron" aria-hidden="true">▾</span>
+        </summary>
+        <div class="info-accordion-body">
+          <div class="warning-box">
+            <span class="warning-symbol" aria-hidden="true">⚠</span>
+            <span id="warning-text">${modeConfig.warningText}</span>
+          </div>
+
+          <div class="info-accordion-grid">
+            <div class="panel-card global-rules-box">
+              <div class="global-rules-title" id="rules-title">${modeConfig.modeRuleTitle}</div>
+              <ul class="global-rules-list" id="rules-list">
+                ${buildListMarkup(modeConfig.rules)}
+              </ul>
+            </div>
+
+            <div class="panel-card">
+              <div class="panel-title">${livePanelTitle}</div>
+              <ul class="live-shortcuts-list">
+                ${buildListMarkup(buildLivePanelCopy(modeConfig.key))}
+              </ul>
+            </div>
+
+            <div class="panel-card">
+              <div class="panel-title">Atajos útiles</div>
+              <ul class="live-shortcuts-list">
+                ${buildShortcutMarkup()}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </details>
 
       <div class="progress-dots">
         <div class="dot" id="dot0"></div>
