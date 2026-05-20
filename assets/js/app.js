@@ -1369,6 +1369,7 @@ function initializeModeApp() {
 
   function renderFriendlyToggle() {
     const active = dataApi.isFriendlyModeEnabled?.() === true;
+    document.body.classList.toggle('friendly-mode-active', active);
     if (elements.btnFriendlyMode) {
       elements.btnFriendlyMode.classList.toggle('is-active', active);
       elements.btnFriendlyMode.setAttribute('aria-pressed', active ? 'true' : 'false');
