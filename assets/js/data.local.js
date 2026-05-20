@@ -726,6 +726,46 @@ const MEDIUM_CONDITIONS = [
     id: 'no-reactions',
     text: 'No puedes depender de Bloom, Hyperbloom, Burgeon o Sobrecargado como fuente principal de daño',
     conflictsWith: ['energy-chain']
+  },
+  {
+    id: 'starter-first-30',
+    text: 'El personaje principal debe permanecer en campo durante los primeros 30 segundos',
+    conflictsWith: ['switch-limit-3', 'mono-damage']
+  },
+  {
+    id: 'finisher-main',
+    text: 'El golpe final debe hacerlo el personaje principal',
+    conflictsWith: []
+  },
+  {
+    id: 'no-opening-burst',
+    text: 'No puedes usar Ultimates durante los primeros 25 segundos',
+    conflictsWith: ['energy-chain']
+  },
+  {
+    id: 'balanced-rotation',
+    text: 'Debes usar al menos 3 personajes diferentes durante el combate',
+    conflictsWith: ['mono-damage']
+  },
+  {
+    id: 'reaction-window',
+    text: 'Debes activar al menos 3 reacciones elementales distintas durante el combate',
+    conflictsWith: ['mono-element', 'no-reactions']
+  },
+  {
+    id: 'no-repeat-burst-chain',
+    text: 'No puedes usar dos Ultimates seguidas sin cambiar de personaje entre ellas',
+    conflictsWith: ['no-bursts', 'pressure-no-burst', 'tech-no-burst']
+  },
+  {
+    id: 'support-must-act',
+    text: 'Cada personaje de apoyo debe entrar al campo al menos una vez',
+    conflictsWith: ['mono-damage']
+  },
+  {
+    id: 'safe-ending',
+    text: 'Debes terminar el combate con al menos 2 personajes vivos',
+    conflictsWith: []
   }
 ];
 
@@ -757,7 +797,7 @@ const SUPERVISED_MEDIUM_CONDITIONS = [
   },
   {
     id: 'ranged-only-supervised',
-    text: 'Al menos 1 de tus 2 personajes debe ser cuerpo a cuerpo a distancia (Arco o Catalizador)',
+    text: 'Al menos 1 de tus 2 personajes debe ser a distancia (Arco o Catalizador)',
     conflictsWith: ['melee-only-supervised']
   },
   {
@@ -821,6 +861,27 @@ const HARD_CONDITIONS_BY_TYPE = {
       id: 'pressure-low-hp',
       text: 'Debes terminar el combate con el personaje principal en campo',
       conflictsWith: []
+    },
+    {
+      id: 'pressure-no-panic-swap',
+      text: 'No puedes cambiar de personaje inmediatamente despues de recibir daño fuerte',
+      conflictsWith: ['switch-limit-3'],
+      hard: true
+    },
+    {
+      id: 'pressure-half-hp-check',
+      text: 'Al llegar el jefe a la mitad de vida, tu personaje principal debe estar vivo y en campo',
+      conflictsWith: []
+    },
+    {
+      id: 'pressure-no-safe-corner',
+      text: 'No puedes permanecer mas de 10 segundos seguidos lejos del jefe',
+      conflictsWith: []
+    },
+    {
+      id: 'pressure-clean-finish',
+      text: 'Durante el ultimo 25% de vida del jefe no puedes perder personajes',
+      conflictsWith: []
     }
   ],
   technical: [
@@ -861,6 +922,27 @@ const HARD_CONDITIONS_BY_TYPE = {
       id: 'tech-no-burst',
       text: 'Sin usar Ultimates (solo ataques normales y habilidades E)',
       conflictsWith: ['energy-chain', 'no-bursts']
+    },
+    {
+      id: 'tech-three-clean-dodges',
+      text: 'Debes esquivar 3 ataques importantes del jefe sin recibir daño entre ellos',
+      conflictsWith: ['tech-no-shield']
+    },
+    {
+      id: 'tech-no-random-burst',
+      text: 'Solo puedes usar Ultimate despues de esquivar correctamente una mecanica peligrosa',
+      conflictsWith: ['energy-chain', 'tech-no-burst']
+    },
+    {
+      id: 'tech-position-discipline',
+      text: 'No puedes salir corriendo del area de combate salvo para esquivar una mecanica directa',
+      conflictsWith: []
+    },
+    {
+      id: 'tech-clean-last-phase',
+      text: 'El ultimo 30% de vida del jefe debe completarse sin recibir golpes directos',
+      conflictsWith: ['tech-max-one-hit'],
+      hard: true
     }
   ],
   gimmick: [
@@ -898,6 +980,26 @@ const HARD_CONDITIONS_BY_TYPE = {
       id: 'gimmick-no-burst-phase',
       text: 'Durante la mecanica especial no puedes usar Ultimates',
       conflictsWith: ['energy-chain', 'no-bursts']
+    },
+    {
+      id: 'gimmick-read-before-damage',
+      text: 'Debes resolver o identificar la mecanica principal antes de hacer daño explosivo',
+      conflictsWith: []
+    },
+    {
+      id: 'gimmick-save-burst',
+      text: 'Debes guardar al menos 1 Ultimate para la fase especial del jefe',
+      conflictsWith: ['gimmick-no-burst-phase', 'no-bursts']
+    },
+    {
+      id: 'gimmick-no-failed-cycle',
+      text: 'No puedes fallar dos ciclos seguidos de la mecanica principal',
+      conflictsWith: []
+    },
+    {
+      id: 'gimmick-main-character-solve',
+      text: 'La mecanica principal debe resolverse con el personaje principal en campo',
+      conflictsWith: []
     }
   ]
 };
@@ -923,6 +1025,16 @@ const SUPERVISED_HARD_CONDITIONS_BY_TYPE = {
       id: 'pressure-no-burst',
       text: 'Sin usar Ultimates durante el combate',
       conflictsWith: []
+    },
+    {
+      id: 'pressure-supervised-no-distance',
+      text: 'No puedes mantenerte lejos del jefe por mas de 10 segundos seguidos',
+      conflictsWith: []
+    },
+    {
+      id: 'pressure-supervised-clean-final',
+      text: 'El ultimo 25% de vida del jefe debe completarse sin perder personajes',
+      conflictsWith: []
     }
   ],
   technical: [
@@ -945,6 +1057,16 @@ const SUPERVISED_HARD_CONDITIONS_BY_TYPE = {
       id: 'tech-no-burst',
       text: 'Sin usar Ultimates (solo ataques normales)',
       conflictsWith: []
+    },
+    {
+      id: 'tech-supervised-three-dodges',
+      text: 'Debes esquivar 3 ataques importantes sin recibir daño directo',
+      conflictsWith: ['tech-max-one-hit']
+    },
+    {
+      id: 'tech-supervised-burst-window',
+      text: 'Solo puedes usar Ultimate despues de superar una mecanica peligrosa',
+      conflictsWith: ['tech-no-burst']
     }
   ],
   gimmick: [
@@ -966,6 +1088,16 @@ const SUPERVISED_HARD_CONDITIONS_BY_TYPE = {
     {
       id: 'gimmick-timed-solve',
       text: 'Debes resolver la mecanica principal dentro de 30 segundos',
+      conflictsWith: []
+    },
+    {
+      id: 'gimmick-supervised-save-burst',
+      text: 'Debes guardar una Ultimate para la fase especial del jefe',
+      conflictsWith: []
+    },
+    {
+      id: 'gimmick-supervised-no-failed-cycle',
+      text: 'No puedes fallar el primer ciclo de la mecanica principal',
       conflictsWith: []
     }
   ]
@@ -1177,7 +1309,13 @@ const INDIVIDUAL_CONDITIONS = [
   { id: 'ind-max-switches', text: 'Maximo 10 cambios de personaje en toda la ronda' },
   { id: 'ind-no-same-element', text: 'Tus personajes del equipo no pueden repetir elemento' },
   { id: 'ind-finish-starter', text: 'Debes terminar el combate con el mismo personaje con el que entraste' },
-  { id: 'ind-no-dash', text: 'Sin usar esquiva durante los primeros 30 segundos de combate' }
+  { id: 'ind-no-dash', text: 'Sin usar esquiva durante los primeros 30 segundos de combate' },
+  { id: 'ind-main-first-20', text: 'Debes mantener tu personaje inicial en campo durante los primeros 20 segundos' },
+  { id: 'ind-finisher', text: 'Tu jugador debe participar en el golpe final del jefe' },
+  { id: 'ind-no-opening-burst', text: 'No puedes usar Ultimate durante los primeros 25 segundos' },
+  { id: 'ind-clean-final-phase', text: 'No puedes perder personajes durante el ultimo 25% de vida del jefe', hard: true },
+  { id: 'ind-reaction-role', text: 'Debes aportar al menos una reaccion elemental importante durante la ronda' },
+  { id: 'ind-support-window', text: 'Debes entrar con un personaje de apoyo antes de usar tu primer Ultimate' }
 ];
 
 // ── Info expandida del jefe ───────────────────────────────────────────
