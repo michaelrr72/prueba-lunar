@@ -75,13 +75,14 @@
   //
   // iconSlug: undefined → usa el id. null explícito → no intenta
   // cargar imagen (va directo al fallback). String → slug custom.
-  function ch(id, name, nameEs, element, weapon, rarity, region, version, primary, secondary, iconSlug, groupId) {
+  function ch(id, name, nameEs, element, weapon, rarity, region, version, primary, secondary, iconSlug, groupId, enkaName) {
     return {
       id, name, nameEs,
       element, weapon, rarity, region, version,
       roles: { primary, secondary: secondary || null },
       iconSlug: iconSlug === undefined ? id : iconSlug,
-      groupId: groupId || null
+      groupId: groupId || null,
+      enkaName: enkaName || null
     };
   }
 
@@ -140,7 +141,7 @@
     ch('sayu', 'Sayu', 'Sayu', 'anemo', 'claymore', 4, 'inazuma', '2.0', 'support', 'healer'),
     ch('yoimiya', 'Yoimiya', 'Yoimiya', 'pyro', 'bow', 5, 'inazuma', '2.0', 'dps', null),
     ch('aloy', 'Aloy', 'Aloy', 'cryo', 'bow', 5, 'inazuma', '2.1', 'dps', 'sub-dps'),
-    ch('raidenshogun', 'Raiden Shogun', 'Shogun Raiden', 'electro', 'polearm', 5, 'inazuma', '2.1', 'sub-dps', 'dps', 'raiden'),
+    ch('raidenshogun', 'Raiden Shogun', 'Shogun Raiden', 'electro', 'polearm', 5, 'inazuma', '2.1', 'sub-dps', 'dps', 'raiden', null, 'Shougun'),
     ch('kujousara', 'Kujou Sara', 'Kujou Sara', 'electro', 'bow', 4, 'inazuma', '2.1', 'support', 'sub-dps', 'sara'),
     ch('kokomi', 'Sangonomiya Kokomi', 'Kokomi', 'hydro', 'catalyst', 5, 'inazuma', '2.1', 'healer', 'sub-dps', 'kokomi'),
     ch('thoma', 'Thoma', 'Thoma', 'pyro', 'polearm', 4, 'inazuma', '2.2', 'support', 'sub-dps'),
@@ -152,7 +153,7 @@
     ch('heizou', 'Shikanoin Heizou', 'Shikanoin Heizou', 'anemo', 'catalyst', 4, 'inazuma', '2.8', 'dps', 'sub-dps', 'shikanoin-heizou'),
     ch('wanderer', 'Wanderer', 'Errante', 'anemo', 'catalyst', 5, 'inazuma', '3.3', 'dps', null),
     ch('kirara', 'Kirara', 'Kirara', 'dendro', 'sword', 4, 'inazuma', '3.7', 'support', 'kirara'),
-    ch('yumemizukimizuki', 'Yumemizuki Mizuki', 'Yumemizuki Mizuki', 'anemo', 'catalyst', 5, 'inazuma', '5.4', 'support', 'sub-dps', null),
+    ch('yumemizukimizuki', 'Yumemizuki Mizuki', 'Yumemizuki Mizuki', 'anemo', 'catalyst', 5, 'inazuma', '5.4', 'support', 'sub-dps', null, null, 'Mizuki'),
 
     // ── Sumeru (3.0+) ─────────────────────────────────────────────────
     ch('tighnari', 'Tighnari', 'Tighnari', 'dendro', 'bow', 5, 'sumeru', '3.0', 'dps', 'sub-dps'),
@@ -190,10 +191,10 @@
     ch('kinich', 'Kinich', 'Kinich', 'dendro', 'claymore', 5, 'natlan', '5.0', 'dps', null),
     ch('xilonen', 'Xilonen', 'Xilonen', 'geo', 'sword', 5, 'natlan', '5.1', 'support', 'healer'),
     ch('chasca', 'Chasca', 'Chasca', 'anemo', 'bow', 5, 'natlan', '5.2', 'dps', 'sub-dps'),
-    ch('ororon', 'Ororon', 'Ororón', 'electro', 'bow', 4, 'natlan', '5.2', 'sub-dps', 'support'),
+    ch('ororon', 'Ororon', 'Ororón', 'electro', 'bow', 4, 'natlan', '5.2', 'sub-dps', 'support', null, null, 'Olorun'),
     ch('mavuika', 'Mavuika', 'Mavuika', 'pyro', 'claymore', 5, 'natlan', '5.3', 'dps', 'sub-dps'),
     ch('citlali', 'Citlali', 'Citlali', 'cryo', 'catalyst', 5, 'natlan', '5.3', 'support', 'sub-dps'),
-    ch('lanyan', 'Lan Yan', 'Lan Yan', 'anemo', 'catalyst', 4, 'natlan', '5.3', 'support', 'sub-dps', null),
+    ch('lanyan', 'Lan Yan', 'Lan Yan', 'anemo', 'catalyst', 4, 'natlan', '5.3', 'support', 'sub-dps', null, null, 'Lanyan'),
     ch('iansan', 'Iansan', 'Iansan', 'electro', 'polearm', 4, 'natlan', '5.5', 'support', 'sub-dps', null),
     ch('varesa', 'Varesa', 'Varesa', 'electro', 'catalyst', 5, 'natlan', '5.5', 'dps', null, null),
     ch('ifa', 'Ifa', 'Ifa', 'anemo', 'sword', 4, 'natlan', '5.6', 'healer', 'support', null),
@@ -210,7 +211,7 @@
     ch('zibai', 'Zibai', 'Zibai', 'geo', 'sword', 5, 'nod-krai', '6.3', 'dps', null, null),
     ch('ineffa', 'Ineffa', 'Ineffa', 'electro', 'polearm', 5, 'nod-krai', '6.3', 'sub-dps', 'support', null),
     ch('dahlia', 'Dahlia', 'Dahlia', 'hydro', 'polearm', 4, 'nod-krai', '5.7', 'support', 'sub-dps', null),
-    ch('skirk', 'Skirk', 'Skirk', 'cryo', 'sword', 5, 'nod-krai', '5.7', 'dps', 'sub-dps', null),
+    ch('skirk', 'Skirk', 'Skirk', 'cryo', 'sword', 5, 'nod-krai', '5.7', 'dps', 'sub-dps', null, null, 'SkirkNew'),
     ch('escoffier', 'Escoffier', 'Escoffier', 'cryo', 'sword', 5, 'nod-krai', '5.6', 'sub-dps', 'support', null),
     ch('varka', 'Varka', 'Varka', 'anemo', 'claymore', 5, 'nod-krai', '6.4', 'dps', 'sub-dps', null),
     ch('linnea', 'Linnea', 'Linnea', 'geo', 'bow', 5, 'nod-krai', '6.5', 'sub-dps', 'support', null),
@@ -319,14 +320,60 @@
   }
 
   /**
-   * Construye la URL pública del retrato del personaje. jmp.blue es el
-   * CDN comunitario más usado; los retratos pueden no existir para los
-   * personajes muy recientes — la UI hace fallback automático a
-   * nombre+chips si la imagen 404.
+   * Devuelve un array ORDENADO de URLs candidatas al retrato del
+   * personaje. La UI intenta la primera y, si falla (404 o red), pasa
+   * a la siguiente. Si se agotan todas, muestra el glifo del elemento.
+   *
+   * Fuentes:
+   *   1. genshin.jmp.blue — API comunitaria principal. Cobertura
+   *      sólida para personajes clásicos. Usa kebab-case (`iconSlug`).
+   *   2. enka.network    — CDN oficial-comunitario, mejor para los
+   *      personajes recientes. Convención: el nombre del personaje
+   *      sin espacios ni signos, con mayúscula inicial de cada parte.
+   *      Ej.: "Hu Tao" → UI_AvatarIcon_Hutao.png,
+   *           "Raiden Shogun" → UI_AvatarIcon_Shougun.png (caso raro).
+   *
+   * Reglas:
+   *   - Si iconSlug es null, se salta jmp.blue.
+   *   - enka.network siempre se intenta como segunda opción.
+   *   - Si un personaje tiene `enkaName` explícito, se respeta (para
+   *     casos como Raiden Shogun → "Shougun" o el Trotamundos).
+   *   - Si ambos fallan en runtime, la UI muestra el glifo del elemento.
+   */
+  function deriveEnkaName(character) {
+    if (character.enkaName) return character.enkaName;
+    // El Trotamundos en enka tiene su propio formato (PlayerBoy/PlayerGirl),
+    // pero no hay una sola imagen genérica. Lo evitamos y dejamos que
+    // caiga al glifo si tampoco está en jmp.blue.
+    if (character.groupId === 'traveler') return null;
+    // Para el resto: tomamos el nombre canónico inglés, eliminamos
+    // espacios y signos, conservamos solo letras.
+    return character.name
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^A-Za-z]/g, '');
+  }
+
+  function getIconUrls(character) {
+    if (!character) return [];
+    const urls = [];
+    if (character.iconSlug) {
+      urls.push(`https://genshin.jmp.blue/characters/${character.iconSlug}/icon-big`);
+    }
+    const enkaName = deriveEnkaName(character);
+    if (enkaName) {
+      urls.push(`https://enka.network/ui/UI_AvatarIcon_${enkaName}.png`);
+    }
+    return urls;
+  }
+
+  /**
+   * Compatibilidad hacia atrás. Devuelve la primera URL candidata o
+   * null si no hay ninguna.
    */
   function getIconUrl(character) {
-    if (!character || !character.iconSlug) return null;
-    return `https://genshin.jmp.blue/characters/${character.iconSlug}/icon-big`;
+    const urls = getIconUrls(character);
+    return urls[0] || null;
   }
 
   // -------------------------------------------------------------------
@@ -381,6 +428,7 @@
     findByName,
     parseRosterText,
     getIconUrl,
+    getIconUrls,
     normalize,
     ROSTER_STORAGE_KEY,
     getRoster,

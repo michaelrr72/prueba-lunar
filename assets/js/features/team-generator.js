@@ -616,23 +616,48 @@ Yelan"></textarea>
   }
 
   function renderCharacterCard(c) {
-    const iconUrl = data.getIconUrl(c);
+    const iconUrls = data.getIconUrls(c);
     const elementLabel = data.ELEMENT_LABELS[c.element];
     const weaponLabel = data.WEAPON_LABELS[c.weapon];
     const color = data.ELEMENT_COLORS[c.element];
     const glyph = data.ELEMENT_GLYPHS[c.element] || '✶';
     const rolePrimary = data.ROLE_LABELS[c.roles.primary];
 
-    // Si iconSlug es null sabemos de antemano que no hay imagen, así
-    // que aplicamos is-fallback directamente y nos saltamos la <img>.
-    const fallbackUpfront = !iconUrl;
+    // Si no hay ninguna URL candidata, vamos directos al glifo.
+    const fallbackUpfront = iconUrls.length === 0;
+
+    // Serializo el resto de URLs como JSON en un data-attribute para
+    // que onerror las pueda probar una a una. La primera URL la pongo
+    // en src directamente; el resto queda en data-fallback-urls.
+    const firstUrl = iconUrls[0] || '';
+    const fallbackUrlsAttr = iconUrls.length > 1
+      ? `data-tg-fallback='${escapeHtml(JSON.stringify(iconUrls.slice(1)))}'`
+      : '';
+
+    // Handler inline: lee el siguiente candidato; si está, lo aplica;
+    // si no, marca al contenedor como is-fallback y se borra.
+    const onerrorHandler = `
+      try{
+        var arr = JSON.parse(this.dataset.tgFallback || '[]');
+        if (arr.length) {
+          this.src = arr.shift();
+          this.dataset.tgFallback = JSON.stringify(arr);
+        } else {
+          this.parentElement.classList.add('is-fallback');
+          this.remove();
+        }
+      } catch(e) {
+        this.parentElement.classList.add('is-fallback');
+        this.remove();
+      }
+    `.replace(/\s+/g, ' ').trim();
 
     return `
       <div class="tg-char-card" data-element="${c.element}" style="--tg-elem-color: ${color}">
         <div class="tg-char-portrait ${fallbackUpfront ? 'is-fallback' : ''}">
-          ${iconUrl
-            ? `<img src="${iconUrl}" alt="${escapeHtml(c.name)}" loading="lazy"
-                    onerror="this.parentElement.classList.add('is-fallback'); this.remove();" />`
+          ${firstUrl
+            ? `<img src="${firstUrl}" ${fallbackUrlsAttr} alt="${escapeHtml(c.name)}" loading="lazy"
+                    onerror="${onerrorHandler}" />`
             : ''}
           <div class="tg-char-portrait-fallback" aria-hidden="true">
             <span class="tg-char-glyph">${glyph}</span>
