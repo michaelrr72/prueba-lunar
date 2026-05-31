@@ -10,7 +10,7 @@
  * basta con cambiar CACHE_VERSION. El SW eliminará los caches antiguos al activarse.
  */
 
-const CACHE_VERSION = 'v4.3.0-layout1';
+const CACHE_VERSION = 'v4.4.1-teams-fix';
 const CACHE_NAME = `prueba-lunar-${CACHE_VERSION}`;
 
 // App-shell que precachamos en la instalación.
@@ -30,7 +30,9 @@ const PRECACHE_URLS = [
   './assets/js/data.local.js',
   './assets/js/app.js',
   './assets/js/torneo.js',
-  './assets/js/features/coop-mode.js'
+  './assets/js/features/coop-mode.js',
+  './assets/js/features/team-generator.js',
+  './assets/js/data/characters.js'
 ];
 
 self.addEventListener('install', event => {

@@ -59,6 +59,28 @@ Cada jugador en el modo cooperativo dispone de **un re-roll individual por inten
 - **Estado visual**: una vez usado, el botón queda gris, tachado y deshabilitado con texto "Re-roll usado".
 - **Persistencia**: los flags `player1RerollUsed` / `player2RerollUsed` se guardan junto al resto del estado del intento.
 
+### 🎲 Generador de equipos
+Modal flotante accesible desde la topbar de los tres modos (solo, supervisado, cooperativo). Genera equipos de 4 personajes a partir de dos pools posibles y tres modalidades de generación.
+
+**Pools**
+- **🌐 Todos** — los 122 personajes jugables (115 únicos + 7 formas del Trotamundos) hasta la versión 6.6 "Luna VII".
+- **👤 Mi roster** — solo los personajes que has marcado como propios.
+
+**Modalidades**
+- **Aleatorio** — 4 al azar del pool, sin restricciones.
+- **Con filtros** — eliges qué elementos, armas y/o rarezas tienen que aparecer; el generador asegura que cada restricción se cumpla al menos una vez (hasta un máximo de 4) y completa con aleatorios.
+- **Balanceado** — intenta cubrir un equipo con DPS principal, Sub-DPS, Support y Sanador. Cuando el pool no llega a cubrir algún rol, lo advierte y rellena con lo más cercano.
+
+**Roster personalizado**
+- **Selector manual** con búsqueda por nombre y filtros por elemento, arma, rareza y región. "Marcar visibles" y "Limpiar todo" agilizan la carga.
+- **Pegar lista de texto** — pega los nombres separados por coma, salto de línea o pipe. El parser reconoce alias comunes (`Childe` → Tartaglia, `Shogun Raiden` → Raiden Shogun, `Sacarosa` → Sucrose, `Trotamundos` → Traveler), normaliza tildes y mayúsculas, y limpia sufijos tipo `Nv. 90`. Lo que no identifique se lista aparte para que lo revises.
+- **Persistencia**: el roster se guarda en `localStorage` (`prueba-lunar-roster`).
+
+**Retratos**
+- Pequeños iconos desde el CDN público `genshin.jmp.blue`. Si el personaje aún no está en el CDN (los muy recientes), la tarjeta hace fallback automático a nombre + inicial estilizada + chips de elemento y arma.
+
+**Nota sobre roles**: las asignaciones DPS / Sub-DPS / Support / Healer son una aproximación de comunidad. Personajes como Yelan o Furina son intencionalmente flexibles. Si una asignación concreta no te encaja, edítala en `assets/js/data/characters.js`.
+
 ---
 
 ## 🚀 Ejecución
