@@ -197,7 +197,7 @@
     ch('lanyan', 'Lan Yan', 'Lan Yan', 'anemo', 'catalyst', 4, 'natlan', '5.3', 'support', 'sub-dps', null, null, 'Lanyan'),
     ch('iansan', 'Iansan', 'Iansan', 'electro', 'polearm', 4, 'natlan', '5.5', 'support', 'sub-dps', null),
     ch('varesa', 'Varesa', 'Varesa', 'electro', 'catalyst', 5, 'natlan', '5.5', 'dps', null, null),
-    ch('ifa', 'Ifa', 'Ifa', 'anemo', 'sword', 4, 'natlan', '5.6', 'healer', 'support', null),
+    ch('ifa', 'Ifa', 'Ifa', 'anemo', 'catalyst', 4, 'natlan', '5.6', 'healer', 'support', null),
 
     // ── Nod-Krai (6.0+) ───────────────────────────────────────────────
     ch('aino', 'Aino', 'Aino', 'hydro', 'claymore', 4, 'nod-krai', '6.0', 'sub-dps', 'dps', null),
