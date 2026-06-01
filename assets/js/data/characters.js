@@ -140,7 +140,7 @@
     ch('ayaka', 'Kamisato Ayaka', 'Kamisato Ayaka', 'cryo', 'sword', 5, 'inazuma', '2.0', 'dps', null, 'ayaka'),
     ch('sayu', 'Sayu', 'Sayu', 'anemo', 'claymore', 4, 'inazuma', '2.0', 'support', 'healer'),
     ch('yoimiya', 'Yoimiya', 'Yoimiya', 'pyro', 'bow', 5, 'inazuma', '2.0', 'dps', null),
-    ch('aloy', 'Aloy', 'Aloy', 'cryo', 'bow', 5, 'inazuma', '2.1', 'dps', 'sub-dps'),
+    ch('aloy', 'Aloy', 'Aloy', 'cryo', 'bow', 5, 'other', '2.1', 'dps', 'sub-dps'),
     ch('raidenshogun', 'Raiden Shogun', 'Shogun Raiden', 'electro', 'polearm', 5, 'inazuma', '2.1', 'sub-dps', 'dps', 'raiden', null, 'Shougun'),
     ch('kujousara', 'Kujou Sara', 'Kujou Sara', 'electro', 'bow', 4, 'inazuma', '2.1', 'support', 'sub-dps', 'sara'),
     ch('kokomi', 'Sangonomiya Kokomi', 'Kokomi', 'hydro', 'catalyst', 5, 'inazuma', '2.1', 'healer', 'sub-dps', 'kokomi'),
