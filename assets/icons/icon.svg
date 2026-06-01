@@ -1,23 +1,68 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Prueba Lunar">
   <defs>
-    <radialGradient id="bg" cx="50%" cy="40%" r="65%">
-      <stop offset="0%" stop-color="#1a2030"/>
+    <radialGradient id="bg" cx="50%" cy="38%" r="70%">
+      <stop offset="0%" stop-color="#1b2233"/>
       <stop offset="100%" stop-color="#06080d"/>
     </radialGradient>
-    <radialGradient id="moon" cx="35%" cy="35%" r="65%">
-      <stop offset="0%" stop-color="#f0c870"/>
-      <stop offset="60%" stop-color="#d4a847"/>
-      <stop offset="100%" stop-color="#a47a28"/>
+
+    <radialGradient id="moon" cx="35%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#ffe7a3"/>
+      <stop offset="48%" stop-color="#d8aa4b"/>
+      <stop offset="100%" stop-color="#8d641f"/>
     </radialGradient>
+
+    <linearGradient id="goldStroke" x1="120" y1="80" x2="390" y2="430">
+      <stop offset="0%" stop-color="#ffe7a3"/>
+      <stop offset="50%" stop-color="#d4a847"/>
+      <stop offset="100%" stop-color="#8d641f"/>
+    </linearGradient>
+
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
-  <!-- Fondo con esquinas redondeadas (maskable-friendly) -->
+
+  <!-- Fondo -->
   <rect width="512" height="512" rx="96" fill="url(#bg)"/>
-  <!-- Pequeñas estrellas decorativas -->
-  <circle cx="120" cy="120" r="3" fill="#d4a847" opacity="0.7"/>
-  <circle cx="400" cy="160" r="2.5" fill="#d4a847" opacity="0.5"/>
-  <circle cx="380" cy="400" r="3" fill="#d4a847" opacity="0.6"/>
-  <circle cx="110" cy="380" r="2" fill="#d4a847" opacity="0.5"/>
-  <!-- Luna creciente: círculo dorado lleno + círculo oscuro encima para crear el creciente -->
-  <circle cx="240" cy="256" r="150" fill="url(#moon)"/>
-  <circle cx="295" cy="225" r="140" fill="url(#bg)"/>
+
+  <!-- Aro de ruleta -->
+  <circle cx="256" cy="256" r="178" fill="none" stroke="url(#goldStroke)" stroke-width="14" opacity="0.85"/>
+  <circle cx="256" cy="256" r="144" fill="none" stroke="#d4a847" stroke-width="2" opacity="0.28"/>
+
+  <!-- Divisiones sutiles de ruleta -->
+  <g stroke="#d4a847" stroke-width="5" stroke-linecap="round" opacity="0.45">
+    <line x1="256" y1="78" x2="256" y2="112"/>
+    <line x1="256" y1="400" x2="256" y2="434"/>
+    <line x1="78" y1="256" x2="112" y2="256"/>
+    <line x1="400" y1="256" x2="434" y2="256"/>
+    <line x1="130" y1="130" x2="154" y2="154"/>
+    <line x1="358" y1="358" x2="382" y2="382"/>
+    <line x1="382" y1="130" x2="358" y2="154"/>
+    <line x1="154" y1="358" x2="130" y2="382"/>
+  </g>
+
+  <!-- Punta superior de ruleta -->
+  <path d="M256 48 L285 96 H227 Z" fill="url(#goldStroke)" filter="url(#softGlow)"/>
+
+  <!-- Luna creciente -->
+  <g filter="url(#softGlow)">
+    <circle cx="236" cy="262" r="116" fill="url(#moon)"/>
+    <circle cx="284" cy="238" r="108" fill="url(#bg)"/>
+  </g>
+
+  <!-- Estrella principal -->
+  <path d="M364 180 L374 205 L400 214 L374 223 L364 248 L354 223 L328 214 L354 205 Z"
+        fill="#ffe7a3" opacity="0.9"/>
+
+  <!-- Estrellas secundarias -->
+  <circle cx="140" cy="142" r="4" fill="#d4a847" opacity="0.75"/>
+  <circle cx="382" cy="348" r="3.5" fill="#d4a847" opacity="0.65"/>
+  <circle cx="145" cy="370" r="3" fill="#d4a847" opacity="0.5"/>
+
+  <!-- Centro lunar pequeño -->
+  <circle cx="256" cy="256" r="9" fill="#ffe7a3" opacity="0.9"/>
 </svg>
