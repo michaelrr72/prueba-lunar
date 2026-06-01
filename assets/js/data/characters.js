@@ -215,7 +215,7 @@
     ch('escoffier', 'Escoffier', 'Escoffier', 'cryo', 'sword', 5, 'nod-krai', '5.6', 'sub-dps', 'support', null),
     ch('varka', 'Varka', 'Varka', 'anemo', 'claymore', 5, 'nod-krai', '6.4', 'dps', 'sub-dps', null),
     ch('linnea', 'Linnea', 'Linnea', 'geo', 'bow', 5, 'nod-krai', '6.5', 'sub-dps', 'support', null),
-    ch('nicole', 'Nicole', 'Nicole', 'pyro', 'bow', 5, 'nod-krai', '6.6', 'sub-dps', 'support', null),
+    ch('nicole', 'Nicole', 'Nicole', 'pyro', 'catalyst', 5, 'nod-krai', '6.6', 'sub-dps', 'support', null),
     ch('lohen', 'Lohen', 'Lohen', 'cryo', 'polearm', 5, 'nod-krai', '6.6', 'dps', 'sub-dps', null),
     ch('prune', 'Prune', 'Prune', 'anemo', 'catalyst', 4, 'nod-krai', '6.6', 'support', 'sub-dps', null),
 
