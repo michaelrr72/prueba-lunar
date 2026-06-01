@@ -69,7 +69,7 @@
             Generar
           </button>
           <button class="tg-tab" role="tab" data-tg-tab="roster" aria-selected="false">
-            Mi roster
+            Mi lista
           </button>
           <button class="tg-tab" role="tab" data-tg-tab="help" aria-selected="false">
             Cómo funciona
@@ -95,7 +95,7 @@
               🌐 Todos (${data.CHARACTERS.length})
             </button>
             <button class="tg-seg" data-tg-pool="roster" role="radio" aria-checked="false">
-              👤 Mi roster (<span id="tg-roster-count">0</span>)
+              👤 Mi lista (<span id="tg-roster-count">0</span>)
             </button>
           </div>
         </div>
@@ -221,7 +221,7 @@ Yelan"></textarea>
         <h3 class="tg-help-title">¿Cómo funciona?</h3>
         <ul class="tg-help-list">
           <li><strong>Pool genérico</strong> usa los ${data.CHARACTERS.length} personajes jugables del juego (hasta v6.6).</li>
-          <li><strong>Mi roster</strong> usa solo los personajes que has marcado en la pestaña <em>Mi roster</em>.</li>
+          <li><strong>Mi lista</strong> usa solo los personajes que has marcado en la pestaña <em>Mi lista</em>.</li>
         </ul>
 
         <h3 class="tg-help-title">Modalidades</h3>
@@ -574,7 +574,7 @@ Yelan"></textarea>
 
   function shortPoolError(pool) {
     if (state.pool === 'roster' && pool.length === 0) {
-      return 'Tu roster está vacío. Marca personajes en la pestaña "Mi roster" o pega una lista de texto.';
+      return 'Tu roster está vacío. Marca personajes en la pestaña "Mi lista" o pega una lista de texto.';
     }
     return `El pool tiene solo ${pool.length} personajes; se necesitan al menos 4.`;
   }
@@ -692,7 +692,7 @@ Yelan"></textarea>
   }
 
   // -------------------------------------------------------------------
-  // Tab "Mi roster"
+  // Tab "Mi lista"
   // -------------------------------------------------------------------
   function getFilteredCharacters() {
     const f = state.rosterFilters;
