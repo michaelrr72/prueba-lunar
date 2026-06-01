@@ -17,8 +17,8 @@
  *   element     – pyro | hydro | anemo | electro | dendro | cryo | geo
  *   weapon      – sword | claymore | polearm | bow | catalyst
  *   rarity      – 4 | 5
- *   region      – mondstadt | liyue | inazuma | sumeru | fontaine
- *                 | natlan | nod-krai | other
+ *   region      – mondstadt | liyue | inazuma | sumeru | fontaine 
+ *                 | natlan | nod-krai | snezhnaya | other
  *   version     – versión de salida ("1.0", "6.6", etc.)
  *   roles       – { primary, secondary }
  *                 dps | sub-dps | support | healer
@@ -31,7 +31,7 @@
 
   const ELEMENTS = ['pyro', 'hydro', 'anemo', 'electro', 'dendro', 'cryo', 'geo'];
   const WEAPONS = ['sword', 'claymore', 'polearm', 'bow', 'catalyst'];
-  const REGIONS = ['mondstadt', 'liyue', 'inazuma', 'sumeru', 'fontaine', 'natlan', 'nod-krai', 'other'];
+  const REGIONS = ['mondstadt', 'liyue', 'inazuma', 'sumeru', 'fontaine', 'natlan', 'nod-krai', 'snezhnaya', 'other'];
   const ROLES = ['dps', 'sub-dps', 'support', 'healer'];
 
   // Etiquetas en español para la UI.
@@ -58,7 +58,7 @@
   const REGION_LABELS = {
     mondstadt: 'Mondstadt', liyue: 'Liyue', inazuma: 'Inazuma',
     sumeru: 'Sumeru', fontaine: 'Fontaine', natlan: 'Natlan',
-    'nod-krai': 'Nod-Krai', other: 'Otros'
+    'nod-krai': 'Nod-Krai', 'snezhnaya': 'Snezhnaya', other: 'Otros'
   };
   const ROLE_LABELS = {
     dps: 'DPS principal', 'sub-dps': 'Sub-DPS',
@@ -120,7 +120,7 @@
     ch('chongyun', 'Chongyun', 'Chongyun', 'cryo', 'claymore', 4, 'liyue', '1.0', 'sub-dps', 'support'),
     ch('qiqi', 'Qiqi', 'Qiqi', 'cryo', 'sword', 5, 'liyue', '1.0', 'healer', null),
     ch('keqing', 'Keqing', 'Keqing', 'electro', 'sword', 5, 'liyue', '1.0', 'dps', 'sub-dps'),
-    ch('tartaglia', 'Tartaglia', 'Tartaglia', 'hydro', 'bow', 5, 'liyue', '1.1', 'dps', 'sub-dps'),
+    ch('tartaglia', 'Tartaglia', 'Tartaglia', 'hydro', 'bow', 5, 'snezhnaya', '1.1', 'dps', 'sub-dps'),
     ch('zhongli', 'Zhongli', 'Zhongli', 'geo', 'polearm', 5, 'liyue', '1.1', 'support', 'sub-dps'),
     ch('xinyan', 'Xinyan', 'Xinyan', 'pyro', 'claymore', 4, 'liyue', '1.1', 'support', 'sub-dps'),
     ch('ganyu', 'Ganyu', 'Ganyu', 'cryo', 'bow', 5, 'liyue', '1.2', 'dps', 'sub-dps'),
@@ -134,7 +134,7 @@
     ch('baizhu', 'Baizhu', 'Baizhu', 'dendro', 'catalyst', 5, 'liyue', '3.6', 'healer', 'support'),
     ch('gaming', 'Gaming', 'Gaming', 'pyro', 'claymore', 4, 'liyue', '4.4', 'dps', 'sub-dps'),
     ch('xianyun', 'Xianyun', 'Xianyun', 'anemo', 'catalyst', 5, 'liyue', '4.4', 'healer', 'support'),
-    ch('chiori', 'Chiori', 'Chiori', 'geo', 'sword', 5, 'liyue', '4.5', 'sub-dps', 'dps'),
+    ch('chiori', 'Chiori', 'Chiori', 'geo', 'sword', 5, 'inazuma', '4.5', 'sub-dps', 'dps'),
 
     // ── Inazuma (2.0+) ────────────────────────────────────────────────
     ch('ayaka', 'Kamisato Ayaka', 'Kamisato Ayaka', 'cryo', 'sword', 5, 'inazuma', '2.0', 'dps', null, 'ayaka'),
@@ -151,7 +151,7 @@
     ch('ayato', 'Kamisato Ayato', 'Kamisato Ayato', 'hydro', 'sword', 5, 'inazuma', '2.6', 'dps', 'sub-dps', 'ayato'),
     ch('kukishinobu', 'Kuki Shinobu', 'Kuki Shinobu', 'electro', 'sword', 4, 'inazuma', '2.7', 'sub-dps', 'healer', 'kuki-shinobu'),
     ch('heizou', 'Shikanoin Heizou', 'Shikanoin Heizou', 'anemo', 'catalyst', 4, 'inazuma', '2.8', 'dps', 'sub-dps', 'shikanoin-heizou'),
-    ch('wanderer', 'Wanderer', 'Errante', 'anemo', 'catalyst', 5, 'inazuma', '3.3', 'dps', null),
+    ch('wanderer', 'Wanderer', 'Errante', 'anemo', 'catalyst', 5, 'sumeru', '3.3', 'dps', null),
     ch('kirara', 'Kirara', 'Kirara', 'dendro', 'sword', 4, 'inazuma', '3.7', 'support', 'kirara'),
     ch('yumemizukimizuki', 'Yumemizuki Mizuki', 'Yumemizuki Mizuki', 'anemo', 'catalyst', 5, 'inazuma', '5.4', 'support', 'sub-dps', null, null, 'Mizuki'),
 
@@ -181,7 +181,7 @@
     ch('navia', 'Navia', 'Navia', 'geo', 'claymore', 5, 'fontaine', '4.3', 'dps', null),
     ch('chevreuse', 'Chevreuse', 'Chevreuse', 'pyro', 'polearm', 4, 'fontaine', '4.3', 'support', 'sub-dps'),
     ch('clorinde', 'Clorinde', 'Clorinde', 'electro', 'sword', 5, 'fontaine', '4.7', 'dps', null),
-    ch('arlecchino', 'Arlecchino', 'Arlecchino', 'pyro', 'polearm', 5, 'fontaine', '4.6', 'dps', null),
+    ch('arlecchino', 'Arlecchino', 'Arlecchino', 'pyro', 'polearm', 5, 'snezhnaya', '4.6', 'dps', null),
     ch('sigewinne', 'Sigewinne', 'Sigewinne', 'hydro', 'bow', 5, 'fontaine', '4.7', 'healer', 'support'),
     ch('emilie', 'Emilie', 'Emilie', 'dendro', 'polearm', 5, 'fontaine', '4.8', 'sub-dps', 'support'),
 
@@ -194,39 +194,39 @@
     ch('ororon', 'Ororon', 'Ororón', 'electro', 'bow', 4, 'natlan', '5.2', 'sub-dps', 'support', null, null, 'Olorun'),
     ch('mavuika', 'Mavuika', 'Mavuika', 'pyro', 'claymore', 5, 'natlan', '5.3', 'dps', 'sub-dps'),
     ch('citlali', 'Citlali', 'Citlali', 'cryo', 'catalyst', 5, 'natlan', '5.3', 'support', 'sub-dps'),
-    ch('lanyan', 'Lan Yan', 'Lan Yan', 'anemo', 'catalyst', 4, 'natlan', '5.3', 'support', 'sub-dps', null, null, 'Lanyan'),
+    ch('lanyan', 'Lan Yan', 'Lan Yan', 'anemo', 'catalyst', 4, 'liyue', '5.3', 'support', 'sub-dps', null, null, 'Lanyan'),
     ch('iansan', 'Iansan', 'Iansan', 'electro', 'polearm', 4, 'natlan', '5.5', 'support', 'sub-dps', null),
     ch('varesa', 'Varesa', 'Varesa', 'electro', 'catalyst', 5, 'natlan', '5.5', 'dps', null, null),
-    ch('ifa', 'Ifa', 'Ifa', 'anemo', 'catalyst', 4, 'natlan', '5.6', 'healer', 'support', null),
+    ch('ifa', 'Ifa', 'Ifa', 'anemo', 'catalyst', 4, 'natlan', '5.6', 'sub-dps', 'support', null),
+    ch('escoffier', 'Escoffier', 'Escoffier', 'cryo', 'sword', 5, 'fontaine', '5.6', 'sub-dps', 'support', null),
+    ch('dahlia', 'Dahlia', 'Dahlia', 'hydro', 'sword', 4, 'mondstadt', '5.7', 'support', 'sub-dps', null),
+    ch('skirk', 'Skirk', 'Skirk', 'cryo', 'sword', 5, 'other', '5.7', 'dps', 'sub-dps', null, null, 'SkirkNew'),
 
     // ── Nod-Krai (6.0+) ───────────────────────────────────────────────
     ch('aino', 'Aino', 'Aino', 'hydro', 'claymore', 4, 'nod-krai', '6.0', 'sub-dps', 'dps', null),
     ch('lauma', 'Lauma', 'Lauma', 'dendro', 'catalyst', 5, 'nod-krai', '6.0', 'sub-dps', 'support', null),
     ch('flins', 'Flins', 'Flins', 'electro', 'polearm', 5, 'nod-krai', '6.0', 'dps', 'sub-dps', null),
     ch('nefer', 'Nefer', 'Nefer', 'dendro', 'catalyst', 5, 'nod-krai', '6.1', 'dps', 'sub-dps', null),
-    ch('durin', 'Durin', 'Durin', 'pyro', 'sword', 5, 'nod-krai', '6.2', 'dps', 'sub-dps', null),
+    ch('durin', 'Durin', 'Durin', 'pyro', 'sword', 5, 'mondstadt', '6.2', 'dps', 'sub-dps', null),
     ch('jahoda', 'Jahoda', 'Jahoda', 'anemo', 'bow', 4, 'nod-krai', '6.2', 'support', 'sub-dps', null),
     ch('columbina', 'Columbina', 'Colombina', 'hydro', 'catalyst', 5, 'nod-krai', '6.3', 'sub-dps', 'support', null),
     ch('illuga', 'Illuga', 'Illuga', 'geo', 'polearm', 4, 'nod-krai', '6.3', 'sub-dps', 'support', null),
-    ch('zibai', 'Zibai', 'Zibai', 'geo', 'sword', 5, 'nod-krai', '6.3', 'dps', null, null),
+    ch('zibai', 'Zibai', 'Zibai', 'geo', 'sword', 5, 'liyue', '6.3', 'dps', null, null),
     ch('ineffa', 'Ineffa', 'Ineffa', 'electro', 'polearm', 5, 'nod-krai', '6.3', 'sub-dps', 'support', null),
-    ch('dahlia', 'Dahlia', 'Dahlia', 'hydro', 'sword', 4, 'nod-krai', '5.7', 'support', 'sub-dps', null),
-    ch('skirk', 'Skirk', 'Skirk', 'cryo', 'sword', 5, 'nod-krai', '5.7', 'dps', 'sub-dps', null, null, 'SkirkNew'),
-    ch('escoffier', 'Escoffier', 'Escoffier', 'cryo', 'sword', 5, 'nod-krai', '5.6', 'sub-dps', 'support', null),
-    ch('varka', 'Varka', 'Varka', 'anemo', 'claymore', 5, 'nod-krai', '6.4', 'dps', 'sub-dps', null),
+    ch('varka', 'Varka', 'Varka', 'anemo', 'claymore', 5, 'mondstadt', '6.4', 'dps', 'sub-dps', null),
     ch('linnea', 'Linnea', 'Linnea', 'geo', 'bow', 5, 'nod-krai', '6.5', 'sub-dps', 'support', null),
-    ch('nicole', 'Nicole', 'Nicole', 'pyro', 'catalyst', 5, 'nod-krai', '6.6', 'sub-dps', 'support', null),
-    ch('lohen', 'Lohen', 'Lohen', 'cryo', 'polearm', 5, 'nod-krai', '6.6', 'dps', 'sub-dps', null),
-    ch('prune', 'Prune', 'Prune', 'anemo', 'catalyst', 4, 'nod-krai', '6.6', 'support', 'sub-dps', null),
+    ch('nicole', 'Nicole', 'Nicole', 'pyro', 'catalyst', 5, 'other', '6.6', 'sub-dps', 'support', null),
+    ch('lohen', 'Lohen', 'Lohen', 'cryo', 'polearm', 5, 'mondstadt', '6.6', 'dps', 'sub-dps', null),
+    ch('prune', 'Prune', 'Prune', 'anemo', 'catalyst', 4, 'mondstadt', '6.6', 'support', 'sub-dps', null),
 
     // ── Viajero (Traveler) y Manequíes ────────────────────────────
-    ch('traveler-anemo', 'Aether/Lumine (Anemo)', 'Trotamundos (Anemo)', 'anemo', 'sword', 5, 'other', '1.0', 'support', 'sub-dps', 'traveler-anemo', 'traveler'),
-    ch('traveler-geo', 'Aether/Lumine (Geo)', 'Trotamundos (Geo)', 'geo', 'sword', 5, 'other', '1.0', 'sub-dps', 'support', 'traveler-anemo', 'traveler'),
-    ch('traveler-electro', 'Aether/Lumine (Electro)', 'Trotamundos (Electro)', 'electro', 'sword', 5, 'other', '2.0', 'sub-dps', 'support', 'traveler-anemo', 'traveler'),
-    ch('traveler-dendro', 'Aether/Lumine (Dendro)', 'Trotamundos (Dendro)', 'dendro', 'sword', 5, 'other', '3.0', 'support', 'sub-dps', 'traveler-anemo', 'traveler'),
-    ch('traveler-hydro', 'Aether/Lumine (Hydro)', 'Trotamundos (Hydro)', 'hydro', 'sword', 5, 'other', '4.0', 'support', 'healer', 'traveler-anemo', 'traveler'),
-    ch('traveler-pyro', 'Aether/Lumine (Pyro)', 'Trotamundos (Pyro)', 'pyro', 'sword', 5, 'other', '5.0', 'dps', 'sub-dps', 'traveler-anemo', 'traveler'),
-    //ch('traveler-cryo', 'Aether/Lumine (Cryo)', 'Trotamundos (Cryo)', 'cryo', 'sword', 5, 'other', '6.0', 'support', 'sub-dps', 'traveler-anemo', 'traveler'),
+    ch('traveler-anemo', 'Aether/Lumine (Anemo)', 'Viajero (Anemo)', 'anemo', 'sword', 5, 'other', '1.0', 'support', 'sub-dps', 'traveler-anemo', 'traveler'),
+    ch('traveler-geo', 'Aether/Lumine (Geo)', 'Viajero (Geo)', 'geo', 'sword', 5, 'other', '1.0', 'sub-dps', 'support', 'traveler-anemo', 'traveler'),
+    ch('traveler-electro', 'Aether/Lumine (Electro)', 'Viajero (Electro)', 'electro', 'sword', 5, 'other', '2.0', 'sub-dps', 'support', 'traveler-anemo', 'traveler'),
+    ch('traveler-dendro', 'Aether/Lumine (Dendro)', 'Viajero (Dendro)', 'dendro', 'sword', 5, 'other', '3.0', 'support', 'sub-dps', 'traveler-anemo', 'traveler'),
+    ch('traveler-hydro', 'Aether/Lumine (Hydro)', 'Viajero (Hydro)', 'hydro', 'sword', 5, 'other', '4.0', 'support', 'healer', 'traveler-anemo', 'traveler'),
+    ch('traveler-pyro', 'Aether/Lumine (Pyro)', 'Viajero (Pyro)', 'pyro', 'sword', 5, 'other', '5.0', 'dps', 'sub-dps', 'traveler-anemo', 'traveler'),
+    //ch('traveler-cryo', 'Aether/Lumine (Cryo)', 'Viajero (Cryo)', 'cryo', 'sword', 5, 'other', '6.0', 'support', 'sub-dps', 'traveler-anemo', 'traveler'),
   ];
 
   // -------------------------------------------------------------------
