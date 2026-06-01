@@ -210,7 +210,7 @@
     ch('illuga', 'Illuga', 'Illuga', 'geo', 'polearm', 4, 'nod-krai', '6.3', 'sub-dps', 'support', null),
     ch('zibai', 'Zibai', 'Zibai', 'geo', 'sword', 5, 'nod-krai', '6.3', 'dps', null, null),
     ch('ineffa', 'Ineffa', 'Ineffa', 'electro', 'polearm', 5, 'nod-krai', '6.3', 'sub-dps', 'support', null),
-    ch('dahlia', 'Dahlia', 'Dahlia', 'hydro', 'polearm', 4, 'nod-krai', '5.7', 'support', 'sub-dps', null),
+    ch('dahlia', 'Dahlia', 'Dahlia', 'hydro', 'sword', 4, 'nod-krai', '5.7', 'support', 'sub-dps', null),
     ch('skirk', 'Skirk', 'Skirk', 'cryo', 'sword', 5, 'nod-krai', '5.7', 'dps', 'sub-dps', null, null, 'SkirkNew'),
     ch('escoffier', 'Escoffier', 'Escoffier', 'cryo', 'sword', 5, 'nod-krai', '5.6', 'sub-dps', 'support', null),
     ch('varka', 'Varka', 'Varka', 'anemo', 'claymore', 5, 'nod-krai', '6.4', 'dps', 'sub-dps', null),
