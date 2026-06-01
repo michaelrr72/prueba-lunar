@@ -237,6 +237,13 @@ Yelan"></textarea>
           <li>El roster se guarda en este dispositivo (localStorage). Si limpias el almacenamiento del navegador, se borra.</li>
           <li>Los retratos vienen de un CDN público. Si no carga, se muestra el nombre con su elemento y arma.</li>
         </ul>
+
+        <p class="legal-notice" style="margin-top: 18px; text-align: left;">
+          Retratos: <a href="https://genshin.jmp.blue/" target="_blank" rel="noopener noreferrer">genshin.jmp.blue</a>,
+          <a href="https://enka.network/" target="_blank" rel="noopener noreferrer">enka.network</a>.
+          Personajes y assets © COGNOSPHERE PTE. LTD. / HoYoverse.
+          Proyecto fan no oficial.
+        </p>
       </section>
     `;
   }

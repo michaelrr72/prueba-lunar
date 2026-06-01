@@ -2390,3 +2390,75 @@ body.tg-modal-open {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ── Aviso legal/atribución ────────────────────────────────────────── */
+/* Línea discreta con la nota mínima de atribución a HoYoverse. Vive
+   justo bajo el footer en todas las páginas. La paleta es deliberadamente
+   apagada para no competir con la UI principal. */
+.legal-notice {
+  margin: 8px auto 0;
+  padding: 0 12px;
+  max-width: 760px;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--text-muted);
+  opacity: 0.85;
+}
+
+.legal-notice a {
+  color: var(--text-soft);
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.2);
+  text-underline-offset: 2px;
+}
+
+.legal-notice a:hover {
+  color: var(--text);
+  text-decoration-color: currentColor;
+}
+
+/* Bloque expandido en index.html con más contexto y enlaces. */
+.legal-card {
+  margin: 22px auto 14px;
+  padding: 14px 18px;
+  max-width: 760px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(15, 23, 42, 0.4);
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--text-soft);
+}
+
+.legal-card-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.legal-card p {
+  margin: 0 0 6px;
+}
+
+.legal-card p:last-child {
+  margin-bottom: 0;
+}
+
+.legal-card a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: rgba(157, 123, 255, 0.45);
+  text-underline-offset: 2px;
+  transition: text-decoration-color 0.18s ease;
+}
+
+.legal-card a:hover {
+  text-decoration-color: var(--accent, #9d7bff);
+}

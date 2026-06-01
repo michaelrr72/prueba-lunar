@@ -750,6 +750,9 @@ function buildModeShell(modeConfig) {
 
       <div class="divider-ornament">${APP_VERSION_LABEL}</div>
       <div class="footer" id="footer-version">${modeConfig.versionLabel}</div>
+      <p class="legal-notice">
+        Proyecto fan no oficial. Genshin Impact © COGNOSPHERE PTE. LTD. / HoYoverse.
+      </p>
     </main>
 
     <dialog class="modal-overlay" id="modal-overlay" aria-labelledby="modal-title">

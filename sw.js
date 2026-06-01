@@ -10,7 +10,7 @@
  * basta con cambiar CACHE_VERSION. El SW eliminará los caches antiguos al activarse.
  */
 
-const CACHE_VERSION = 'v4.4.4-cdn-fixes';
+const CACHE_VERSION = 'v4.4.5-legal';
 const CACHE_NAME = `prueba-lunar-${CACHE_VERSION}`;
 
 // App-shell que precachamos en la instalación.

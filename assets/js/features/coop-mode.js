@@ -646,6 +646,9 @@
 
         <div class="divider-ornament">Prueba Lunar v4.1.0</div>
         <div class="footer">Prueba Lunar v4.1.0 · Modo Cooperativo</div>
+        <p class="legal-notice">
+          Proyecto fan no oficial. Genshin Impact © COGNOSPHERE PTE. LTD. / HoYoverse.
+        </p>
 
       </main><!-- /coop-game -->
     `;
