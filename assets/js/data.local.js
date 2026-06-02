@@ -766,6 +766,31 @@ const MEDIUM_CONDITIONS = [
     id: 'safe-ending',
     text: 'Debes terminar el combate con al menos 2 personajes vivos',
     conflictsWith: []
+  },
+  {
+    id: 'first-minute-stability',
+    text: 'Durante el primer minuto no puede caer ningun personaje',
+    conflictsWith: []
+  },
+  {
+    id: 'no-revive-food',
+    text: 'No puedes usar comida de resurreccion durante el combate',
+    conflictsWith: []
+  },
+  {
+    id: 'main-field-check',
+    text: 'El personaje principal debe entrar al campo al menos una vez cada 45 segundos',
+    conflictsWith: ['mono-damage']
+  },
+  {
+    id: 'two-clean-windows',
+    text: 'Debes completar 2 ventanas ofensivas sin recibir daño directo',
+    conflictsWith: ['tech-no-direct-damage']
+  },
+  {
+    id: 'no-edge-camping',
+    text: 'No puedes permanecer pegado al borde del area de combate por mas de 10 segundos seguidos',
+    conflictsWith: ['pressure-no-safe-corner']
   }
 ];
 
@@ -818,6 +843,26 @@ const SUPERVISED_MEDIUM_CONDITIONS = [
   {
     id: 'switch-limit-2-supervised',
     text: 'Maximo 36 cambios de personaje en todo el combate',
+    conflictsWith: []
+  },
+  {
+    id: 'supervised-no-revive-food',
+    text: 'No puedes usar comida de resurreccion durante el combate',
+    conflictsWith: []
+  },
+  {
+    id: 'supervised-main-window',
+    text: 'El personaje principal debe participar en al menos una ventana ofensiva clara',
+    conflictsWith: []
+  },
+  {
+    id: 'supervised-support-action',
+    text: 'El segundo personaje debe entrar al campo al menos una vez antes del primer minuto',
+    conflictsWith: []
+  },
+  {
+    id: 'supervised-no-random-reset',
+    text: 'No puedes alejarte intencionalmente para reiniciar el jefe o cortar la mecanica',
     conflictsWith: []
   }
 ];
@@ -882,6 +927,16 @@ const HARD_CONDITIONS_BY_TYPE = {
       id: 'pressure-clean-finish',
       text: 'Durante el ultimo 25% de vida del jefe no puedes perder personajes',
       conflictsWith: []
+    },
+    {
+      id: 'pressure-no-emergency-menu',
+      text: 'No puedes abrir el menu de comida despues de recibir daño fuerte',
+      conflictsWith: ['pressure-no-heal']
+    },
+    {
+      id: 'pressure-recover-control',
+      text: 'Despues de recibir daño fuerte, debes mantener al personaje en campo por 5 segundos antes de cambiar',
+      conflictsWith: ['pressure-no-panic-swap']
     }
   ],
   technical: [
@@ -943,6 +998,16 @@ const HARD_CONDITIONS_BY_TYPE = {
       text: 'El ultimo 30% de vida del jefe debe completarse sin recibir golpes directos',
       conflictsWith: ['tech-max-one-hit'],
       hard: true
+    },
+    {
+      id: 'tech-clean-opening',
+      text: 'Los primeros 30 segundos deben completarse sin recibir golpes directos',
+      conflictsWith: ['tech-no-direct-damage']
+    },
+    {
+      id: 'tech-no-blind-burst',
+      text: 'No puedes usar Ultimate si el jefe esta fuera de pantalla o fuera de una ventana segura',
+      conflictsWith: ['tech-no-burst']
     }
   ],
   gimmick: [
@@ -1000,6 +1065,16 @@ const HARD_CONDITIONS_BY_TYPE = {
       id: 'gimmick-main-character-solve',
       text: 'La mecanica principal debe resolverse con el personaje principal en campo',
       conflictsWith: []
+    },
+    {
+      id: 'gimmick-first-cycle-read',
+      text: 'Debes identificar correctamente la primera mecanica antes de usar daño explosivo',
+      conflictsWith: ['gimmick-read-before-damage']
+    },
+    {
+      id: 'gimmick-one-clean-cycle',
+      text: 'Debes completar al menos un ciclo completo de la mecanica principal sin fallos',
+      conflictsWith: ['gimmick-no-failed-cycle']
     }
   ]
 };
@@ -1035,6 +1110,11 @@ const SUPERVISED_HARD_CONDITIONS_BY_TYPE = {
       id: 'pressure-supervised-clean-final',
       text: 'El ultimo 25% de vida del jefe debe completarse sin perder personajes',
       conflictsWith: []
+    },
+    {
+      id: 'pressure-supervised-no-panic-menu',
+      text: 'No puedes abrir el menu de comida inmediatamente despues de recibir daño fuerte',
+      conflictsWith: ['pressure-no-heal']
     }
   ],
   technical: [
@@ -1067,6 +1147,11 @@ const SUPERVISED_HARD_CONDITIONS_BY_TYPE = {
       id: 'tech-supervised-burst-window',
       text: 'Solo puedes usar Ultimate despues de superar una mecanica peligrosa',
       conflictsWith: ['tech-no-burst']
+    },
+    {
+      id: 'tech-supervised-clean-opening',
+      text: 'Debes superar los primeros 20 segundos sin recibir golpes directos',
+      conflictsWith: ['tech-max-one-hit']
     }
   ],
   gimmick: [
@@ -1099,6 +1184,11 @@ const SUPERVISED_HARD_CONDITIONS_BY_TYPE = {
       id: 'gimmick-supervised-no-failed-cycle',
       text: 'No puedes fallar el primer ciclo de la mecanica principal',
       conflictsWith: []
+    },
+    {
+      id: 'gimmick-supervised-first-read',
+      text: 'Debes reconocer la primera mecanica antes de iniciar tu ventana principal de daño',
+      conflictsWith: ['gimmick-supervised-no-failed-cycle']
     }
   ]
 };
@@ -1315,7 +1405,13 @@ const INDIVIDUAL_CONDITIONS = [
   { id: 'ind-no-opening-burst', text: 'No puedes usar Ultimate durante los primeros 25 segundos' },
   { id: 'ind-clean-final-phase', text: 'No puedes perder personajes durante el ultimo 25% de vida del jefe', hard: true },
   { id: 'ind-reaction-role', text: 'Debes aportar al menos una reaccion elemental importante durante la ronda' },
-  { id: 'ind-support-window', text: 'Debes entrar con un personaje de apoyo antes de usar tu primer Ultimate' }
+  { id: 'ind-support-window', text: 'Debes entrar con un personaje de apoyo antes de usar tu primer Ultimate' },
+  { id: 'ind-clean-opening-20', text: 'Debes sobrevivir los primeros 20 segundos sin perder personajes' },
+  { id: 'ind-no-revive-food', text: 'No puedes usar comida de resurreccion durante la ronda' },
+  { id: 'ind-one-safe-window', text: 'Debes completar al menos una ventana ofensiva sin recibir daño directo' },
+  { id: 'ind-mechanic-callout', text: 'Debes reaccionar correctamente a una mecanica importante del jefe durante la ronda' },
+  { id: 'ind-no-panic-swap-after-hit', text: 'Despues de recibir daño fuerte, no puedes cambiar inmediatamente de personaje' },
+  { id: 'ind-final-phase-survive', text: 'Durante el ultimo 25% de vida del jefe, no puedes perder personajes', hard: true }
 ];
 
 // ── Info expandida del jefe ───────────────────────────────────────────
