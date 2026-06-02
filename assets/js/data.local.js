@@ -770,7 +770,7 @@ const MEDIUM_CONDITIONS = [
   {
     id: 'first-minute-stability',
     text: 'Durante el primer minuto no puede caer ningun personaje',
-    conflictsWith: []
+    conflictsWith: ['max-one-death']
   },
   {
     id: 'no-revive-food',
@@ -780,12 +780,12 @@ const MEDIUM_CONDITIONS = [
   {
     id: 'main-field-check',
     text: 'El personaje principal debe entrar al campo al menos una vez cada 45 segundos',
-    conflictsWith: ['mono-damage']
+    conflictsWith: ['mono-damage', 'starter-first-30']
   },
   {
     id: 'two-clean-windows',
     text: 'Debes completar 2 ventanas ofensivas sin recibir daño directo',
-    conflictsWith: ['tech-no-direct-damage']
+    conflictsWith: ['tech-no-direct-damage', 'tech-clean-last-phase']
   },
   {
     id: 'no-edge-camping',
